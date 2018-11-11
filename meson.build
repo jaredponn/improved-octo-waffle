@@ -6,7 +6,10 @@ project('improved-octo-waffle', 'cpp',
 
 inc = include_directories('src')
 
-srcs = ['src/main.cpp'
+srcs = [ 'src/main.cpp'
+        ,'src/packedvector.cpp'
+        ,'src/ecs.cpp'
+        ,'src/logger.cpp'
        ]
 
 executable('improved-octo-waffle'
