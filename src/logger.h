@@ -1,8 +1,15 @@
 #pragma once
 
+#include <iostream>
 
-template <class T>
 class Logger
 {
-	static void print(T a);
+    private:
+	static constexpr unsigned int LOGGING_LEVEL = 0;
+
+    public:
+	static void logMessage(const char *const a)
+	{
+		std::cout << a << std::endl;
+	}
 };
