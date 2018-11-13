@@ -3,7 +3,7 @@
 
 int main(void)
 {
-	PackedVector<int> a(121);
+	iow::PackedVector<int> a(121);
 	a.add_element_at_sparse_vector(1, 23);
 	a.delete_element_at_sparse_vector(1);
 
