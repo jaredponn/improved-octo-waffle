@@ -1,13 +1,19 @@
 #include <iostream>
+#include <vector>
 #include "packedvector.h"
+#include "input.h"
+
 
 int main(void)
 {
-	iow::PackedVector<int> a(121);
-	a.add_element_at_sparse_vector(1, 23);
-	a.delete_element_at_sparse_vector(1);
+	iow::InputManager::initInputManager();
+	sf::RenderWindow window(sf::VideoMode(600, 400), "window");
+
+	// main game loop
+	while (1) {
+		iow::InputManager::shiftAndUpdateInputbuffer();
+	};
 
 
-	std::cout << "hellow";
 	return 0;
 }
