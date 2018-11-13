@@ -8,6 +8,7 @@ inc = include_directories('src')
 inc = include_directories('extern')
 
 srcs = [ 'src/main.cpp'
+       , 'src/input.cpp'
        ]
 
 executable('improved-octo-waffle'
