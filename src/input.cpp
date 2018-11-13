@@ -17,34 +17,14 @@ void iow::InputManager::initInputManager()
 iow::InputManager::KeyState
 iow::InputManager::getKeyState(const sf::Keyboard::Key &key)
 {
-	unsigned int tmp = KEY_INPUT_BUFFER->at((unsigned int)key);
-	return identifyKeyState(tmp);
+	return identifyKeyState(
+		KEY_INPUT_BUFFER->at(static_cast<unsigned int>(key)));
 }
 
 iow::InputManager::KeyState
 iow::InputManager::identifyKeyState(unsigned int val)
 {
-	unsigned int tmp = val & 0b11;
-
-	switch (tmp) {
-	case (unsigned int)iow::InputManager::KeyState::UP:
-		return iow::InputManager::KeyState::UP;
-		break;
-	case (unsigned int)iow::InputManager::KeyState::PRESSED:
-		return iow::InputManager::KeyState::PRESSED;
-		break;
-
-	case (unsigned int)iow::InputManager::KeyState::DOWN:
-		return iow::InputManager::KeyState::DOWN;
-		break;
-	case (unsigned int)iow::InputManager::KeyState::RELEASED:
-		return iow::InputManager::KeyState::RELEASED;
-		break;
-	default:
-		Logger::logMessage(
-			"ERROR in InputHandler. Invalid key state... Returning Keystate::UP ");
-		return iow::InputManager::KeyState::UP;
-	}
+	return static_cast<iow ::InputManager::KeyState>(val & 0b11);
 }
 
 void iow::InputManager::shiftAndUpdateInputbuffer()

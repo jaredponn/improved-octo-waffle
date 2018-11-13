@@ -10,7 +10,7 @@ using KeyBuffer = std::array<unsigned int, sf::Keyboard::KeyCount>;
 
 class InputManager
 {
-	enum class KeyState {
+	enum class KeyState : unsigned int {
 		UP = 0b00,
 		PRESSED = 0b01,
 		DOWN = 0b11,
