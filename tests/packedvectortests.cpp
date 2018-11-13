@@ -1,39 +1,83 @@
 // 010-TestCase.cpp
 
 #include "../extern/catch.hpp"
+#include "../src/packedvector.h"
 
-int Factorial(int number)
+
+TEST_CASE("Creating a packedvector")
 {
-	return number <= 1 ? number : Factorial(number - 1) * number; // fail
-	// return number <= 1 ? 1      : Factorial( number - 1 ) * number;  //
-	// pass
+	iow::PackedVector<int> testPkdVec(10);
+	REQUIRE(testPkdVec.get_packed_indicies().size() == 0);
+	REQUIRE(testPkdVec.get_packed_data().size() == 0);
+	REQUIRE(testPkdVec.get_sparse_vector().size() == 10);
 }
 
-TEST_CASE("Factorial of 0 is 1 (fail)", "[single-file]")
+TEST_CASE("Adding stuff to the packed vector ")
 {
-	REQUIRE(Factorial(0) == 1);
+	iow::PackedVector<int> testPkdVec(10);
+	testPkdVec.add_element_at_sparse_vector(5, 69);
+
+	REQUIRE(testPkdVec.get_packed_data()[0] == 69);
+	REQUIRE(testPkdVec.get_packed_indicies()[0] == 5);
+	REQUIRE(testPkdVec.get_sparse_vector()[5] == 0);
+
+	testPkdVec.add_element_at_sparse_vector(9, 96);
+	REQUIRE(testPkdVec.get_packed_data()[1] == 96);
+	REQUIRE(testPkdVec.get_packed_indicies()[1] == 9);
+	REQUIRE(testPkdVec.get_sparse_vector()[9] == 1);
+
+	testPkdVec.add_element_at_sparse_vector(2, 126);
+	REQUIRE(testPkdVec.get_packed_data()[1] == 96);
+	REQUIRE(testPkdVec.get_packed_indicies()[1] == 9);
+	REQUIRE(testPkdVec.get_sparse_vector()[9] == 1);
 }
 
-TEST_CASE("Factorials of 1 and higher are computed (pass)", "[single-file]")
+TEST_CASE("Testing the get_data_from_sparse_vector")
 {
-	REQUIRE(Factorial(1) == 1);
-	REQUIRE(Factorial(2) == 2);
-	REQUIRE(Factorial(3) == 6);
-	REQUIRE(Factorial(10) == 3628800);
+	iow::PackedVector<int> testPkdVec(10);
+	testPkdVec.add_element_at_sparse_vector(5, 69);
+	testPkdVec.add_element_at_sparse_vector(9, 96);
+	testPkdVec.add_element_at_sparse_vector(2, 126);
+
+	REQUIRE(testPkdVec.get_data_from_sparse_vector(5) == 69);
+	REQUIRE(testPkdVec.get_data_from_sparse_vector(9) == 96);
+	REQUIRE(testPkdVec.get_data_from_sparse_vector(2) == 126);
 }
 
-// Compile & run:
-// - g++ -std=c++11 -Wall -I$(CATCH_SINGLE_INCLUDE) -o 010-TestCase
-// 010-TestCase.cpp && 010-TestCase --success
-// - cl -EHsc -I%CATCH_SINGLE_INCLUDE% 010-TestCase.cpp && 010-TestCase
-// --success
+TEST_CASE("Deleting stuff in the packed vector")
+{
+	iow::PackedVector<int> testPkdVec(10);
+	testPkdVec.add_element_at_sparse_vector(5, 69);
+	testPkdVec.add_element_at_sparse_vector(9, 96);
+	testPkdVec.add_element_at_sparse_vector(2, 126);
 
-// Expected compact output (all assertions):
-//
-// prompt> 010-TestCase --reporter compact --success
-// 010-TestCase.cpp:14: failed: Factorial(0) == 1 for: 0 == 1
-// 010-TestCase.cpp:18: passed: Factorial(1) == 1 for: 1 == 1
-// 010-TestCase.cpp:19: passed: Factorial(2) == 2 for: 2 == 2
-// 010-TestCase.cpp:20: passed: Factorial(3) == 6 for: 6 == 6
-// 010-TestCase.cpp:21: passed: Factorial(10) == 3628800 for: 3628800 (0x375f00)
-// == 3628800 (0x375f00) Failed 1 test case, failed 1 assertion.
+	testPkdVec.delete_element_at_sparse_vector(5);
+
+	REQUIRE(testPkdVec.get_data_from_sparse_vector(9) == 96);
+	REQUIRE(testPkdVec.get_packed_indicies()[1] == 9);
+
+	REQUIRE(testPkdVec.get_data_from_sparse_vector(2) == 126);
+	REQUIRE(testPkdVec.get_packed_indicies()[0] == 2);
+	REQUIRE(testPkdVec.get_packed_data()[0] == 126);
+
+	REQUIRE(testPkdVec.get_sparse_vector()[5] == SIZE_MAX);
+
+	testPkdVec.delete_element_at_sparse_vector(9);
+
+	REQUIRE(testPkdVec.get_data_from_sparse_vector(2) == 126);
+
+	testPkdVec.delete_element_at_sparse_vector(2);
+}
+
+TEST_CASE("Adding stuff after deleting stuff")
+{
+	iow::PackedVector<int> testPkdVec(10);
+	testPkdVec.add_element_at_sparse_vector(5, 69);
+	testPkdVec.add_element_at_sparse_vector(9, 96);
+	testPkdVec.add_element_at_sparse_vector(2, 126);
+	testPkdVec.delete_element_at_sparse_vector(5);
+	testPkdVec.delete_element_at_sparse_vector(9);
+
+	testPkdVec.add_element_at_sparse_vector(4, 999);
+	REQUIRE(testPkdVec.get_packed_data()[1] == 999);
+}
