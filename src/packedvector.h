@@ -25,7 +25,12 @@ class PackedVector
 	/* Functions */
 	void add_element_at_sparse_vector(const size_t index, const T &val);
 	void delete_element_at_sparse_vector(const size_t index);
+
+	// when given the sparse_vector index, and returns the data in the
+	// packed vector
 	T get_data_from_sparse_vector(const size_t index);
+	// gets the global index (sparse_vector) when given the packed index
+	size_t get_global_index_from_packed_index(const size_t index);
 
 	/* Getters */
 	const std::vector<size_t> &get_sparse_vector();
@@ -103,6 +108,16 @@ T PackedVector<T>::get_data_from_sparse_vector(const size_t index)
 			"MAJOR ERROR: Accessing invalid sparse vector index with get_data_from_sparse_vector function");
 	}
 	return m_packed_data[m_sparse_vector[index]];
+}
+
+template <class T>
+size_t PackedVector<T>::get_global_index_from_packed_index(const size_t index)
+{
+	if (index >= m_packed_indicies.size()) {
+		Logger::logMessage(
+			"MAJOR ERROR: Accessing index outside of the packed_indicies vector.");
+	}
+	return m_packed_indicies[index];
 }
 
 /* Getters */
