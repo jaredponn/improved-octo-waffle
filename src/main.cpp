@@ -1,11 +1,16 @@
 #include <iostream>
+#include <vector>
 #include "packedvector.h"
+<<<<<<< HEAD
 #include "graphics.h"
 #include <SFML/Graphics.hpp>
-int main(void)
+#include "input.h"
+	int main(void)
 {
 	sf::RenderWindow window(sf::VideoMode(500, 500), "waffle",
 				sf::Style::Close);
+
+	iow::InputManager::initInputManager();
 	iow::PackedVector<int> a(121);
 	a.add_element_at_sparse_vector(1, 23);
 	a.delete_element_at_sparse_vector(1);
@@ -26,15 +31,15 @@ int main(void)
 	sf::Vector2f posOfCir(400, 50);
 	sf::Color colorOfCir(100, 200, 250);
 	iow::mutateCircle(cir1, sizeOfCir, posOfCir, colorOfCir);
-
+	// main game loop
 	// displaying them
 	while (1) {
+		iow::inputmanager::shiftandupdateinputbuffer();
 		window.draw(rect1);
 		window.display();
 		window.draw(cir1);
 		window.display();
 	}
 
-	std::cout << "hellow";
 	return 0;
 }
