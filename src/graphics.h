@@ -7,19 +7,11 @@
 namespace iow
 {
 
-template <class T>
-inline void pushToSFMLRenderBuffer(sf::Window window, T sfmlShape,
+extern void pushToSFMLRenderBuffer(sf::Window window,
+				   sf::RectangleShape sfmlShape, Camera camera);
+
+extern void pushToSFMLRenderBuffer(sf::Window window, sf::CircleShape sfmlShape,
 				   Camera camera);
-
-inline void pushToSFMLRenderBuffer(sf::Window window,
-				   sf::RectangleShape sfmlShape, Camera camera)
-{
-}
-
-inline void pushToSFMLRenderBuffer(sf::Window window, sf::CircleShape sfmlShape,
-				   Camera camera)
-{
-}
 
 // takes in the size, xcord, ycord, and color of the
 // rectangle
