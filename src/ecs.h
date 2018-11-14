@@ -19,8 +19,8 @@ class ECS : private iow::Components
 	void runECS(sf::Time dt, const KeyBuffer &keyBufInput);
 
     private:
-	// TODO add delete and add entity functions here
-	void create_new_entity(uint64_t components);
+	// gives you an index to a new entity in the ECS
+	size_t create_new_entity();
 	void add_component_to(size_t index);
 
     private:
