@@ -1,10 +1,9 @@
-#pragma once
-
 #include "components.h"
 
 iow::Components::Components(size_t capacity)
-    : c_HP(capacity), c_HasHP(capacity), c_Position(capacity),
-      c_Speed(capacity), c_RectAppearance(capacity),
-      c_CircleAppearance(capacity)
+    :
+#define X_CPT(name, type) MK_COMPONENT_MEMBER_VAR_NAME(name)(capacity),
+      ID_VA_ARGS(IOW_COMPONENT_LIST)
+#undef X_CPT
 {
 }

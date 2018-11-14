@@ -10,7 +10,6 @@
 namespace iow
 {
 
-
 class ECS : private iow::Components
 {
     public:
