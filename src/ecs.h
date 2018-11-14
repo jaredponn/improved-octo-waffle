@@ -28,17 +28,5 @@ class ECS : private iow::Components
 	std::stack<size_t> m_free_indices;
 };
 
-ECS::ECS(size_t capacity) : Components(capacity)
-{
-
-	for (size_t i = 0; i < capacity; ++i) {
-		m_free_indices.push(i);
-	}
-
-	// TODO
-	// make sure you intialize the compoenets as well. probably use xmacros
-	// to do this
-}
-
 
 }; // namespace iow
