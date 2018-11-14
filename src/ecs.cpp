@@ -1,10 +1,8 @@
-#pragma once
 #include "ecs.h"
+#include <iostream>
 
 namespace iow
 {
-
-
 iow::ECS::ECS(size_t capacity) : Components(capacity)
 {
 
@@ -20,6 +18,7 @@ iow::ECS::ECS(size_t capacity) : Components(capacity)
 
 void iow::ECS::runECS(sf::Time dt, const KeyBuffer &keyBufInput)
 {
+	float t = dt.asMicroseconds();
 }
 
 } // namespace iow
