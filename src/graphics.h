@@ -1,11 +1,24 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "camera.h"
+
 namespace iow
 {
 
-void pushToRenderBuffer();
+template <class T>
+inline void pushToSFMLRenderBuffer(sf::Window window, T sfmlShape,
+				   Camera camera);
 
+inline void pushToSFMLRenderBuffer(sf::Window window,
+				   sf::RectangleShape sfmlShape, Camera camera)
+{
+}
+
+inline void pushToSFMLRenderBuffer(sf::Window window, sf::CircleShape sfmlShape,
+				   Camera camera)
+{
+}
 
 // takes in the size, xcord, ycord, and color of the
 // rectangle

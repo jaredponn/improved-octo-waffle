@@ -14,7 +14,7 @@ void iow::InputManager::initInputManager()
 	KEY_INPUT_BUFFER->fill(0);
 }
 
-const iow::KeyBuffer &getKeyBuffer()
+const iow::KeyBuffer &iow::InputManager::getKeyBuffer()
 {
 	return *KEY_INPUT_BUFFER;
 }

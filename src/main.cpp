@@ -13,6 +13,7 @@ int main(void)
 	sf::RenderWindow window(sf::VideoMode(500, 500), "waffle",
 				sf::Style::Close);
 	iow::InputManager::initInputManager();
+
 	iow::ECS ecs(MAX_ENTITIES);
 
 	sf::Clock clock;
@@ -22,13 +23,13 @@ int main(void)
 
 	while (window.isOpen()) {
 		ti = clock.getElapsedTime();
-		iow::InputManager::shiftAndUpdateInputbuffer();
 
+		iow::InputManager::shiftAndUpdateInputbuffer();
 		ecs.runECS(dt, iow::InputManager::getKeyBuffer());
 
 
 		tf = clock.getElapsedTime();
-		dt = tf = ti;
+		dt = tf - ti;
 	}
 
 	return 0;
