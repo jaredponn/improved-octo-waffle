@@ -2,10 +2,22 @@
 
 #include "packedvector.h"
 #include "graphics.h"
+#include "../extern/mmacros.h"
 
 /** Components.h
  * Class for the vectors of componenets
  */
+
+#define IOW_COMPONENT_LIST                                                     \
+	/*X_CPT(name, type) */                                                 \
+	X_CPT(RectAppearance, sf ::RectangleShape)                             \
+	X_CPT(CircleAppearance, sf ::CircleShape)                              \
+	X_CPT(Position, sf::Vector2f)                                          \
+	X_CPT(Speed, sf::Vector2f)                                             \
+	X_CPT(HP, float)                                                       \
+	X_CPT(HasHP, bool)
+
+#define MK_COMPONENT_MEMBER_VAR_NAME(name) c_##name
 
 namespace iow
 {
@@ -13,24 +25,21 @@ namespace iow
 // deprecated
 enum class ComponentTypes : uint64_t {};
 
-using HP = float;
-using HasHP = bool;
-using Position = sf::Vector2f;
-using Speed = sf::Vector2f;
+// Aliasing the types
+#define X_CPT(name, type) using name = type;
+IOW_COMPONENT_LIST
+#undef X_CPT
 
 class Components
 {
     public:
 	Components(size_t capacity);
 
-	iow::PackedVector<HP> c_HP;
-	iow::PackedVector<HasHP> c_HasHP;
-	iow::PackedVector<Position> c_Position;
-	iow::PackedVector<Speed> c_Speed;
-
-
-	iow::PackedVector<sf::RectangleShape> c_RectAppearance;
-	iow::PackedVector<sf::CircleShape> c_CircleAppearance;
+	// generating the component lists
+#define X_CPT(name, type)                                                      \
+	iow::PackedVector<name> MK_COMPONENT_MEMBER_VAR_NAME(name);
+	IOW_COMPONENT_LIST
+#undef X_CPT
 };
 
 } // namespace iow
