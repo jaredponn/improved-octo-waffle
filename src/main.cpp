@@ -28,7 +28,9 @@ int main(void)
 
 
 		tf = clock.getElapsedTime();
-		dt = tf = ti;
+		dt = tf - ti;
+		int changet = dt.asMilliseconds();
+		std::cout << "dt = " << changet << std::endl;
 	}
 
 	return 0;
