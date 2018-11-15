@@ -14,7 +14,7 @@ int main(void)
 
 	iow::InputManager::initInputManager();
 	iow::ResourceManager resourceManager;
-	sf::RenderWindow window(sf::VideoMode(500, 500), "waffle",
+	sf::RenderWindow window(sf::VideoMode(1080, 800), "waffle",
 				sf::Style::Close);
 
 	iow::ECS ecs(MAX_ENTITIES);
