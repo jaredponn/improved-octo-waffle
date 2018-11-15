@@ -29,7 +29,7 @@ int main(void)
 		ti = clock.getElapsedTime();
 
 		iow::InputManager::shiftAndUpdateInputbuffer();
-		ecs.runECS(dt.asMicroseconds(), window, resourceManager);
+		ecs.runECS(dt.asMilliseconds(), window, resourceManager);
 
 		tf = clock.getElapsedTime();
 

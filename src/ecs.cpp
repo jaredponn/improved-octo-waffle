@@ -79,25 +79,36 @@ void iow::ECS::runGameLogic(float dt, iow::ResourceManager &resourceManager)
 			switch (std::get<1>(resourceManager.m_key_binds[i])) {
 
 			case iow::PlayerGameEvents::MOVE_PLAYER_DOWN:
-				c_Position[m_player_entity] += sf::Vector2f(
-					0, -resourceManager.m_player_config
-						    .speed.y);
+				c_Position[m_player_entity] +=
+					dt
+					* sf::Vector2f(0,
+						       -resourceManager
+								.m_player_config
+								.speed.y);
 				break;
 			case iow::PlayerGameEvents::MOVE_PLAYER_UP:
-				c_Position[m_player_entity] += sf::Vector2f(
-					0, resourceManager.m_player_config.speed
-						   .y);
+				c_Position[m_player_entity] +=
+					dt
+					* sf::Vector2f(0,
+						       resourceManager
+							       .m_player_config
+							       .speed.y);
 				break;
 			case iow::PlayerGameEvents::MOVE_PLAYER_LEFT:
-				c_Position[m_player_entity] += sf::Vector2f(
-					-resourceManager.m_player_config.speed
-						 .x,
-					0);
+				c_Position[m_player_entity] +=
+					dt
+					* sf::Vector2f(-resourceManager
+								.m_player_config
+								.speed.x,
+						       0);
 				break;
 			case iow::PlayerGameEvents::MOVE_PLAYER_RIGHT:
-				c_Position[m_player_entity] += sf::Vector2f(
-					resourceManager.m_player_config.speed.x,
-					0);
+				c_Position[m_player_entity] +=
+					dt
+					* sf::Vector2f(resourceManager
+							       .m_player_config
+							       .speed.x,
+						       0);
 				break;
 
 			default:
