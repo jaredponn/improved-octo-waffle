@@ -30,6 +30,10 @@ int main(void)
 
 		tf = clock.getElapsedTime();
 		dt = tf - ti;
+		sf::CircleShape rect(20.f);
+		// rect.setPosition(10.f, 50.f);
+		window.draw(rect);
+		window.display();
 	}
 
 	return 0;
