@@ -3,7 +3,6 @@
 #include "../extern/catch.hpp"
 #include "../src/packedvector.h"
 
-
 TEST_CASE("Creating a packedvector")
 {
 	iow::PackedVector<int> testPkdVec(10);
