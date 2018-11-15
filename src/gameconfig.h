@@ -3,32 +3,38 @@
 
 namespace iow
 {
-
-struct SquishyEntity {
-	float hp;
+struct Entity {
 	sf::Vector2f size;
+	sf::Vector2f position;
+	sf::Sprite sprite;
+	sf::Texture texture;
+};
+
+struct PlayerConfig : public Entity {
+	float hp;
+	float bulletInterval;
+	float bulletSpeed;
 	sf::Vector2f speed;
 };
 
-struct PlayerConfig : SquishyEntity {
+struct DestroyableWallConfig : public Entity {
+};
+
+struct EnemyConfig : public Entity {
+};
+
+struct ScaryEnemyConfig : public Entity {
 	float bulletInterval;
 	float bulletSpeed;
 };
 
-struct DestroyableWallConfig {
-	sf::Vector2f size;
-	sf::Vector2f position;
-};
-
-struct EnemyConfig : SquishyEntity {
-};
-
-struct ScaryEnemyConfig : SquishyEntity {
-	float bulletInterval;
-	float bulletSpeed;
+struct CameraConfig {
+	sf::Vector2f topLeftPosition;
+	sf::Vector2f botRightPosition;
 };
 
 struct TileMap {
 };
+
 
 } // namespace iow

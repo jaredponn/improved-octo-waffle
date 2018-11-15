@@ -5,6 +5,6 @@ namespace iow
 {
 struct Camera {
 	sf::Vector2f position;
-	sf::Vector2f scale;
 };
+
 } // namespace iow
