@@ -21,9 +21,9 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.bulletInterval = 10;
 	m_player_config.bulletSpeed = 10;
 	m_player_config.hp = 10;
-	m_player_config.position = sf::Vector2f(0, 0);
+	m_player_config.position = sf::Vector2f(250, 250);
 	m_player_config.size = sf::Vector2f(100, 100);
-	m_player_config.speed = sf::Vector2f(100, 100);
+	m_player_config.speed = sf::Vector2f(1, 1);
 
 	m_player_config.texture.loadFromFile("../resources/muted.png");
 	m_player_config.texture.setSmooth(true);

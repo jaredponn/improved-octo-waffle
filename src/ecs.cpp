@@ -62,6 +62,7 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 
 	// Systems...
+	window.clear(); // clears the color for the buffer
 	iow::updateAppearanceFromPosition(c_Appearance, c_Position);
 	iow::renderSystem(c_Appearance, window, m_camera);
 
@@ -78,14 +79,25 @@ void iow::ECS::runGameLogic(float dt, iow::ResourceManager &resourceManager)
 			switch (std::get<1>(resourceManager.m_key_binds[i])) {
 
 			case iow::PlayerGameEvents::MOVE_PLAYER_DOWN:
-				c_Position[m_player_entity] +=
-					sf::Vector2f(1, 1);
+				c_Position[m_player_entity] += sf::Vector2f(
+					0, -resourceManager.m_player_config
+						    .speed.y);
 				break;
 			case iow::PlayerGameEvents::MOVE_PLAYER_UP:
+				c_Position[m_player_entity] += sf::Vector2f(
+					0, resourceManager.m_player_config.speed
+						   .y);
 				break;
 			case iow::PlayerGameEvents::MOVE_PLAYER_LEFT:
+				c_Position[m_player_entity] += sf::Vector2f(
+					-resourceManager.m_player_config.speed
+						 .x,
+					0);
 				break;
 			case iow::PlayerGameEvents::MOVE_PLAYER_RIGHT:
+				c_Position[m_player_entity] += sf::Vector2f(
+					resourceManager.m_player_config.speed.x,
+					0);
 				break;
 
 			default:
