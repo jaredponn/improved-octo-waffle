@@ -2,7 +2,8 @@
 # export CC=/usr/bin/clang
 
 project('improved-octo-waffle', 'cpp',
- default_options : ['-std=c++17'] )
+ default_options : ['cpp_std=c++17'] )
+
 
 inc = include_directories('src')
 inc = include_directories('extern')
