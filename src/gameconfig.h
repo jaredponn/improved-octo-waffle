@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include <SFML/Graphics.hpp>
 
 namespace iow
@@ -36,6 +37,8 @@ struct CameraConfig {
 };
 
 struct TileMap {
+	unsigned int width;
+	unsigned int height;
 };
 
 
