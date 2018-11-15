@@ -25,6 +25,9 @@ class PackedVector
 	/* Functions */
 	inline void add_element_at_sparse_vector(const size_t index,
 						 const T &val);
+	// delets the element at the sparse vector. Sets that sparse vector
+	// index to SIZE_MAX and pops and swaps the corrosponding data / indices
+	// vector
 	inline void delete_element_at_sparse_vector(const size_t index);
 
 	// when given the sparse_vector index, and returns the data in the

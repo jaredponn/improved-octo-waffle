@@ -27,7 +27,11 @@ size_t iow::ECS::delete_entity_at(size_t index)
 	// TODO
 	Logger::logMessage(
 		"ERROR deleting entity. This has not been implemented yet.");
-	(void)index;
+#define X_CPT(name, type)                                                      \
+	MK_COMPONENT_MEMBER_VAR_NAME(name).delete_element_at_sparse_vector(    \
+		index);                                                        \
+	IOW_COMPONENT_LIST
+#undef X_CPT
 	return 0;
 }
 
