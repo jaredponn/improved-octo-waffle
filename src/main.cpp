@@ -6,6 +6,7 @@
 #include "graphics.h"
 #include "packedvector.h"
 #include "resourcemanager.h"
+#include "collision.h"
 
 constexpr unsigned int MAX_ENTITIES = 1000000;
 

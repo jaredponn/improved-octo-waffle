@@ -2,6 +2,8 @@
 
 #include "../extern/catch.hpp"
 #include "../src/packedvector.h"
+#include "../src/collision.cpp"
+#include <SFML/Graphics.hpp>
 
 TEST_CASE("Creating a packedvector")
 {

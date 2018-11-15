@@ -86,6 +86,8 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 			  window.getSize());
 	iow::updateAppearanceFromPosition(c_Appearance, c_Position, m_camera);
 	iow::renderSystem(c_Appearance, window, m_camera);
+	;
+
 
 	/* Push output to the screen */
 	window.display();
