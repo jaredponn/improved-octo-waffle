@@ -5,16 +5,20 @@
 #include "ecs.h"
 #include "graphics.h"
 #include "packedvector.h"
+#include "resourcemanager.h"
 
 constexpr unsigned int MAX_ENTITIES = 1000000;
 
 int main(void)
 {
+
+	iow::InputManager::initInputManager();
+	iow::ResourceManager resourceManager;
 	sf::RenderWindow window(sf::VideoMode(500, 500), "waffle",
 				sf::Style::Close);
-	iow::InputManager::initInputManager();
 
 	iow::ECS ecs(MAX_ENTITIES);
+	ecs.initECS(window, resourceManager);
 
 	sf::Clock clock;
 	sf::Time ti = sf::microseconds(0);
@@ -25,10 +29,11 @@ int main(void)
 		ti = clock.getElapsedTime();
 
 		iow::InputManager::shiftAndUpdateInputbuffer();
-		ecs.runECS(dt, iow::InputManager::getKeyBuffer());
-
+		ecs.runECS(dt.asMicroseconds(), window, resourceManager);
 
 		tf = clock.getElapsedTime();
+
+
 		dt = tf - ti;
 		sf::CircleShape rect(20.f);
 		// rect.setPosition(10.f, 50.f);

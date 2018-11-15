@@ -25,6 +25,9 @@ class PackedVector
 	/* Functions */
 	inline void add_element_at_sparse_vector(const size_t index,
 						 const T &val);
+	// delets the element at the sparse vector. Sets that sparse vector
+	// index to SIZE_MAX and pops and swaps the corrosponding data / indices
+	// vector
 	inline void delete_element_at_sparse_vector(const size_t index);
 
 	// when given the sparse_vector index, and returns the data in the
@@ -33,10 +36,32 @@ class PackedVector
 	// gets the global index (sparse_vector) when given the packed index
 	inline size_t get_global_index_from_packed_index(const size_t index);
 
+	/// should only be used when yo know for certain that the entity is
+	/// thing
+	T operator[](size_t i) const
+	{
+		if (i >= m_sparse_vector.size()
+		    || m_sparse_vector[i] == SIZE_MAX) {
+			Logger::logMessage(
+				"MAJOR ERROR in PackedVector. Invalid access, please you are inputting a valid entity index.");
+		}
+
+		return m_packed_data[m_sparse_vector[i]];
+	}
+	T &operator[](size_t i)
+	{
+		if (i >= m_sparse_vector.size()
+		    || m_sparse_vector[i] == SIZE_MAX) {
+			Logger::logMessage(
+				"MAJOR ERROR in PackedVector. Invalid access, please you are inputting a valid entity index.");
+		}
+		return m_packed_data[m_sparse_vector[i]];
+	}
+
 	/* Getters */
-	inline const std::vector<size_t> &get_sparse_vector();
-	inline const std::vector<size_t> &get_packed_indicies();
-	inline const std::vector<T> &get_packed_data();
+	inline const std::vector<size_t> &get_sparse_vector() const;
+	inline const std::vector<size_t> &get_packed_indicies() const;
+	inline const std::vector<T> &get_packed_data() const;
 
 	~PackedVector();
 };
@@ -58,6 +83,7 @@ inline void PackedVector<T>::add_element_at_sparse_vector(const size_t index,
 	if (index >= m_sparse_vector.size()) {
 		Logger::logMessage(
 			"MAJOR ERROR in PackedVector. Too many entities exist for this engine. Increase the buffer size");
+
 		return;
 	}
 	// if the index has already been added, throw an error
@@ -124,18 +150,18 @@ PackedVector<T>::get_global_index_from_packed_index(const size_t index)
 
 /* Getters */
 template <class T>
-inline const std::vector<size_t> &PackedVector<T>::get_sparse_vector()
+inline const std::vector<size_t> &PackedVector<T>::get_sparse_vector() const
 {
 	return m_sparse_vector;
 }
 template <class T>
-inline const std::vector<size_t> &PackedVector<T>::get_packed_indicies()
+inline const std::vector<size_t> &PackedVector<T>::get_packed_indicies() const
 
 {
 	return m_packed_indicies;
 }
 template <class T>
-inline const std::vector<T> &PackedVector<T>::get_packed_data()
+inline const std::vector<T> &PackedVector<T>::get_packed_data() const
 
 {
 	return m_packed_data;

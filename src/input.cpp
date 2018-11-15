@@ -19,17 +19,15 @@ const iow::KeyBuffer &iow::InputManager::getKeyBuffer()
 	return *KEY_INPUT_BUFFER;
 }
 
-iow::InputManager::KeyState
-iow::InputManager::getKeyState(const sf::Keyboard::Key &key)
+iow::KeyState iow::InputManager::getKeyState(const sf::Keyboard::Key &key)
 {
 	return identifyKeyState(
 		KEY_INPUT_BUFFER->at(static_cast<unsigned int>(key)));
 }
 
-iow::InputManager::KeyState
-iow::InputManager::identifyKeyState(unsigned int val)
+iow::KeyState iow::InputManager::identifyKeyState(unsigned int val)
 {
-	return static_cast<iow ::InputManager::KeyState>(val & 0b11);
+	return static_cast<iow ::KeyState>(val & 0b11);
 }
 
 void iow::InputManager::shiftAndUpdateInputbuffer()

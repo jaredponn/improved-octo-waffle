@@ -6,16 +6,30 @@
 namespace iow
 {
 
-using KeyBuffer = std::array<unsigned int, sf::Keyboard::KeyCount>;
+constexpr size_t MAX_NUMBER_KEYS = sf::Keyboard::KeyCount;
+
+using KeyBuffer = std::array<unsigned int, MAX_NUMBER_KEYS>;
+
+enum class KeyState : unsigned int {
+	UP = 0b00,
+	PRESSED = 0b01,
+	DOWN = 0b11,
+	RELEASED = 0b10,
+
+	INVALID_STATE = 0b111
+};
+
+enum class PlayerGameEvents : unsigned int {
+	MOVE_PLAYER_UP,
+	MOVE_PLAYER_RIGHT,
+	MOVE_PLAYER_LEFT,
+	MOVE_PLAYER_DOWN,
+
+	NO_ACTION
+};
 
 class InputManager
 {
-	enum class KeyState : unsigned int {
-		UP = 0b00,
-		PRESSED = 0b01,
-		DOWN = 0b11,
-		RELEASED = 0b10
-	};
 
     public:
 	// initilizes the key buffer
@@ -26,9 +40,9 @@ class InputManager
 	static const iow::KeyBuffer &getKeyBuffer();
 
 	// gets the given key state
-	static InputManager::KeyState getKeyState(const sf::Keyboard::Key &key);
+	static KeyState getKeyState(const sf::Keyboard::Key &key);
 
-	static InputManager::KeyState identifyKeyState(unsigned int val);
+	static KeyState identifyKeyState(unsigned int val);
 
 	// updates the input buffer. must be called once evrey frame
 	static void shiftAndUpdateInputbuffer();
