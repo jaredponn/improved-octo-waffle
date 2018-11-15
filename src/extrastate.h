@@ -12,6 +12,7 @@ class ExtraState
 	ExtraState();
 
 	// state
+	size_t m_player_entity;
 	iow::Camera m_camera;
 };
 

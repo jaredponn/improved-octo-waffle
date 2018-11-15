@@ -10,7 +10,6 @@
 
 #define IOW_COMPONENT_LIST                                                     \
 	/*X_CPT(name, type) */                                                 \
-	X_CPT(IsPlayer, bool)                                                  \
 	X_CPT(Appearance, sf ::Sprite)                                         \
 	X_CPT(Position, sf::Vector2f)                                          \
 	X_CPT(Speed, sf::Vector2f)                                             \
