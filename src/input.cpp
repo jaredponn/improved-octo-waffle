@@ -14,6 +14,11 @@ void iow::InputManager::initInputManager()
 	KEY_INPUT_BUFFER->fill(0);
 }
 
+const iow::KeyBuffer &getKeyBuffer()
+{
+	return *KEY_INPUT_BUFFER;
+}
+
 iow::InputManager::KeyState
 iow::InputManager::getKeyState(const sf::Keyboard::Key &key)
 {

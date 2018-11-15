@@ -22,10 +22,10 @@ class InputManager
 	static void initInputManager();
 
 
-	// gets the gicen keyt state
-	static iow::KeyBuffer getKeyBuffer(const sf::Keyboard::Key &key);
+	// gets the entire key buffer
+	static const iow::KeyBuffer &getKeyBuffer();
 
-	// gets the gicen keyt state
+	// gets the given key state
 	static InputManager::KeyState getKeyState(const sf::Keyboard::Key &key);
 
 	static InputManager::KeyState identifyKeyState(unsigned int val);
