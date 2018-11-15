@@ -13,6 +13,7 @@ srcs = [ 'src/main.cpp'
        , 'src/resourcemanager.cpp'
        , 'src/ecs.cpp'
        , 'src/components.cpp'
+       , 'src/extrastate.cpp'
        ]
 
 executable('improved-octo-waffle'
