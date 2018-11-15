@@ -6,6 +6,7 @@
 #include "graphics.h"
 #include "packedvector.h"
 #include "resourcemanager.h"
+#include "collision.h"
 
 constexpr unsigned int MAX_ENTITIES = 1000000;
 
@@ -35,10 +36,6 @@ int main(void)
 
 
 		dt = tf - ti;
-		sf::CircleShape rect(20.f);
-		// rect.setPosition(10.f, 50.f);
-		window.draw(rect);
-		window.display();
 	}
 
 	return 0;
