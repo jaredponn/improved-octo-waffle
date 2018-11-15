@@ -16,6 +16,10 @@ iow::ResourceManager::ResourceManager()
 	m_key_binds[sf::Keyboard::D] = std::make_pair(
 		iow::KeyState::DOWN, iow::PlayerGameEvents::MOVE_PLAYER_RIGHT);
 
+	// TODO HAIYANG presseing space shoots
+	m_key_binds[sf::Keyboard::Space] = std::make_pair(
+		iow::KeyState::PRESSED, iow::PlayerGameEvents::PLAYER_SHOOT);
+
 
 	// player stuff
 	m_player_config.bulletInterval = 10;

@@ -24,6 +24,7 @@ enum class PlayerGameEvents : unsigned int {
 	MOVE_PLAYER_RIGHT,
 	MOVE_PLAYER_LEFT,
 	MOVE_PLAYER_DOWN,
+	PLAYER_SHOOT, // TODO HAIYANG
 
 	NO_ACTION
 };

@@ -134,6 +134,10 @@ void iow::ECS::runGameLogic(float dt, iow::ResourceManager &resourceManager)
 						       0);
 				break;
 
+			case iow::PlayerGameEvents::PLAYER_SHOOT:
+				// TODO HAIYANG DO WHATEVER
+				break;
+
 			default:
 				break;
 			}
