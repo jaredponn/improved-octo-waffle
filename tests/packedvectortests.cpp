@@ -5,24 +5,6 @@
 #include "../src/collision.cpp"
 #include <SFML/Graphics.hpp>
 
-TEST_CASE("testing collisions")
-{
-
-	sf::RectangleShape rect1(sf::Vector2f(20.f, 20.f));
-	sf::RectangleShape rect2(sf::Vector2f(50.f, 20.f));
-	rect1.setPosition(50.f, 50.f);
-	rect2.setPosition(30.f, 40.f);
-	rect2.setFillColor(sf::Color(100, 200, 250));
-
-	auto tmp = iow::checkCollision(rect1, rect2);
-	if (tmp) {
-		REQUIRE(tmp->x == 0);
-		REQUIRE(tmp->y == 10);
-		// std::cout << tmp->x << std::endl;
-		// std::cout << tmp->y << std::endl;
-	}
-}
-
 TEST_CASE("Creating a packedvector")
 {
 	iow::PackedVector<int> testPkdVec(10);

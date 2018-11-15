@@ -15,7 +15,7 @@ int main(void)
 
 	iow::InputManager::initInputManager();
 	iow::ResourceManager resourceManager;
-	sf::RenderWindow window(sf::VideoMode(500, 500), "waffle",
+	sf::RenderWindow window(sf::VideoMode(1080, 800), "waffle",
 				sf::Style::Close);
 
 	iow::ECS ecs(MAX_ENTITIES);
@@ -30,7 +30,7 @@ int main(void)
 		ti = clock.getElapsedTime();
 
 		iow::InputManager::shiftAndUpdateInputbuffer();
-		ecs.runECS(dt.asMicroseconds(), window, resourceManager);
+		ecs.runECS(dt.asMilliseconds(), window, resourceManager);
 
 		tf = clock.getElapsedTime();
 

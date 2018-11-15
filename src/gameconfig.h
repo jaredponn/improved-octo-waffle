@@ -5,7 +5,7 @@ namespace iow
 {
 struct Entity {
 	sf::Vector2f size;
-	sf::Vector2f position;
+	sf::Vector2f spawnPosition;
 	sf::Sprite sprite;
 	sf::Texture texture;
 };
@@ -21,6 +21,8 @@ struct DestroyableWallConfig : public Entity {
 };
 
 struct EnemyConfig : public Entity {
+	float hp;
+	sf::Vector2f speed;
 };
 
 struct ScaryEnemyConfig : public Entity {

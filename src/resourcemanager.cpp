@@ -21,7 +21,7 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.bulletInterval = 10;
 	m_player_config.bulletSpeed = 10;
 	m_player_config.hp = 10;
-	m_player_config.position = sf::Vector2f(250, 250);
+	m_player_config.spawnPosition = sf::Vector2f(250, 250);
 	m_player_config.size = sf::Vector2f(100, 100);
 	m_player_config.speed = sf::Vector2f(1, 1);
 
@@ -32,9 +32,28 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
 	m_player_config.sprite.setPosition(10, 10);
 
+	// enemy stuff
+	m_enemy_config.hp = 100;
+	m_enemy_config.speed = sf::Vector2f(1, 1);
+	m_enemy_config.size = sf::Vector2f(100, 100);
+
+	m_enemy_config.spawnPosition = sf::Vector2f(100, 100);
+	m_enemy_config.texture.loadFromFile("../resources/muted.png");
+	m_enemy_config.texture.setSmooth(true);
+
+	m_enemy_config.sprite.setTexture(m_player_config.texture);
+	m_enemy_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
+	m_enemy_config.sprite.setColor(sf::Color::Red);
+	m_enemy_config.sprite.setPosition(10, 10);
+
+
 	/* if (!m_player_config.texture.create(200, 200)) { */
 	/* 	Logger::logMessage( */
 	/* 		"ERROR in ResourceManager. Failed to load
 	 * player_config.texture"); */
 	/* } */
+
+	// camera
+	m_camera_config.position = sf::Vector2f(0.f, 0.f);
+	m_camera_config.scale = sf::Vector2f(1.f, -1.0f);
 }

@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "gameconfig.h"
+#include "camera.h"
 #include "input.h"
 
 namespace iow
@@ -24,6 +25,7 @@ class ResourceManager
 	iow::PlayerConfig m_player_config;
 	iow::EnemyConfig m_enemy_config;
 	iow::ScaryEnemyConfig m_scary_enemy_config;
+	iow::Camera m_camera_config;
 	std::vector<iow::DestroyableWallConfig> m_destroyable_wall_configs;
 	iow::TileMap m_tile_map;
 };
