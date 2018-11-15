@@ -2,7 +2,7 @@
 # export CC=/usr/bin/clang
 
 project('improved-octo-waffle', 'cpp',
- default_options : ['-std=c++17'] )
+ default_options : ['cpp_std=c++17'] )
 
 inc = include_directories('src')
 inc = include_directories('extern')
@@ -14,6 +14,7 @@ srcs = [ 'src/main.cpp'
        , 'src/ecs.cpp'
        , 'src/components.cpp'
        , 'src/extrastate.cpp'
+       , 'src/collision.cpp'
        ]
 
 executable('improved-octo-waffle'
@@ -25,6 +26,6 @@ executable('improved-octo-waffle'
 testsrcs = [ 'tests/main-tests.cpp'  
            , 'tests/packedvectortests.cpp'  
            ]
-unittests = executable('unittests', testsrcs, cpp_args : ['-Wall', '-Wextra', '-O2', '-g'], link_args :[])
+unittests = executable('unittests', testsrcs, cpp_args : ['-Wall', '-Wextra', '-O2', '-g'], link_args :['-lsfml-graphics', '-lsfml-window', '-lsfml-audio', '-lsfml-network', '-lsfml-system'])
 test('unittests', unittests )
 

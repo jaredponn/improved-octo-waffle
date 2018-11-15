@@ -65,6 +65,8 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 	window.clear(); // clears the color for the buffer
 	iow::updateAppearanceFromPosition(c_Appearance, c_Position);
 	iow::renderSystem(c_Appearance, window, m_camera);
+	;
+
 
 	// Push output to the screen
 	window.display();
