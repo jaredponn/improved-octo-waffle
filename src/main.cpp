@@ -32,7 +32,6 @@ int main(void)
 	while (1) {
 		iow::InputManager::shiftAndUpdateInputbuffer();
 		window.draw(rect1);
-		window.display();
 		window.draw(cir1);
 		window.display();
 	}
