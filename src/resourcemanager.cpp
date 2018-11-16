@@ -23,7 +23,6 @@ iow::ResourceManager::ResourceManager()
 
 	// player stuff
 	m_player_config.bulletInterval = 10;
-	m_player_config.bulletSpeed = 10;
 	m_player_config.hp = 10;
 	m_player_config.spawnPosition = sf::Vector2f(250, 250);
 	m_player_config.size = sf::Vector2f(100, 100);
@@ -60,4 +59,12 @@ iow::ResourceManager::ResourceManager()
 	// camera
 	m_camera_config.position = sf::Vector2f(0.f, 0.f);
 	m_camera_config.scale = sf::Vector2f(1.f, -1.0f);
+	// bullet configs
+	m_bullet_config.bulletVelocity = 2.f;
+
+	m_bullet_config.texture.loadFromFile("../resources/muted.png");
+	m_bullet_config.texture.setSmooth(true);
+	m_bullet_config.sprite.setTexture(m_player_config.texture);
+	m_bullet_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
+	m_bullet_config.sprite.setColor(sf::Color::Yellow);
 }

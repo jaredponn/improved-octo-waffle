@@ -34,7 +34,6 @@ int main(void)
 
 		tf = clock.getElapsedTime();
 
-
 		dt = tf - ti;
 	}
 
