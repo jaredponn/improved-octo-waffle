@@ -27,17 +27,21 @@ size_t iow::ECS::delete_entity_at(size_t index)
 	// TODO
 	Logger::logMessage(
 		"ERROR deleting entity. This has not been implemented yet.");
+	Logger::logMessage("UNTESTED AND PROBABLY NOT WORKIGN");
 #define X_CPT(name, type)                                                      \
 	MK_COMPONENT_MEMBER_VAR_NAME(name).delete_element_at_sparse_vector(    \
 		index);                                                        \
 	IOW_COMPONENT_LIST
 #undef X_CPT
+
+	(void)index;
 	return 0;
 }
 
 void iow::ECS::initECS(sf::RenderWindow &window,
 		       iow::ResourceManager &resourceManager)
 {
+	(void)window;
 	/* creating the player entity */
 	m_player_entity = create_new_entity();
 
@@ -82,11 +86,11 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 	/* Systems... */
 	window.clear(); // clears the color for the buffer
+	iow::updatePositionFromSpeed(dt, c_Position, c_Speed);
 	iow::updateCamera(m_camera, c_Position[m_player_entity],
 			  window.getSize());
 	iow::updateAppearanceFromPosition(c_Appearance, c_Position, m_camera);
 	iow::renderSystem(c_Appearance, window, m_camera);
-	;
 
 
 	/* Push output to the screen */
@@ -95,6 +99,8 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 void iow::ECS::runGameLogic(float dt, iow::ResourceManager &resourceManager)
 {
+
+	size_t tmp;
 	for (size_t i = 0; i < iow::MAX_NUMBER_KEYS; ++i) {
 		if (iow::InputManager::getKeyState(
 			    static_cast<sf::Keyboard::Key>(i))
@@ -135,10 +141,19 @@ void iow::ECS::runGameLogic(float dt, iow::ResourceManager &resourceManager)
 				break;
 
 			case iow::PlayerGameEvents::PLAYER_SHOOT:
-				// TODO HAIYANG DO WHATEVER
+				tmp = create_new_entity();
+				c_IsBullet.add_element_at_sparse_vector(tmp,
+									true);
+				c_Position.add_element_at_sparse_vector(
+					tmp, c_Position[m_player_entity]);
+				c_Speed.add_element_at_sparse_vector(
+					tmp, sf::Vector2f(2.f, 2.f));
+				c_Appearance.add_element_at_sparse_vector(
+					tmp,
+					resourceManager.m_bullet_config.sprite);
 				break;
 
-			default:
+			case iow::PlayerGameEvents::NO_ACTION:
 				break;
 			}
 		}
