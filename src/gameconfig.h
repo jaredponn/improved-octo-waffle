@@ -14,7 +14,6 @@ struct Entity {
 struct PlayerConfig : public Entity {
 	float hp;
 	float bulletInterval;
-	float bulletSpeed;
 	sf::Vector2f speed;
 };
 
@@ -34,6 +33,11 @@ struct ScaryEnemyConfig : public Entity {
 struct CameraConfig {
 	sf::Vector2f topLeftPosition;
 	sf::Vector2f botRightPosition;
+};
+struct BulletConfig {
+	sf::Sprite sprite;
+	sf::Texture texture;
+	float bulletVelocity;
 };
 
 struct TileMap {
