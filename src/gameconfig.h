@@ -1,6 +1,7 @@
 #pragma once
-#include <vector>
 #include <SFML/Graphics.hpp>
+
+#include "tilemap.h"
 
 namespace iow
 {
@@ -36,10 +37,9 @@ struct CameraConfig {
 	sf::Vector2f botRightPosition;
 };
 
-struct TileMap {
-	unsigned int width;
-	unsigned int height;
+struct TileMapConfig {
+	std::vector<iow::TileConfig> tileConfigs;
+	iow::TileMap tileMap;
 };
-
 
 } // namespace iow
