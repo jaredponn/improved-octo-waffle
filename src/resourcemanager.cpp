@@ -60,4 +60,20 @@ iow::ResourceManager::ResourceManager()
 	// camera
 	m_camera_config.position = sf::Vector2f(0.f, 0.f);
 	m_camera_config.scale = sf::Vector2f(1.f, -1.0f);
+
+
+	/* individualtile configs map */
+	// 0 tile config:
+	TileConfig tilemapconf0;
+	m_tile_configs.push_back(tilemapconf0);
+
+	// 1 tile config:
+	TileConfig tilemapconf1;
+	m_tile_configs.push_back(tilemapconf1);
+
+	// 2 tile config:
+	TileConfig tilemapconf2;
+	m_tile_configs.push_back(tilemapconf2);
+
+	/* tile map config */
 }
