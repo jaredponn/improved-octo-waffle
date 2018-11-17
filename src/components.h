@@ -11,6 +11,8 @@
 #define IOW_COMPONENT_LIST                                                     \
 	/*X_CPT(name, type) */                                                 \
 	X_CPT(Appearance, sf ::Sprite)                                         \
+	X_CPT(IsBullet, bool)                                                  \
+	X_CPT(Direction, sf::Vector2f)                                         \
 	X_CPT(Position, sf::Vector2f)                                          \
 	X_CPT(Speed, sf::Vector2f)                                             \
 	X_CPT(HP, float)                                                       \

@@ -69,18 +69,21 @@ std::optional<sf::Vector2f> iow::checkCollision(sf::RectangleShape entity1,
 
 bool iow::checkCollision(sf::CircleShape circle, sf::RectangleShape entity)
 {
-	// the circle' position is its center
-	sf::Vector2f circleCenter = circle.getPosition();
-	sf::Vector2f entityCenter = entity.getPosition();
-	entityCenter.x = entityCenter.x + entity.getSize().x / 2 + 0.2f;
-	entityCenter.y = entityCenter.y + entity.getSize().y / 2 + 0.2f;
+	sf::Vector2f circleCenter(
+		circle.getPosition()
+		+ sf::Vector2f(circle.getRadius(), circle.getRadius()));
+	sf::Vector2f entityCenter(entity.getPosition()
+				  + entity.getSize() / 2.f);
 	sf::Vector2f d = circleCenter - entityCenter;
 	sf::Vector2f p;
-	p.x = std::max(-entity.getSize().x / 2 - 0.2f,
-		       std::min(d.x, entity.getSize().x / 2 + 0.2f));
-	p.y = std::max(-entity.getSize().y / 2 - 0.2f,
-		       std::min(d.y, entity.getSize().y / 2 + 0.2f));
+	p.x = std::max(-entity.getSize().x / 2,
+		       std::min(d.x, entity.getSize().x / 2))
+	      + entityCenter.x;
+	p.y = std::max(-entity.getSize().y / 2,
+		       std::min(d.y, entity.getSize().y / 2))
+	      + entityCenter.y;
+
 	d = p - circleCenter;
-	float ptocir = std::sqrt(p.x * p.x + p.y * p.y);
+	float ptocir = std::sqrt(d.x * d.x + d.y * d.y);
 	return ptocir < circle.getRadius();
 }
