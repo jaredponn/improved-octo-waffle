@@ -59,7 +59,6 @@ iow::ResourceManager::ResourceManager()
 	// camera
 	m_camera_config.position = sf::Vector2f(0.f, 0.f);
 	m_camera_config.scale = sf::Vector2f(1.f, -1.0f);
-<<<<<<< HEAD
 
 
 	/* individualtile configs map */
@@ -76,7 +75,7 @@ iow::ResourceManager::ResourceManager()
 	m_tile_configs.push_back(tilemapconf2);
 
 	/* tile map config */
-=======
+
 	// bullet configs
 	m_bullet_config.bulletVelocity = 2.f;
 
@@ -85,5 +84,4 @@ iow::ResourceManager::ResourceManager()
 	m_bullet_config.sprite.setTexture(m_player_config.texture);
 	m_bullet_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
 	m_bullet_config.sprite.setColor(sf::Color::Yellow);
->>>>>>> 10dde857de59d91f98f0a15ec2115e822d454579
 }
