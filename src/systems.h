@@ -19,8 +19,7 @@ namespace iow
 // -----------------------------------------
 static inline void
 updateAppearanceFromPosition(iow::PackedVector<Appearance> &pkdAppearance,
-			     iow::PackedVector<Position> &pkdPos,
-			     iow::Camera &camera)
+			     const iow::PackedVector<Position> &pkdPos)
 {
 	const auto &posPkdData = pkdPos.get_packed_data();
 	const auto &posPkdIndicies = pkdPos.get_packed_indicies();
@@ -29,28 +28,8 @@ updateAppearanceFromPosition(iow::PackedVector<Appearance> &pkdAppearance,
 		Logger::logMessage(
 			"ERROR in updateAppearanceFromPosition. Position packed vector is of different size, buggy programis going to follow ");
 
-	sf::Vector2<float> npos;
-	sf::Vector2f lengthOffset;
-
 	for (size_t i = 0; i < posPkdIndicies.size(); ++i) {
-		npos = (posPkdData[i] - (camera.position))
-		       + (camera.windowsize * 0.5f);
-
-		lengthOffset = sf::Vector2<float>(
-			-static_cast<float>(pkdAppearance[posPkdIndicies[i]]
-						    .getTextureRect()
-						    .width)
-				/ 2.f,
-			static_cast<float>(pkdAppearance[posPkdIndicies[i]]
-						   .getTextureRect()
-						   .height)
-				/ 2.f);
-		npos += lengthOffset;
-		npos.x *= camera.scale.x;
-		npos.y *= camera.scale.y;
-
-
-		pkdAppearance[posPkdIndicies[i]].setPosition(npos);
+		pkdAppearance[posPkdIndicies[i]].setPosition(posPkdData[i]);
 	}
 }
 
@@ -94,10 +73,23 @@ static inline void renderEntityToSFMLRenderBuffer(sf::RenderWindow &window,
 						  const sf::Sprite &sprite,
 						  const iow::Camera &camera)
 {
-	sf::Sprite tmp = sprite;
-	tmp.move(camera.position);
 
-	window.draw(sprite);
+	sf::Vector2f lengthOffset = sf::Vector2f(
+		-static_cast<float>(sprite.getTextureRect().width) / 2.f,
+		static_cast<float>(sprite.getTextureRect().height) / 2.f);
+
+	sf::Vector2f npos;
+	npos = (sprite.getPosition() - (camera.position))
+	       + (camera.windowsize * 0.5f);
+
+	npos += lengthOffset;
+	npos.x *= camera.scale.x;
+	npos.y *= camera.scale.y;
+
+	auto newsprite = sprite;
+	newsprite.setPosition(npos);
+
+	window.draw(newsprite);
 }
 
 static inline void renderSystem(const iow::PackedVector<sf::Sprite> &data,
@@ -108,6 +100,5 @@ static inline void renderSystem(const iow::PackedVector<sf::Sprite> &data,
 		renderEntityToSFMLRenderBuffer(window, i, camera);
 	}
 }
-
 
 } // namespace iow
