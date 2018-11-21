@@ -1,9 +1,11 @@
 #include "resourcemanager.h"
 #include "logger.h"
+#include "defaulttilemap.h"
+
 
 iow::ResourceManager::ResourceManager()
 {
-	// keybaord
+	/* keybaord */
 	m_key_binds.resize(iow::MAX_NUMBER_KEYS,
 			   std::make_pair(iow::KeyState::INVALID_STATE,
 					  iow ::PlayerGameEvents::NO_ACTION));
@@ -15,13 +17,11 @@ iow::ResourceManager::ResourceManager()
 		iow::KeyState::DOWN, iow::PlayerGameEvents::MOVE_PLAYER_DOWN);
 	m_key_binds[sf::Keyboard::D] = std::make_pair(
 		iow::KeyState::DOWN, iow::PlayerGameEvents::MOVE_PLAYER_RIGHT);
-
-	// TODO HAIYANG presseing space shoots
 	m_key_binds[sf::Keyboard::Space] = std::make_pair(
 		iow::KeyState::PRESSED, iow::PlayerGameEvents::PLAYER_SHOOT);
 
 
-	// player stuff
+	/* player stuff */
 	m_player_config.bulletInterval = 10;
 	m_player_config.hp = 10;
 	m_player_config.spawnPosition = sf::Vector2f(250, 250);
@@ -35,7 +35,7 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
 	m_player_config.sprite.setPosition(10, 10);
 
-	// enemy stuff
+	/* enemy stuff */
 	m_enemy_config.hp = 100;
 	m_enemy_config.speed = sf::Vector2f(1, 1);
 	m_enemy_config.size = sf::Vector2f(100, 100);
@@ -60,23 +60,17 @@ iow::ResourceManager::ResourceManager()
 	m_camera_config.position = sf::Vector2f(0.f, 0.f);
 	m_camera_config.scale = sf::Vector2f(1.f, -1.0f);
 
-	/* tile map config */
+	/* TileConfig  */
+	m_tile_map_config.setTileSize(100, 100);
+	m_tile_map_config.loadTileMap(iow::DEFAULT_TILE_MAP);
 
-	// TODO test tile map and load some stuff. after make sure you actually
-	// render stuff in the ECS!
-	/* individualtile configs map */
-	/* TileConfig groundConf; */
-	/* groundConf.texture.loadFromFile("../resources/bg.png"); */
-	/* groundConf.texture.setSmooth(true); */
-	/* groundConf.sprite.setTexture(groundConf.texture); */
-	/* groundConf.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32)); */
-	/* m_tile_configs[static_cast<size_t>(iow::TileType::GROUND)] =
-	 * groundConf; */
+	m_tile_map_config.setTileConfig("../resources/bg.png",
+					iow::TileType::GROUND);
 
-	/* TileConfig staticWallConf; */
-	/* m_tile_configs[static_cast<size_t>(iow::TileType::STATIC_WALL)] = */
-	/* 	staticWallConf; */
 
+	TileConfig staticWallConf; // static wall conf
+	m_tile_map_config.setTileConfig("../resources/wall.png",
+					iow::TileType::STATIC_WALL);
 
 	/* bullet configs */
 	m_bullet_config.bulletVelocity = 2.f;
