@@ -22,8 +22,8 @@ updateAppearanceFromPosition(iow::PackedVector<Appearance> &pkdAppearance,
 			     iow::PackedVector<Position> &pkdPos,
 			     iow::Camera &camera)
 {
-	auto posPkdData = pkdPos.get_packed_data();
-	auto posPkdIndicies = pkdPos.get_packed_indicies();
+	const auto &posPkdData = pkdPos.get_packed_data();
+	const auto &posPkdIndicies = pkdPos.get_packed_indicies();
 
 	if (posPkdData.size() != posPkdIndicies.size())
 		Logger::logMessage(
@@ -45,9 +45,6 @@ updateAppearanceFromPosition(iow::PackedVector<Appearance> &pkdAppearance,
 						   .getTextureRect()
 						   .height)
 				/ 2.f);
-		std::cout << lengthOffset.x << std::endl;
-		std::cout << lengthOffset.y << std::endl;
-
 		npos += lengthOffset;
 		npos.x *= camera.scale.x;
 		npos.y *= camera.scale.y;
@@ -57,6 +54,24 @@ updateAppearanceFromPosition(iow::PackedVector<Appearance> &pkdAppearance,
 	}
 }
 
+static inline void
+updatePositionFromSpeed(const float dt,
+			iow::PackedVector<Position> &positionPackedVector,
+			const iow::PackedVector<Speed> &speedPackedVector)
+{
+
+	const auto &speedPackedIndicies =
+		speedPackedVector.get_packed_indicies();
+	const auto &speedPackedData = speedPackedVector.get_packed_data();
+
+	if (speedPackedIndicies.size() != speedPackedData.size())
+		Logger::logMessage(
+			"ERROR in update position from speed. Velocity packed data is not the same size");
+	for (size_t i = 0; i < speedPackedData.size(); ++i) {
+		positionPackedVector[speedPackedIndicies[i]] +=
+			speedPackedData[i] * dt;
+	}
+}
 // -----------------------------------------
 //    Camera update system
 // -----------------------------------------
