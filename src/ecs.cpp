@@ -44,16 +44,14 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 	(void)window;
 	/* creating the player entity */
 	m_player_entity = create_new_entity();
-
-	/* c_Speed.add_element_at_sparse_vector( */
-	/* 	m_player_entity, resourceManager.m_player_config.speed); */
 	c_Position.add_element_at_sparse_vector(
 		m_player_entity, resourceManager.m_player_config.spawnPosition);
 	c_HP.add_element_at_sparse_vector(m_player_entity,
 					  resourceManager.m_player_config.hp);
 	c_Appearance.add_element_at_sparse_vector(
 		m_player_entity, resourceManager.m_player_config.sprite);
-
+	c_Direction.add_element_at_sparse_vector(m_player_entity,
+						 iow::Directions::UP);
 
 	/* intializing the camera */
 	m_camera.position = resourceManager.m_camera_config.position;

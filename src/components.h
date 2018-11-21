@@ -2,6 +2,7 @@
 
 #include "packedvector.h"
 #include "graphics.h"
+#include "directions.h"
 #include "../extern/mmacros.h"
 
 /** Components.h
@@ -19,10 +20,12 @@ namespace iow
 	X_CPT(TilePosition, sf ::Vector2f)                                     \
 	X_CPT(TileAppearance, sf ::Sprite)                                     \
                                                                                \
+	/* bullet components */                                                \
+	X_CPT(IsBullet, bool)                                                  \
+	X_CPT(Direction, iow::Directions)                                      \
+                                                                               \
 	/* game components */                                                  \
 	X_CPT(Appearance, sf ::Sprite)                                         \
-	X_CPT(IsBullet, bool)                                                  \
-	X_CPT(Direction, sf::Vector2f)                                         \
 	X_CPT(Position, sf::Vector2f)                                          \
 	X_CPT(Speed, sf::Vector2f)                                             \
 	X_CPT(HP, float)                                                       \
