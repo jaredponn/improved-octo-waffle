@@ -1,6 +1,7 @@
 #pragma once
-#include <vector>
 #include <SFML/Graphics.hpp>
+
+#include "tilemap.h"
 
 namespace iow
 {
@@ -40,10 +41,9 @@ struct BulletConfig {
 	float bulletVelocity;
 };
 
-struct TileMap {
-	unsigned int width;
-	unsigned int height;
+struct TileMapConfig {
+	std::vector<iow::TileConfig> tileConfigs;
+	iow::TileMap tileMap;
 };
-
 
 } // namespace iow
