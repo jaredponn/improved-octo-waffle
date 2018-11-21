@@ -4,9 +4,13 @@
 #include <vector>
 #include <cctype>
 #include <algorithm>
+#include <iostream>
 
 namespace iow
 {
+
+// splits the string by a delimter. If there are empty strings between
+// delimiters, wit will not append that to the token vector
 static inline std::vector<std::string>
 splitStringBy(const std::string &str, const std::string delimiter)
 {
@@ -17,10 +21,14 @@ splitStringBy(const std::string &str, const std::string delimiter)
 	size_t pos = s.find(delimiter);
 
 	while (pos != std::string::npos) {
+		pos = s.find(delimiter);
 		token = s.substr(0, pos);
-		tokens.push_back(token);
+		if (token != "") {
+			tokens.push_back(token);
+		}
 		s.erase(0, pos + delimiter.length());
 	}
+
 	return tokens;
 }
 
