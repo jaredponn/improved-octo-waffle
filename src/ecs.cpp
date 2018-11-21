@@ -45,8 +45,8 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 	/* creating the player entity */
 	m_player_entity = create_new_entity();
 
-	c_Speed.add_element_at_sparse_vector(
-		m_player_entity, resourceManager.m_player_config.speed);
+	/* c_Speed.add_element_at_sparse_vector( */
+	/* 	m_player_entity, resourceManager.m_player_config.speed); */
 	c_Position.add_element_at_sparse_vector(
 		m_player_entity, resourceManager.m_player_config.spawnPosition);
 	c_HP.add_element_at_sparse_vector(m_player_entity,
@@ -63,8 +63,8 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 	size_t enemyTmp;
 	for (size_t i = 0; i < 5; ++i) {
 		enemyTmp = create_new_entity();
-		c_Speed.add_element_at_sparse_vector(
-			enemyTmp, resourceManager.m_enemy_config.speed);
+		/* c_Speed.add_element_at_sparse_vector( */
+		/* 	enemyTmp, resourceManager.m_enemy_config.speed); */
 		c_Position.add_element_at_sparse_vector(
 			enemyTmp, resourceManager.m_enemy_config.spawnPosition);
 		c_HP.add_element_at_sparse_vector(
@@ -73,8 +73,22 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 			enemyTmp, resourceManager.m_enemy_config.sprite);
 	}
 
+	/* spawning the world */
+	for (size_t i = 0;
+	     i < resourceManager.m_tile_map_config.getTileMapSize(); ++i) {
+		size_t tileEntity = create_new_entity();
+		const auto &tmp = resourceManager.m_tile_map_config.getTile(i);
 
-	// spawning the world TODO
+		c_TilePosition.add_element_at_sparse_vector(tileEntity,
+							    std::get<0>(tmp));
+
+		c_TileAppearance.add_element_at_sparse_vector(
+			tileEntity, resourceManager.m_tile_map_config
+					    .getTileConfig(std::get<1>(tmp))
+					    .sprite);
+	}
+
+	iow::updateAppearanceFromPosition(c_TileAppearance, c_TilePosition);
 }
 
 void iow::ECS::runECS(float dt, sf::RenderWindow &window,
@@ -89,9 +103,10 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 	iow::updatePositionFromSpeed(dt, c_Position, c_Speed);
 	iow::updateCamera(m_camera, c_Position[m_player_entity],
 			  window.getSize());
-	iow::updateAppearanceFromPosition(c_Appearance, c_Position, m_camera);
-	iow::renderSystem(c_Appearance, window, m_camera);
+	iow::updateAppearanceFromPosition(c_Appearance, c_Position);
 
+	iow::renderSystem(c_TileAppearance, window, m_camera);
+	iow::renderSystem(c_Appearance, window, m_camera);
 
 	/* Push output to the screen */
 	window.display();
@@ -99,8 +114,6 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 void iow::ECS::runGameLogic(float dt, iow::ResourceManager &resourceManager)
 {
-
-	size_t tmp;
 	for (size_t i = 0; i < iow::MAX_NUMBER_KEYS; ++i) {
 		if (iow::InputManager::getKeyState(
 			    static_cast<sf::Keyboard::Key>(i))
@@ -140,18 +153,20 @@ void iow::ECS::runGameLogic(float dt, iow::ResourceManager &resourceManager)
 						       0);
 				break;
 
-			case iow::PlayerGameEvents::PLAYER_SHOOT:
-				tmp = create_new_entity();
-				c_IsBullet.add_element_at_sparse_vector(tmp,
-									true);
+			case iow::PlayerGameEvents::PLAYER_SHOOT: {
+				size_t bulletEntity = create_new_entity();
+				c_IsBullet.add_element_at_sparse_vector(
+					bulletEntity, true);
 				c_Position.add_element_at_sparse_vector(
-					tmp, c_Position[m_player_entity]);
+					bulletEntity,
+					c_Position[m_player_entity]);
 				c_Speed.add_element_at_sparse_vector(
-					tmp, sf::Vector2f(2.f, 2.f));
+					bulletEntity, sf::Vector2f(2.f, 2.f));
 				c_Appearance.add_element_at_sparse_vector(
-					tmp,
+					bulletEntity,
 					resourceManager.m_bullet_config.sprite);
 				break;
+			}
 
 			case iow::PlayerGameEvents::NO_ACTION:
 				break;
