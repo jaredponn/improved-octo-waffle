@@ -56,27 +56,29 @@ iow::ResourceManager::ResourceManager()
 	 * player_config.texture"); */
 	/* } */
 
-	// camera
+	/* camera */
 	m_camera_config.position = sf::Vector2f(0.f, 0.f);
 	m_camera_config.scale = sf::Vector2f(1.f, -1.0f);
 
-
-	/* individualtile configs map */
-	// 0 tile config:
-	TileConfig tilemapconf0;
-	m_tile_configs.push_back(tilemapconf0);
-
-	// 1 tile config:
-	TileConfig tilemapconf1;
-	m_tile_configs.push_back(tilemapconf1);
-
-	// 2 tile config:
-	TileConfig tilemapconf2;
-	m_tile_configs.push_back(tilemapconf2);
-
 	/* tile map config */
 
-	// bullet configs
+	// TODO test tile map and load some stuff. after make sure you actually
+	// render stuff in the ECS!
+	/* individualtile configs map */
+	/* TileConfig groundConf; */
+	/* groundConf.texture.loadFromFile("../resources/bg.png"); */
+	/* groundConf.texture.setSmooth(true); */
+	/* groundConf.sprite.setTexture(groundConf.texture); */
+	/* groundConf.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32)); */
+	/* m_tile_configs[static_cast<size_t>(iow::TileType::GROUND)] =
+	 * groundConf; */
+
+	/* TileConfig staticWallConf; */
+	/* m_tile_configs[static_cast<size_t>(iow::TileType::STATIC_WALL)] = */
+	/* 	staticWallConf; */
+
+
+	/* bullet configs */
 	m_bullet_config.bulletVelocity = 2.f;
 
 	m_bullet_config.texture.loadFromFile("../resources/muted.png");
