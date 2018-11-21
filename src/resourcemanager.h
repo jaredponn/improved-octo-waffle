@@ -26,8 +26,8 @@ class ResourceManager
 	iow::EnemyConfig m_enemy_config;
 	iow::ScaryEnemyConfig m_scary_enemy_config;
 	iow::Camera m_camera_config;
-	std::vector<iow::DestroyableWallConfig> m_destroyable_wall_configs;
 	iow::BulletConfig m_bullet_config;
+	std::vector<iow::DestroyableWallConfig> m_destroyable_wall_configs;
 
 	iow::TileMapConfig m_tile_map_config;
 };
