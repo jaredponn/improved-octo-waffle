@@ -7,6 +7,12 @@
 
 constexpr float DEFAULT_TILE_SIZE = 100;
 
+iow::TileConfig::TileConfig()
+{
+	collision.reset();
+	isDestroyable.reset();
+}
+
 iow::TileMap::TileMap(){};
 
 void iow::TileMap::assertTileMapSize()
@@ -40,14 +46,30 @@ void iow::TileMap::setTileSize(const sf::Vector2f &n)
 	m_tileSize = tmp;
 }
 
+void iow::TileMap::setTileSize(const float x, const float y)
+{
+	setTileSize(sf::Vector2f(x, y));
+}
+
 const sf::Vector2f &iow::TileMap::getTileSize()
 {
 	return m_tileSize;
 }
 
 
-void iow::TileMap::loadTileMap(std::string tilemap)
+void iow::TileMap::loadTileMap(const char tilemap[])
 {
+	if (tilemap != nullptr)
+		loadTileMap(std::string(tilemap));
+	else {
+		Logger::logMessage(
+			"ERROR in loadTileMap. Ensure that the string is not NULL.");
+	}
+}
+
+void iow::TileMap::loadTileMap(const std::string &tilemap)
+{
+
 	if (tilemap.size() <= 0) {
 		Logger::logMessage(
 			"ERROR loading tile map in loadTileMap function. Tile map vector is empty, please input a vector with values");
@@ -66,6 +88,11 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 	std::vector<std::string> row = iow::splitStringBy(lines[0], " ");
 	// number of columns is the number of space seperated things
 	m_tileMapSize.y = row.size();
+
+	for (auto &i : lines) {
+		std::cout << i << std::endl;
+	}
+
 
 	for (size_t i = 0; i < lines.size(); ++i) {
 		row = ::iow::splitStringBy(lines[i], " ");
@@ -92,7 +119,6 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 				Logger::logMessage(std::to_string(j).c_str());
 				Logger::logMessage(
 					"Please ensure that the tile map only contains valid enum values for tile types.. loading the defaul ttile type.");
-
 				m_tiles.push_back(
 					static_cast<iow::TileType>(0));
 			}
@@ -109,6 +135,10 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 		}
 
 		for (size_t j = 0; j < m_tileMapSize.y - row.size(); ++j) {
+			Logger::logMessage(
+				std::to_string(m_tileMapSize.y).c_str());
+			Logger::logMessage(
+				std::to_string(m_tileMapSize.y).c_str());
 			Logger::logMessage("ERROR loading tile map at ROW:");
 			Logger::logMessage(std::to_string(i).c_str());
 			Logger::logMessage("and COLUMN:");
@@ -122,6 +152,9 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 
 std::pair<iow::Position, iow::TileType> iow::TileMap::getTile(size_t i)
 {
+	/* sf::Vector2i tileIndexPosition = sf::Vector2i( */
+	/* 	m_tileMapSize.x - 1 - i / m_tileMapSize.y, i %
+	 * m_tileMapSize.y); */
 	sf::Vector2i tileIndexPosition = sf::Vector2i(
 		m_tileMapSize.x - 1 - i / m_tileMapSize.y, i % m_tileMapSize.y);
 	return std::make_pair(
@@ -134,4 +167,36 @@ std::pair<iow::Position, iow::TileType> iow::TileMap::getTile(size_t i)
 size_t iow::TileMap::getTileMapSize()
 {
 	return m_tiles.size();
+}
+
+void iow::TileMap::setTileConfig(const char *strpath, const TileType type)
+{
+
+	if (strpath != nullptr) {
+		m_tileConfigs[static_cast<size_t>(type)].texture.loadFromFile(
+			strpath);
+		m_tileConfigs[static_cast<size_t>(type)].texture.setSmooth(
+			true);
+
+		m_tileConfigs[static_cast<size_t>(type)].sprite.setTexture(
+			m_tileConfigs[static_cast<size_t>(type)].texture);
+		m_tileConfigs[static_cast<size_t>(type)].sprite.setTextureRect(
+			sf::IntRect(0, 0, m_tileSize.x, m_tileSize.y));
+
+	} else {
+		Logger::logMessage(
+			"ERROR loading iamge for tile config. Ensure the path is not a null ptr before loading it.");
+	}
+}
+
+const iow::TileConfig iow::TileMap::getTileConfig(iow::TileType val)
+{
+	return m_tileConfigs[static_cast<size_t>(val)];
+}
+
+void iow::TileMap::printTileMap()
+{
+	for (size_t i = 0; i < m_tiles.size(); ++i) {
+		// TODO implement this funciton
+	}
 }

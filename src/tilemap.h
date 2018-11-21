@@ -5,7 +5,6 @@
 #include <array>
 #include <utility>
 
-#include "collision.h"
 #include "components.h"
 
 namespace iow
@@ -13,7 +12,7 @@ namespace iow
 
 enum class TileType : size_t {
 	GROUND = 0,
-	STATIC_WALL,
+	STATIC_WALL = 1,
 	DESTROYABLE_WALL,
 
 	TOTAL_NUMBER_OF_TILES // should not be used when getting tile configs
@@ -32,11 +31,14 @@ static inline bool isValidTileType(size_t n)
 }
 
 struct TileConfig {
+	// constructo ro intialize the std::optionals as empty
+	TileConfig();
+
 	sf::Texture texture; // texture
 	sf::Sprite sprite;   // sprite
 
 	std::optional<sf::RectangleShape> collision; // does have collision?
-	std::optional<float> isDestroyable;	  // is it destroyable?
+	std::optional<iow::HP> isDestroyable;	// is it destroyable?
 };
 
 using TileConfigs =
@@ -59,24 +61,35 @@ class TileMap
 	// must be rectangles
 	void assertTileMapSize();
 
+	// gets the tile size
+	const sf::Vector2f &getTileSize();
+
     public:
 	TileMap();
 
 	/* setters */
 	// loads a tile map from a space seperated string for columns, and \n
 	// seperated string for the rows
-	void loadTileMap(std::string tilemap);
+	void loadTileMap(const std::string &tilemap);
+	void loadTileMap(const char[]);
 
 	// sets the size of the tiles (e.g.100x100)
 	void setTileSize(const sf::Vector2f &);
+	void setTileSize(const float x, const float y);
+
+	// set the tile config. witha given path to a texture
+	void setTileConfig(const char *, const TileType);
 
 	/* getters */
 	std::pair<iow::Position, iow::TileType> getTile(size_t i);
+	// gets the length ofthe tile map
 	size_t getTileMapSize();
 	// gets a specific tile config
-	const TileConfig &getTileConfig(iow::TileType val);
-	// gets the tile size
-	const sf::Vector2f &getTileSize();
+	const iow::TileConfig getTileConfig(iow::TileType val);
+
+	/* printing */
+	// TODO not implemented yet
+	void printTileMap();
 };
 
 /* Using the tile map */
