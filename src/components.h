@@ -8,8 +8,18 @@
  * Class for the vectors of componenets
  */
 
+
+namespace iow
+{
+
 #define IOW_COMPONENT_LIST                                                     \
 	/*X_CPT(name, type) */                                                 \
+                                                                               \
+	/* tile map components*/                                               \
+	X_CPT(TilePosition, sf ::Vector2f)                                     \
+	X_CPT(TileAppearance, sf ::Sprite)                                     \
+                                                                               \
+	/* game components */                                                  \
 	X_CPT(Appearance, sf ::Sprite)                                         \
 	X_CPT(IsBullet, bool)                                                  \
 	X_CPT(Direction, sf::Vector2f)                                         \
@@ -19,9 +29,6 @@
 	X_CPT(HasHP, bool)
 
 #define MK_COMPONENT_MEMBER_VAR_NAME(name) c_##name
-
-namespace iow
-{
 
 // deprecated
 enum class ComponentTypes : uint64_t {};
