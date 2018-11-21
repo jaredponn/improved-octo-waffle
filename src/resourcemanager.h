@@ -30,6 +30,5 @@ class ResourceManager
 	iow::BulletConfig m_bullet_config;
 
 	iow::TileMapConfig m_tile_map_config;
-	std::vector<TileConfig> m_tile_configs;
 };
 } // namespace iow
