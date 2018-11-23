@@ -59,9 +59,9 @@ class PackedVector
 	}
 
 	/* Getters */
-	inline const std::vector<size_t> &get_sparse_vector() const;
-	inline const std::vector<size_t> &get_packed_indicies() const;
-	inline const std::vector<T> &get_packed_data() const;
+	inline const std::vector<size_t> get_sparse_vector() const;
+	inline const std::vector<size_t> get_packed_indicies() const;
+	inline const std::vector<T> get_packed_data() const;
 
 	~PackedVector();
 };
@@ -150,18 +150,18 @@ PackedVector<T>::get_global_index_from_packed_index(const size_t index)
 
 /* Getters */
 template <class T>
-inline const std::vector<size_t> &PackedVector<T>::get_sparse_vector() const
+inline const std::vector<size_t> PackedVector<T>::get_sparse_vector() const
 {
 	return m_sparse_vector;
 }
 template <class T>
-inline const std::vector<size_t> &PackedVector<T>::get_packed_indicies() const
+inline const std::vector<size_t> PackedVector<T>::get_packed_indicies() const
 
 {
 	return m_packed_indicies;
 }
 template <class T>
-inline const std::vector<T> &PackedVector<T>::get_packed_data() const
+inline const std::vector<T> PackedVector<T>::get_packed_data() const
 
 {
 	return m_packed_data;
