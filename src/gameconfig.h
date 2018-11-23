@@ -3,6 +3,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 
+#include "texturemanager.h"
 #include "tilemap.h"
 
 namespace iow
@@ -11,7 +12,6 @@ struct Entity {
 	sf::Vector2f size;
 	sf::Vector2f spawnPosition;
 	sf::Sprite sprite;
-	sf::Texture texture;
 };
 
 struct PlayerConfig : public Entity {
@@ -37,9 +37,8 @@ struct CameraConfig {
 	sf::Vector2f topLeftPosition;
 	sf::Vector2f botRightPosition;
 };
-struct BulletConfig {
-	sf::Sprite sprite;
-	sf::Texture texture;
+
+struct BulletConfig : public Entity {
 	float bulletVelocity;
 };
 

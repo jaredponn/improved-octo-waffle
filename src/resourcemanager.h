@@ -4,8 +4,10 @@
 #include <vector>
 #include <tuple>
 #include <SFML/Graphics.hpp>
+#include <string>
 
 #include "gameconfig.h"
+#include "texturemanager.h"
 #include "camera.h"
 #include "input.h"
 
@@ -15,6 +17,9 @@ using KeyBind = std::pair<iow::KeyState, iow::PlayerGameEvents>;
 
 class ResourceManager
 {
+    private:
+	iow::TextureManager m_textures;
+
     public:
 	ResourceManager();
 

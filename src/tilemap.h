@@ -2,53 +2,38 @@
 
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include <array>
 #include <utility>
+#include <memory>
 
 #include "components.h"
+#include "texturemanager.h"
 
 namespace iow
 {
 
-enum class TileType : size_t {
-	GROUND = 0,
-	STATIC_WALL = 1,
-	DESTROYABLE_WALL,
-
-	TOTAL_NUMBER_OF_TILES // should not be used when getting tile configs
-};
-
-static inline bool isValidTileType(size_t n)
-{
-	for (size_t i = 0;
-	     i < static_cast<size_t>(iow::TileType::TOTAL_NUMBER_OF_TILES);
-	     ++i) {
-		if (n == i) {
-			return true;
-		}
-	}
-	return false;
-}
-
 struct TileConfig {
 	// constructo ro intialize the std::optionals as empty
-	TileConfig();
+	TileConfig(const sf::Texture &texture,
+		   std::optional<sf::RectangleShape> col =
+			   std::make_optional<sf::RectangleShape>(),
+		   std::optional<iow::HP> des = std::make_optional<iow::HP>()
 
-	sf::Texture texture; // texture
-	sf::Sprite sprite;   // sprite
+	);
+
+	sf::Sprite sprite; // sprite
 
 	std::optional<sf::RectangleShape> collision; // does have collision?
 	std::optional<iow::HP> isDestroyable;	// is it destroyable?
 };
 
-using TileConfigs =
-	std::array<TileConfig,
-		   static_cast<size_t>(iow::TileType::TOTAL_NUMBER_OF_TILES)>;
+using TileConfigs = std::vector<std::unique_ptr<TileConfig>>;
+using TileType = size_t;
 
 class TileMap
 {
     private:
 	TileConfigs m_tileConfigs;
+
 	sf::Vector2u m_tileMapSize; // number of tiles rows (x) and columns (y)
 	sf::Vector2f m_tileSize;    // length and width of a tile
 
@@ -64,6 +49,9 @@ class TileMap
 	// gets the tile size
 	const sf::Vector2f &getTileSize();
 
+	// for testing if a tile type is valid
+	bool isValidTileType(TileType);
+
     public:
 	TileMap();
 
@@ -78,7 +66,7 @@ class TileMap
 	void setTileSize(const float x, const float y);
 
 	// set the tile config. witha given path to a texture
-	void setTileConfig(const char *, const TileType);
+	void setTileConfig(TileType val, std::unique_ptr<TileConfig> conf);
 
 	/* getters */
 	std::pair<iow::Position, iow::TileType> getTile(size_t i);
