@@ -7,10 +7,15 @@
 
 constexpr float DEFAULT_TILE_SIZE = 100;
 
-iow::TileConfig::TileConfig()
+
+iow::TileConfig::TileConfig(const sf::Texture &texture,
+			    std::optional<sf::RectangleShape> col,
+			    std::optional<iow::HP> des)
 {
-	collision.reset();
-	isDestroyable.reset();
+	sprite.setTexture(texture);
+
+	collision = col;
+	isDestroyable = des;
 }
 
 iow::TileMap::TileMap(){};
@@ -105,22 +110,24 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 				Logger::logMessage("and COLUMN:");
 				Logger::logMessage(std::to_string(j).c_str());
 				Logger::logMessage(
-					"Please ensure that the tile map only contains numbers");
-			}
-
-			if (isValidTileType(std::stoi(row[j]))) {
-				m_tiles.push_back(static_cast<iow::TileType>(
-					std::stoi(row[j])));
-			} else {
-				Logger::logMessage(
-					"ERROR loading tile map at ROW:");
-				Logger::logMessage(std::to_string(i).c_str());
-				Logger::logMessage("and COLUMN:");
-				Logger::logMessage(std::to_string(j).c_str());
-				Logger::logMessage(
-					"Please ensure that the tile map only contains valid enum values for tile types.. loading the defaul ttile type.");
+					"Please ensure that the tile map only contains numbers. Loading default val of 0 instead...");
 				m_tiles.push_back(
 					static_cast<iow::TileType>(0));
+			} else {
+				if (isValidTileType(std::stoi(row[j]))) {
+					m_tiles.push_back(std::stoi(row[j]));
+				} else {
+					Logger::logMessage(
+						"ERROR loading tile map at ROW:");
+					Logger::logMessage(
+						std::to_string(i).c_str());
+					Logger::logMessage("and COLUMN:");
+					Logger::logMessage(
+						std::to_string(j).c_str());
+					Logger::logMessage(
+						"Please ensure that the tile map only contains valid enum values for tile types.. loading the defaul ttile type.");
+					m_tiles.push_back(0);
+				}
 			}
 		}
 
@@ -156,7 +163,7 @@ std::pair<iow::Position, iow::TileType> iow::TileMap::getTile(size_t i)
 	/* 	m_tileMapSize.x - 1 - i / m_tileMapSize.y, i %
 	 * m_tileMapSize.y); */
 	sf::Vector2i tileIndexPosition = sf::Vector2i(
-		m_tileMapSize.x - 1 - i / m_tileMapSize.y, i % m_tileMapSize.y);
+		i % m_tileMapSize.y, m_tileMapSize.x - 1 - i / m_tileMapSize.y);
 	return std::make_pair(
 		sf::Vector2f(
 			static_cast<float>(tileIndexPosition.x) * m_tileSize.x,
@@ -169,29 +176,28 @@ size_t iow::TileMap::getTileMapSize()
 	return m_tiles.size();
 }
 
-void iow::TileMap::setTileConfig(const char *strpath, const TileType type)
+void iow::TileMap::setTileConfig(size_t val, std::unique_ptr<TileConfig> conf)
 {
-
-	if (strpath != nullptr) {
-		m_tileConfigs[static_cast<size_t>(type)].texture.loadFromFile(
-			strpath);
-		m_tileConfigs[static_cast<size_t>(type)].texture.setSmooth(
-			true);
-
-		m_tileConfigs[static_cast<size_t>(type)].sprite.setTexture(
-			m_tileConfigs[static_cast<size_t>(type)].texture);
-		m_tileConfigs[static_cast<size_t>(type)].sprite.setTextureRect(
-			sf::IntRect(0, 0, m_tileSize.x, m_tileSize.y));
-
-	} else {
-		Logger::logMessage(
-			"ERROR loading iamge for tile config. Ensure the path is not a null ptr before loading it.");
+	if (m_tileConfigs.size() >= val) {
+		m_tileConfigs.resize(1 + val * 2);
 	}
+
+	conf->sprite.setTextureRect(
+		sf::IntRect(0, 0, m_tileSize.x, m_tileSize.y));
+	m_tileConfigs[val] = std::move(conf);
 }
 
 const iow::TileConfig iow::TileMap::getTileConfig(iow::TileType val)
 {
-	return m_tileConfigs[static_cast<size_t>(val)];
+	if (m_tileConfigs[val] == nullptr) {
+		Logger::logMessage(
+			"ERROR with getTileConfig. Ensure that the TileType you loaded has the required val loaded in already. You're attempting to load: ");
+		Logger::logMessage(std::to_string(val).c_str());
+		Logger::logMessage(
+			"which does not exist. Loading tile config at 0, evreything may be undefine behaviour");
+		return *m_tileConfigs[0];
+	}
+	return *m_tileConfigs[val];
 }
 
 void iow::TileMap::printTileMap()
@@ -199,4 +205,18 @@ void iow::TileMap::printTileMap()
 	for (size_t i = 0; i < m_tiles.size(); ++i) {
 		// TODO implement this funciton
 	}
+}
+
+bool iow::TileMap::isValidTileType(TileType n)
+{
+
+	if (n >= m_tileConfigs.size()) {
+		return false;
+	}
+
+	if (m_tileConfigs[n] == nullptr) {
+		return false;
+	}
+
+	return true;
 }
