@@ -7,13 +7,13 @@
 #include <string>
 
 #include "gameconfig.h"
+#include "gameinput.h"
 #include "texturemanager.h"
 #include "camera.h"
 #include "input.h"
 
 namespace iow
 {
-using KeyBind = std::pair<iow::KeyState, iow::PlayerGameEvents>;
 
 class ResourceManager
 {
@@ -24,7 +24,8 @@ class ResourceManager
 	ResourceManager();
 
 	// keyboard config
-	std::vector<KeyBind> m_key_binds;
+	std::vector<iow::KeyChord> m_key_chords;
+	std::vector<iow::KeyBind> m_key_binds;
 
 	// states
 	iow::PlayerConfig m_player_config;

@@ -176,7 +176,7 @@ size_t iow::TileMap::getTileMapSize()
 	return m_tiles.size();
 }
 
-void iow::TileMap::setTileConfig(size_t val, std::unique_ptr<TileConfig> conf)
+void iow::TileMap::setTileConfig(size_t val, std::optional<TileConfig> conf)
 {
 	if (m_tileConfigs.size() >= val) {
 		m_tileConfigs.resize(1 + val * 2);
@@ -189,7 +189,7 @@ void iow::TileMap::setTileConfig(size_t val, std::unique_ptr<TileConfig> conf)
 
 const iow::TileConfig iow::TileMap::getTileConfig(iow::TileType val)
 {
-	if (m_tileConfigs[val] == nullptr) {
+	if (!m_tileConfigs[val].has_value()) {
 		Logger::logMessage(
 			"ERROR with getTileConfig. Ensure that the TileType you loaded has the required val loaded in already. You're attempting to load: ");
 		Logger::logMessage(std::to_string(val).c_str());
@@ -214,7 +214,7 @@ bool iow::TileMap::isValidTileType(TileType n)
 		return false;
 	}
 
-	if (m_tileConfigs[n] == nullptr) {
+	if (!m_tileConfigs[n].has_value()) {
 		return false;
 	}
 

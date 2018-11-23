@@ -2,13 +2,14 @@
 
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
+#include <vector>
+#include <tuple>
 
 namespace iow
 {
 
 constexpr size_t MAX_NUMBER_KEYS = sf::Keyboard::KeyCount;
 
-using KeyBuffer = std::array<unsigned int, MAX_NUMBER_KEYS>;
 
 enum class KeyState : unsigned int {
 	UP = 0b00,
@@ -19,15 +20,7 @@ enum class KeyState : unsigned int {
 	INVALID_STATE = 0b111
 };
 
-enum class PlayerGameEvents : unsigned int {
-	MOVE_PLAYER_UP,
-	MOVE_PLAYER_RIGHT,
-	MOVE_PLAYER_LEFT,
-	MOVE_PLAYER_DOWN,
-	PLAYER_SHOOT, // TODO HAIYANG
-
-	NO_ACTION
-};
+using KeyBuffer = std::array<unsigned int, MAX_NUMBER_KEYS>;
 
 class InputManager
 {
@@ -40,10 +33,17 @@ class InputManager
 	// gets the entire key buffer
 	static const iow::KeyBuffer &getKeyBuffer();
 
-	// gets the given key state
-	static KeyState getKeyState(const sf::Keyboard::Key &key);
+	// gets the given key state (up press down released)
+	static KeyState getKeyState(const sf::Keyboard::Key key);
 
-	static KeyState identifyKeyState(unsigned int val);
+	// sets a key to the given state. WARNING: unsafe and does not do bounds
+	// checking
+	static void setKeyState(const sf::Keyboard::Key key,
+				const iow::KeyState keystate);
+
+	// convience function that "resets" the key state to UP. WARNING: unsafe
+	// and does not do bounds chekcing
+	static void resetKeyState(const sf::Keyboard::Key key);
 
 	// updates the input buffer. must be called once evrey frame
 	static void shiftAndUpdateInputbuffer();
@@ -52,6 +52,7 @@ class InputManager
 	InputManager();
 	static void pollForInputBuffer();
 	static void shiftInputBuffer();
+	static KeyState identifyKeyState(unsigned int val);
 };
 
 } // namespace iow

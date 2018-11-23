@@ -72,11 +72,11 @@ iow::ResourceManager::ResourceManager()
 
 	/* Indiviudal tile configs  */ // must be declared before loading the
 				       // tile maps
-	auto groundConf = std::make_unique<TileConfig>(
+	auto groundConf = std::make_optional<TileConfig>(
 		TileConfig(m_textures.getTexture("ground")));
 	m_tile_map_config.setTileConfig(0, std::move(groundConf));
 
-	auto staticWallConf = std::make_unique<TileConfig>(
+	auto staticWallConf = std::make_optional<TileConfig>(
 		TileConfig(m_textures.getTexture("staticwall")));
 	m_tile_map_config.setTileConfig(1, std::move(staticWallConf));
 
