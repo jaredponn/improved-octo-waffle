@@ -26,7 +26,7 @@ struct TileConfig {
 	std::optional<iow::HP> isDestroyable;	// is it destroyable?
 };
 
-using TileConfigs = std::vector<std::unique_ptr<TileConfig>>;
+using TileConfigs = std::vector<std::optional<TileConfig>>;
 using TileType = size_t;
 
 class TileMap
@@ -66,7 +66,7 @@ class TileMap
 	void setTileSize(const float x, const float y);
 
 	// set the tile config. witha given path to a texture
-	void setTileConfig(TileType val, std::unique_ptr<TileConfig> conf);
+	void setTileConfig(TileType val, std::optional<TileConfig> conf);
 
 	/* getters */
 	std::pair<iow::Position, iow::TileType> getTile(size_t i);
