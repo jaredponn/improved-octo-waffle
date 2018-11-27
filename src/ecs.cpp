@@ -1,6 +1,7 @@
 #include "ecs.h"
 #include "systems.h"
 #include "logger.h"
+#include "parsegamekeys.h"
 #include <iostream>
 
 namespace iow
@@ -112,65 +113,7 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 void iow::ECS::runGameLogic(float dt, iow::ResourceManager &resourceManager)
 {
-	for (size_t i = 0; i < iow::MAX_NUMBER_KEYS; ++i) {
-		if (iow::InputManager::getKeyState(
-			    static_cast<sf::Keyboard::Key>(i))
-		    == std::get<0>(resourceManager.m_key_binds[i])) {
-			switch (std::get<1>(resourceManager.m_key_binds[i])) {
-
-			case iow::PlayerGameEvents::MOVE_PLAYER_DOWN:
-				c_Position[m_player_entity] +=
-					dt
-					* sf::Vector2f(0,
-						       -resourceManager
-								.m_player_config
-								.speed.y);
-				break;
-			case iow::PlayerGameEvents::MOVE_PLAYER_UP:
-				c_Position[m_player_entity] +=
-					dt
-					* sf::Vector2f(0,
-						       resourceManager
-							       .m_player_config
-							       .speed.y);
-				break;
-			case iow::PlayerGameEvents::MOVE_PLAYER_LEFT:
-				c_Position[m_player_entity] +=
-					dt
-					* sf::Vector2f(-resourceManager
-								.m_player_config
-								.speed.x,
-						       0);
-				break;
-			case iow::PlayerGameEvents::MOVE_PLAYER_RIGHT:
-				c_Position[m_player_entity] +=
-					dt
-					* sf::Vector2f(resourceManager
-							       .m_player_config
-							       .speed.x,
-						       0);
-				break;
-
-			case iow::PlayerGameEvents::PLAYER_SHOOT: {
-				size_t bulletEntity = create_new_entity();
-				c_IsBullet.add_element_at_sparse_vector(
-					bulletEntity, true);
-				c_Position.add_element_at_sparse_vector(
-					bulletEntity,
-					c_Position[m_player_entity]);
-				c_Speed.add_element_at_sparse_vector(
-					bulletEntity, sf::Vector2f(2.f, 2.f));
-				c_Appearance.add_element_at_sparse_vector(
-					bulletEntity,
-					resourceManager.m_bullet_config.sprite);
-				break;
-			}
-
-			case iow::PlayerGameEvents::NO_ACTION:
-				break;
-			}
-		}
-	}
+	iow::parseGameKeys(*this, dt, resourceManager);
 }
 
 } // namespace iow
