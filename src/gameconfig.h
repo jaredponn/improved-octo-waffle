@@ -17,7 +17,7 @@ struct Entity {
 struct PlayerConfig : public Entity {
 	float hp;
 	float bulletInterval;
-	sf::Vector2f speed;
+	float speed;
 };
 
 struct DestroyableWallConfig : public Entity {
@@ -25,7 +25,7 @@ struct DestroyableWallConfig : public Entity {
 
 struct EnemyConfig : public Entity {
 	float hp;
-	sf::Vector2f speed;
+	float speed;
 };
 
 struct ScaryEnemyConfig : public Entity {
@@ -39,7 +39,7 @@ struct CameraConfig {
 };
 
 struct BulletConfig : public Entity {
-	float bulletVelocity;
+	float speed;
 };
 
 using TileMapConfig = iow::TileMap;
