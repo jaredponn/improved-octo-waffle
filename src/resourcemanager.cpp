@@ -8,7 +8,7 @@ namespace iow
 
 iow::ResourceManager::ResourceManager()
 {
-	/* keybaord */
+	/* keybind */
 	m_key_binds.resize(iow::MAX_NUMBER_KEYS,
 			   std::make_pair(iow::KeyState::INVALID_STATE,
 					  iow ::PlayerGameEvents::NO_ACTION));
@@ -23,6 +23,31 @@ iow::ResourceManager::ResourceManager()
 	m_key_binds[sf::Keyboard::Space] = std::make_pair(
 		iow::KeyState::PRESSED, iow::PlayerGameEvents::PLAYER_SHOOT);
 
+	/* key chords */
+	m_key_chords.push_back(std::make_pair(
+		std::vector<iow::SFKeyAndKeyStatePair>{
+			std::make_pair(sf::Keyboard::W, iow::KeyState::DOWN),
+			std::make_pair(sf::Keyboard::D, iow::KeyState::DOWN)},
+		iow::PlayerGameEvents::MOVE_PLAYER_UP_RIGHT));
+
+	m_key_chords.push_back(std::make_pair(
+		std::vector<iow::SFKeyAndKeyStatePair>{
+			std::make_pair(sf::Keyboard::W, iow::KeyState::DOWN),
+			std::make_pair(sf::Keyboard::A, iow::KeyState::DOWN)},
+		iow::PlayerGameEvents::MOVE_PLAYER_UP_LEFT));
+
+	m_key_chords.push_back(std::make_pair(
+		std::vector<iow::SFKeyAndKeyStatePair>{
+			std::make_pair(sf::Keyboard::S, iow::KeyState::DOWN),
+			std::make_pair(sf::Keyboard::D, iow::KeyState::DOWN)},
+		iow::PlayerGameEvents::MOVE_PLAYER_DOWN_RIGHT));
+
+	m_key_chords.push_back(std::make_pair(
+		std::vector<iow::SFKeyAndKeyStatePair>{
+			std::make_pair(sf::Keyboard::A, iow::KeyState::DOWN),
+			std::make_pair(sf::Keyboard::S, iow::KeyState::DOWN)},
+		iow::PlayerGameEvents::MOVE_PLAYER_DOWN_LEFT));
+
 	/*textures*/
 	m_textures.loadTextureFromFile("player", "../resources/muted.png");
 	m_textures.loadTextureFromFile("enemy", "../resources/muted.png");
@@ -36,7 +61,7 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.hp = 10;
 	m_player_config.spawnPosition = sf::Vector2f(250, 250);
 	m_player_config.size = sf::Vector2f(100, 100);
-	m_player_config.speed = sf::Vector2f(1, 1);
+	m_player_config.speed = 1;
 
 	m_player_config.sprite.setTexture(m_textures.getTexture("player"));
 	m_player_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
@@ -44,7 +69,7 @@ iow::ResourceManager::ResourceManager()
 
 	/* enemy stuff */
 	m_enemy_config.hp = 100;
-	m_enemy_config.speed = sf::Vector2f(1, 1);
+	m_enemy_config.speed = 1;
 	m_enemy_config.size = sf::Vector2f(100, 100);
 
 	m_enemy_config.spawnPosition = sf::Vector2f(100, 100);
@@ -70,8 +95,8 @@ iow::ResourceManager::ResourceManager()
 		100,
 		100); // must be set before everything else
 
-	/* Indiviudal tile configs  */ // must be declared before loading the
-				       // tile maps
+	/* Indiviudal tile configs  */ // must be declared before
+				       // loading the tile maps
 	auto groundConf = std::make_optional<TileConfig>(
 		TileConfig(m_textures.getTexture("ground")));
 	m_tile_map_config.setTileConfig(0, std::move(groundConf));
@@ -84,11 +109,11 @@ iow::ResourceManager::ResourceManager()
 		iow::DEFAULT_TILE_MAP); // loading the tile maps
 
 	/* bullet configs */
-	m_bullet_config.bulletVelocity = 2.f;
+	m_bullet_config.speed = 2.f;
 
 	m_bullet_config.sprite.setTexture(m_textures.getTexture("bullet"));
 	m_bullet_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
 	m_bullet_config.sprite.setColor(sf::Color::Yellow);
-}
+} // namespace iow
 
 } // namespace iow
