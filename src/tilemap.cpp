@@ -94,11 +94,6 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 	// number of columns is the number of space seperated things
 	m_tileMapSize.y = row.size();
 
-	for (auto &i : lines) {
-		std::cout << i << std::endl;
-	}
-
-
 	for (size_t i = 0; i < lines.size(); ++i) {
 		row = ::iow::splitStringBy(lines[i], " ");
 
