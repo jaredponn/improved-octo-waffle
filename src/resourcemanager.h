@@ -25,7 +25,7 @@ class ResourceManager
 
 	// keyboard config
 	std::vector<iow::KeyChord> m_key_chords;
-	std::vector<iow::KeyBind> m_key_binds;
+	std::vector<iow::SingleKeyBind> m_key_binds;
 
 	// states
 	iow::PlayerConfig m_player_config;

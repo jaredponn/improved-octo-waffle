@@ -12,7 +12,7 @@
 namespace iow
 {
 
-class ECS : private iow::Components, private iow::ExtraState
+class ECS : public iow::Components, public iow::ExtraState
 {
     public:
 	ECS(size_t capacity);
@@ -27,7 +27,7 @@ class ECS : private iow::Components, private iow::ExtraState
 
 	void runGameLogic(float dt, iow::ResourceManager &resourceManager);
 
-    private:
+    public:
 	// gives you an index to a new entity in the ECS
 	size_t create_new_entity();
 	size_t delete_entity_at(size_t index);
