@@ -22,9 +22,9 @@ namespace iow
                                                                                \
 	/* bullet components */                                                \
 	X_CPT(IsBullet, bool)                                                  \
-	X_CPT(Direction, iow::Directions)                                      \
                                                                                \
 	/* game components */                                                  \
+	X_CPT(Direction, iow::Directions)                                      \
 	X_CPT(Appearance, sf ::Sprite)                                         \
 	X_CPT(Position, sf::Vector2f)                                          \
 	X_CPT(Speed, sf::Vector2f)                                             \
