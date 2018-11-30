@@ -1,7 +1,7 @@
 #pragma once
-#include <cmath>
-#include <SFML/Graphics.hpp>
 #include "logger.h"
+#include <SFML/Graphics.hpp>
+#include <cmath>
 
 
 namespace iow

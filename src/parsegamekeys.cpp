@@ -1,7 +1,7 @@
 #include <iostream>
 
-#include "parsegamekeys.h"
 #include "directions.h"
+#include "parsegamekeys.h"
 
 namespace iow
 {

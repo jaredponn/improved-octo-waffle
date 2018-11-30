@@ -1,9 +1,9 @@
 #pragma once
 
-#include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
-#include <vector>
+#include <SFML/Window.hpp>
 #include <tuple>
+#include <vector>
 
 namespace iow
 {

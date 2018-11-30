@@ -1,6 +1,6 @@
+#include "graphics.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include "graphics.h"
 
 void iow::mutateRectangle(sf::RectangleShape &rect, const sf::Vector2f size,
 			  const sf::Vector2f pos, const sf::Color color)

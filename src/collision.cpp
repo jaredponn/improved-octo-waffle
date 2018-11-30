@@ -1,7 +1,7 @@
-#include <SFML/Graphics.hpp>
-#include <iostream>
 #include "collision.h"
+#include <SFML/Graphics.hpp>
 #include <cmath>
+#include <iostream>
 #include <optional>
 // BIG ERRRRORRRR: this does not (yet) handle 2 moving entities collision.. or
 // probably we just move each shape deltax/2 and deltay/2 units back?

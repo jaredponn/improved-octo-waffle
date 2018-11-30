@@ -1,16 +1,16 @@
 #pragma once
 
 
-#include <vector>
-#include <tuple>
 #include <SFML/Graphics.hpp>
 #include <string>
+#include <tuple>
+#include <vector>
 
+#include "camera.h"
 #include "gameconfig.h"
 #include "gameinput.h"
-#include "texturemanager.h"
-#include "camera.h"
 #include "input.h"
+#include "texturemanager.h"
 
 namespace iow
 {

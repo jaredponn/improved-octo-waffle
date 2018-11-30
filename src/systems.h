@@ -2,10 +2,10 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "graphics.h"
-#include "packedvector.h"
 #include "components.h"
+#include "graphics.h"
 #include "logger.h"
+#include "packedvector.h"
 
 /** systems.h
  * Systems to run over the ECS.

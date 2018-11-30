@@ -1,9 +1,9 @@
 #pragma once
 
-#include "packedvector.h"
-#include "graphics.h"
-#include "directions.h"
 #include "../extern/mmacros.h"
+#include "directions.h"
+#include "graphics.h"
+#include "packedvector.h"
 
 /** Components.h
  * Class for the vectors of componenets

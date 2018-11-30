@@ -1,6 +1,6 @@
 #include "resourcemanager.h"
-#include "logger.h"
 #include "defaulttilemap.h"
+#include "logger.h"
 
 namespace iow
 {
@@ -61,7 +61,7 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.hp = 10;
 	m_player_config.spawnPosition = sf::Vector2f(250, 250);
 	m_player_config.size = sf::Vector2f(100, 100);
-	m_player_config.speed = 1;
+	m_player_config.speed = 0.25;
 
 	m_player_config.sprite.setTexture(m_textures.getTexture("player"));
 	m_player_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
@@ -69,7 +69,7 @@ iow::ResourceManager::ResourceManager()
 
 	/* enemy stuff */
 	m_enemy_config.hp = 100;
-	m_enemy_config.speed = 1;
+	m_enemy_config.speed = 0.0001;
 	m_enemy_config.size = sf::Vector2f(100, 100);
 
 	m_enemy_config.spawnPosition = sf::Vector2f(100, 100);
@@ -88,7 +88,7 @@ iow::ResourceManager::ResourceManager()
 
 	/* camera */
 	m_camera_config.position = sf::Vector2f(0.f, 0.f);
-	m_camera_config.scale = sf::Vector2f(1.f, -1.0f);
+	m_camera_config.scale = sf::Vector2f(1.0f, -1.0f);
 
 	/* Tile map */
 	m_tile_map_config.setTileSize(

@@ -1,7 +1,7 @@
 #pragma once
+#include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
-#include <SFML/Graphics.hpp>
 
 #include "texturemanager.h"
 #include "tilemap.h"

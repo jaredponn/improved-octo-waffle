@@ -1,12 +1,12 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 
-#include "input.h"
+#include "collision.h"
 #include "ecs.h"
 #include "graphics.h"
+#include "input.h"
 #include "packedvector.h"
 #include "resourcemanager.h"
-#include "collision.h"
 
 constexpr unsigned int MAX_ENTITIES = 1000000;
 

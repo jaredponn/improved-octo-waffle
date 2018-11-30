@@ -1,9 +1,9 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <vector>
-#include <utility>
 #include <memory>
+#include <utility>
+#include <vector>
 
 #include "components.h"
 #include "texturemanager.h"

@@ -1,10 +1,10 @@
 #pragma once
 
+#include <algorithm>
+#include <cctype>
+#include <iostream>
 #include <string>
 #include <vector>
-#include <cctype>
-#include <algorithm>
-#include <iostream>
 
 namespace iow
 {

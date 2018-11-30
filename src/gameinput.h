@@ -1,8 +1,8 @@
 #pragma once
 
-#include <vector>
-#include <tuple>
 #include <SFML/Graphics.hpp>
+#include <tuple>
+#include <vector>
 
 #include "input.h"
 

@@ -1,12 +1,12 @@
 #pragma once
-#include <stack>
-#include <cstdint>
 #include <SFML/Graphics.hpp>
+#include <cstdint>
+#include <stack>
 
-#include "packedvector.h"
-#include "input.h"
 #include "components.h"
 #include "extrastate.h"
+#include "input.h"
+#include "packedvector.h"
 #include "resourcemanager.h"
 
 namespace iow
@@ -36,6 +36,5 @@ class ECS : public iow::Components, public iow::ExtraState
     private:
 	std::stack<size_t> m_free_indices;
 };
-
 
 }; // namespace iow
