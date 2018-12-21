@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "collision.h"
 #include "texturemanager.h"
 #include "tilemap.h"
 
@@ -15,6 +16,7 @@ struct Entity {
 };
 
 struct PlayerConfig : public Entity {
+	iow::CollisionBox collisionBox;
 	float hp;
 	float bulletInterval;
 	float speed;
