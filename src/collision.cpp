@@ -5,8 +5,9 @@
 #include <optional>
 // BIG ERRRRORRRR: this does not (yet) handle 2 moving entities collision.. or
 // probably we just move each shape deltax/2 and deltay/2 units back?
-std::optional<sf::Vector2f> iow::checkCollision(sf::RectangleShape entity1,
-						sf::RectangleShape entity2)
+std::optional<sf::Vector2f>
+iow::checkAndResolveCollisionDelta(sf::RectangleShape entity1,
+				   sf::RectangleShape entity2)
 {
 	// position start at top left corner, add 0.2f as the bounding box
 	bool xcollide = (entity1.getPosition().x + entity1.getSize().x
