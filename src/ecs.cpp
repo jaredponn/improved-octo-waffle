@@ -43,8 +43,11 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 		       iow::ResourceManager &resourceManager)
 {
 	(void)window;
+
 	/* creating the player entity */
 	m_player_entity = create_new_entity();
+	c_IsPlayer.add_element_at_sparse_vector(m_player_entity, true);
+
 	c_Position.add_element_at_sparse_vector(
 		m_player_entity, resourceManager.m_player_config.spawnPosition);
 	c_HP.add_element_at_sparse_vector(m_player_entity,
@@ -53,6 +56,8 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 		m_player_entity, resourceManager.m_player_config.sprite);
 	c_Direction.add_element_at_sparse_vector(m_player_entity,
 						 iow::Directions::UP);
+	c_PlayerCollisionLayer.add_element_at_sparse_vector(
+		m_player_entity, resourceManager.m_player_config.collisionBox);
 
 	/* intializing the camera */
 	m_camera.position = resourceManager.m_camera_config.position;
@@ -77,14 +82,28 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 	     i < resourceManager.m_tile_map_config.getTileMapSize(); ++i) {
 		size_t tileEntity = create_new_entity();
 		const auto &tmp = resourceManager.m_tile_map_config.getTile(i);
+		const auto &tileWorldPosition = std::get<0>(tmp);
+		const auto &tileType = std::get<1>(tmp);
+		const auto &tileConf =
+			resourceManager.m_tile_map_config.getTileConfig(
+				tileType);
 
 		c_TilePosition.add_element_at_sparse_vector(tileEntity,
-							    std::get<0>(tmp));
+							    tileWorldPosition);
 
-		c_TileAppearance.add_element_at_sparse_vector(
-			tileEntity, resourceManager.m_tile_map_config
-					    .getTileConfig(std::get<1>(tmp))
-					    .sprite);
+		c_TileAppearance.add_element_at_sparse_vector(tileEntity,
+							      tileConf.sprite);
+
+		// TODO actually make the collisions work. Make a player
+		// collision comppnent and a system that will use a la haiyang
+		// he's system to check if colliusion work
+		if (tileConf.collision) {
+			c_TileCollisionLayer.add_element_at_sparse_vector(
+				tileEntity,
+				iow::setCollisionBoxPositionFromPosition(
+					tileConf.collision.value(),
+					tileWorldPosition));
+		}
 	}
 
 	iow::updateAppearanceFromPosition(c_TileAppearance, c_TilePosition);
@@ -100,12 +119,22 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 	/* Systems... */
 	window.clear(); // clears the color for the buffer
 	iow::updatePositionFromSpeed(dt, c_Position, c_Speed);
+	iow::updateCollisionBoxFromPosition(c_PlayerCollisionLayer, c_Position);
+
+	iow::checkAndResolveCollisionOfOneAgainstEntities(
+		c_PlayerCollisionLayer[m_player_entity],
+		c_Position[m_player_entity], c_TileCollisionLayer);
+
+
 	iow::updateCamera(m_camera, c_Position[m_player_entity],
 			  window.getSize());
 	iow::updateAppearanceFromPosition(c_Appearance, c_Position);
 
 	iow::renderSystem(c_TileAppearance, window, m_camera);
 	iow::renderSystem(c_Appearance, window, m_camera);
+
+	// debug render system for collision boxes
+	iow::debugRenderSystem(c_TileCollisionLayer, window, m_camera);
 
 	/* Push output to the screen */
 	window.display();
