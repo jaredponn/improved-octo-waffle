@@ -15,6 +15,29 @@ namespace iow
 {
 
 // -----------------------------------------
+//    Collisions
+// -----------------------------------------
+static inline void checkAndResolveCollisionOfOneAgainstEntities(
+	const iow::CollisionBox &oneCollisionBox, iow::Position &onePosition,
+	const iow::PackedVector<iow::CollisionBox> &pkdCollision)
+{
+	const std::vector<iow::CollisionBox> &pkdColData =
+		pkdCollision.get_packed_data();
+
+
+	for (auto &i : pkdColData) {
+		auto tmp =
+			iow::checkAndResolveCollisionDelta(oneCollisionBox, i);
+		if (tmp) {
+			std::cout << tmp.value().x << " , " << tmp.value().y
+				  << std::endl;
+			onePosition += tmp.value();
+		}
+	}
+}
+
+
+// -----------------------------------------
 //    Position update systems
 // -----------------------------------------
 static inline void
@@ -49,6 +72,25 @@ updatePositionFromSpeed(const float dt,
 	for (size_t i = 0; i < speedPackedData.size(); ++i) {
 		positionPackedVector[speedPackedIndicies[i]] +=
 			speedPackedData[i] * dt;
+	}
+}
+
+static inline void
+updateCollisionBoxFromPosition(iow::PackedVector<CollisionBox> &pkdCollision,
+			       const iow::PackedVector<Position> &pkdPos)
+{
+
+	const auto &colPkdData = pkdCollision.get_packed_data();
+	const auto &colPkdIndices = pkdCollision.get_packed_indicies();
+
+	if (colPkdData.size() != colPkdIndices.size())
+		Logger::logMessage(
+			"ERROR in updateCollisionBoxFromPosition. Position packed vector is of different size, buggy program is going to follow ");
+
+	for (size_t i = 0; i < colPkdIndices.size(); ++i) {
+		pkdCollision[colPkdIndices[i]] =
+			setCollisionBoxPositionFromPosition(
+				colPkdData[i], pkdPos[colPkdIndices[i]]);
 	}
 }
 // -----------------------------------------
@@ -98,6 +140,26 @@ static inline void renderSystem(const iow::PackedVector<sf::Sprite> &data,
 {
 	for (const auto &i : data.get_packed_data()) {
 		renderEntityToSFMLRenderBuffer(window, i, camera);
+	}
+}
+
+static inline void
+debugRenderSystem(const iow::PackedVector<sf::RectangleShape> &data,
+		  sf::RenderWindow &window, const iow::Camera &camera)
+{
+	for (const auto &i : data.get_packed_data()) {
+		sf::Sprite tmp;
+		sf::Image tmpimage;
+		sf::Texture ttmp;
+
+		tmpimage.create(i.getSize().x, i.getSize().y,
+				sf::Color(255, 0, 0));
+		ttmp.loadFromImage(tmpimage);
+		tmp.setTexture(ttmp);
+		tmp.setColor(sf::Color::Red);
+		tmp.setPosition(i.getPosition());
+
+		renderEntityToSFMLRenderBuffer(window, tmp, camera);
 	}
 }
 
