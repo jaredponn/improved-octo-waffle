@@ -9,7 +9,7 @@ constexpr float DEFAULT_TILE_SIZE = 100;
 
 
 iow::TileConfig::TileConfig(const sf::Texture &texture,
-			    std::optional<sf::RectangleShape> col,
+			    std::optional<iow::TileCollisionLayer> col,
 			    std::optional<iow::HP> des)
 {
 	sprite.setTexture(texture);

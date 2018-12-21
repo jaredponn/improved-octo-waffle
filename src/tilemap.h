@@ -14,11 +14,8 @@ namespace iow
 struct TileConfig {
 	// constructo ro intialize the std::optionals as empty
 	TileConfig(const sf::Texture &texture,
-		   std::optional<sf::RectangleShape> col =
-			   std::make_optional<sf::RectangleShape>(),
-		   std::optional<iow::HP> des = std::make_optional<iow::HP>()
-
-	);
+		   std::optional<iow::TileCollisionLayer> col,
+		   std::optional<iow::HP> des);
 
 	sf::Sprite sprite; // sprite
 
