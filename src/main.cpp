@@ -26,6 +26,7 @@ int main(void)
 	sf::Time tf = sf::microseconds(0);
 	sf::Time dt = sf::microseconds(0);
 
+
 	while (window.isOpen()) {
 		ti = clock.getElapsedTime();
 
