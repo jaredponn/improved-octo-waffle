@@ -70,6 +70,7 @@ iow::checkAndResolveCollisionDelta(sf::RectangleShape entity1,
 			tempv.x = 0;
 		}
 		// UNHANDLED THOUGHTS: what if they collide diagonally?
+		std::cout << "collision cocured" << std::endl;
 		return std::make_optional(tempv);
 	} else {
 		return std::nullopt;

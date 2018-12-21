@@ -56,16 +56,16 @@ iow::ResourceManager::ResourceManager()
 	m_textures.loadTextureFromFile("bullet", "../resources/muted.png");
 
 	/* player stuff */
-	m_player_config.collisionBox = sf::RectangleShape(sf::Vector2f(32, 32));
+	m_player_config.collisionBox = sf::RectangleShape(sf::Vector2f(50, 50));
 	m_player_config.bulletInterval = 10;
 	m_player_config.hp = 10;
 	m_player_config.spawnPosition = sf::Vector2f(250, 250);
-	m_player_config.size = sf::Vector2f(100, 100);
+	m_player_config.size = sf::Vector2f(50, 50);
 	m_player_config.speed = 0.25;
 
 	m_player_config.sprite.setTexture(m_textures.getTexture("player"));
 	m_player_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
-	m_player_config.sprite.setPosition(10, 10);
+	m_player_config.sprite.setPosition(0, 0);
 
 	/* enemy stuff */
 	m_enemy_config.hp = 100;

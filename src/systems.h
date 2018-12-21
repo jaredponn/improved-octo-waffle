@@ -116,9 +116,14 @@ static inline void renderEntityToSFMLRenderBuffer(sf::RenderWindow &window,
 						  const iow::Camera &camera)
 {
 
-	sf::Vector2f lengthOffset = sf::Vector2f(
-		-static_cast<float>(sprite.getTextureRect().width) / 2.f,
-		static_cast<float>(sprite.getTextureRect().height) / 2.f);
+	sf::Vector2f lengthOffset = sf::Vector2f(0, 0);
+	// uncommenting this code block sets it so that it will rende rnicelyin
+	// the center of the screen, howevre it will not play nicely with hte
+	// collision system
+	// TODO -- not exactly too sure how to go about fixing this....
+	/* sf::Vector2f lengthOffset = sf::Vector2f( */
+	/* 	-static_cast<float>(sprite.getTextureRect().width) / 2.f, */
+	/* 	static_cast<float>(sprite.getTextureRect().height) / 2.f); */
 
 	sf::Vector2f npos;
 	npos = (sprite.getPosition() - (camera.position))
