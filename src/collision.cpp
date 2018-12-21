@@ -11,14 +11,22 @@ iow::checkAndResolveCollisionDelta(sf::RectangleShape entity1,
 {
 	// position start at top left corner, add 0.2f as the bounding box
 	bool xcollide = (entity1.getPosition().x + entity1.getSize().x
-			 > entity2.sf::Shape::getPosition().x)
+			 >= entity2.sf::Shape::getPosition().x)
 			&& (entity2.getPosition().x + entity2.getSize().x
-			    > entity1.sf::Shape::getPosition().x);
+			    >= entity1.sf::Shape::getPosition().x);
 	bool ycollide = (entity1.getPosition().y + entity1.getSize().y
-			 > entity2.sf::Shape::getPosition().y)
+			 >= entity2.sf::Shape::getPosition().y)
 			&& (entity2.getPosition().y + entity2.getSize().y
-			    > entity1.sf::Shape::getPosition().y);
+			    >= entity1.sf::Shape::getPosition().y);
 	float deltax, deltay;
+	std::cout << "xcollide = " << xcollide << std::endl;
+	std::cout << "entity1 xpos = " << entity1.getPosition().x << std::endl;
+	std::cout << "entity1 pos+size = "
+		  << entity1.getPosition().x + entity1.getSize().x << std::endl;
+	std::cout << "entity2 xpos = " << entity2.getPosition().x << std::endl;
+	std::cout << "entity2 pos+size = "
+		  << entity2.getPosition().x + entity2.getSize().x << std::endl;
+	// std::cout << "ycollide = " << ycollide << std::endl;
 	if (xcollide && ycollide == true) // they collide
 	{
 		sf::Vector2f entity1Center = sf::Vector2(
