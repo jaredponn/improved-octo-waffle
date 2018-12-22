@@ -21,11 +21,18 @@ iow::checkAndResolveCollisionDelta(sf::RectangleShape entity1,
 	float deltax, deltay;
 	std::cout << "xcollide = " << xcollide << std::endl;
 	std::cout << "entity1 xpos = " << entity1.getPosition().x << std::endl;
-	std::cout << "entity1 pos+size = "
+	std::cout << "entity1 xpos+size = "
 		  << entity1.getPosition().x + entity1.getSize().x << std::endl;
 	std::cout << "entity2 xpos = " << entity2.getPosition().x << std::endl;
-	std::cout << "entity2 pos+size = "
+	std::cout << "entity2 xpos+size = "
 		  << entity2.getPosition().x + entity2.getSize().x << std::endl;
+	std::cout << "ycollide = " << ycollide << std::endl;
+	std::cout << "entity1 ypos = " << entity1.getPosition().y << std::endl;
+	std::cout << "entity1 ypos+size = "
+		  << entity1.getPosition().y + entity1.getSize().y << std::endl;
+	std::cout << "entity2 ypos = " << entity2.getPosition().y << std::endl;
+	std::cout << "entity2 ypos+size = "
+		  << entity2.getPosition().y + entity2.getSize().y << std::endl;
 	// std::cout << "ycollide = " << ycollide << std::endl;
 	if (xcollide && ycollide == true) // they collide
 	{
