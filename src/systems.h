@@ -32,6 +32,7 @@ static inline void checkAndResolveCollisionOfOneAgainstEntities(
 			std::cout << tmp.value().x << " , " << tmp.value().y
 				  << std::endl;
 			onePosition += tmp.value();
+			break;
 		}
 	}
 }
