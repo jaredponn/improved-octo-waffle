@@ -135,7 +135,7 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 	// debug render system for collision boxes
 	iow::debugRenderSystem(c_TileCollisionLayer, window, m_camera);
-	iow::debugRenderSystem(c_PlayerCollisionLayer, window, m_camera);
+	// iow::debugRenderSystem(c_PlayerCollisionLayer, window, m_camera);
 
 	/* Push output to the screen */
 	window.display();
