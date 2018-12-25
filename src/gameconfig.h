@@ -15,6 +15,15 @@ struct Entity {
 	sf::Sprite sprite;
 };
 
+// https://natureofcode.com/book/chapter-6-autonomous-agents/
+struct SteeringBehaviour {
+	sf::Vector2f steeringVelocity;
+
+	sf::Vector2f desiredVelocity; //  = target - location
+	float maxSpeed; // normalize desired velocity, then multiply by max
+			// speed
+};
+
 struct PlayerConfig : public Entity {
 	iow::CollisionBox collisionBox;
 	float hp;
@@ -28,6 +37,8 @@ struct DestroyableWallConfig : public Entity {
 struct EnemyConfig : public Entity {
 	float hp;
 	float speed;
+
+	SteeringBehaviour steeringBehaviour;
 };
 
 struct ScaryEnemyConfig : public Entity {
