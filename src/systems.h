@@ -173,4 +173,11 @@ debugRenderSystem(const iow::PackedVector<sf::RectangleShape> &data,
 	}
 }
 
+// -----------------------------------------
+//    Bulet deletion
+// -----------------------------------------
+
+/* HAIYANG -> write the bulletdeletion funciton here */
+
+
 } // namespace iow

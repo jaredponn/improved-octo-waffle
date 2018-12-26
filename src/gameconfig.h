@@ -40,6 +40,7 @@ struct CameraConfig {
 	sf::Vector2f botRightPosition;
 };
 
+/* HAIYANG -> update this so the game config a for a bullet can do collisions */
 struct BulletConfig : public Entity {
 	float speed;
 };

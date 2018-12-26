@@ -23,6 +23,8 @@ size_t iow::ECS::create_new_entity()
 }
 
 // TODO the delete_entity_at() function
+
+/* HAIYANG use this to remove a bullet entity from the engine */
 size_t iow::ECS::delete_entity_at(size_t index)
 {
 	// TODO
@@ -136,6 +138,10 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 	// debug render system for collision boxes
 	// iow::debugRenderSystem(c_TileCollisionLayer, window, m_camera);
 	// iow::debugRenderSystem(c_PlayerCollisionLayer, window, m_camera);
+
+	/*HAIYANG::: c_IsBullet -> the bool packed vector for determing which
+	 * indicies are a bullet*/
+
 
 	/* Push output to the screen */
 	window.display();
