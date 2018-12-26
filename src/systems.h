@@ -29,8 +29,6 @@ static inline void checkAndResolveCollisionOfOneAgainstEntities(
 		auto tmp =
 			iow::checkAndResolveCollisionDelta(oneCollisionBox, i);
 		if (tmp) {
-			std::cout << tmp.value().x << " , " << tmp.value().y
-				  << std::endl;
 			onePosition += tmp.value();
 			oneCollisionBox.setPosition(onePosition);
 		}
