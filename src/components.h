@@ -36,7 +36,9 @@ namespace iow
 	X_CPT(Position, iow::Position)                                         \
 	X_CPT(Speed, sf::Vector2f)                                             \
 	X_CPT(HP, float)                                                       \
-	X_CPT(HasHP, bool)
+	X_CPT(HasHP, bool)                                                     \
+                                                                               \
+	X_CPT(PositionDeltas, iow::Position)
 
 #define MK_COMPONENT_MEMBER_VAR_NAME(name) c_##name
 

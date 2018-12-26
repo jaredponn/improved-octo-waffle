@@ -35,6 +35,10 @@ static inline void checkAndResolveCollisionOfOneAgainstEntities(
 	}
 }
 
+// -----------------------------------------
+//    Computing Position deltas
+// -----------------------------------------
+
 
 // -----------------------------------------
 //    Position update systems
