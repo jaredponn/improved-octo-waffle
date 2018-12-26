@@ -24,19 +24,19 @@ namespace iow
 	X_CPT(TileCollisionLayer, CollisionBox)                                \
                                                                                \
 	/* Player Components */                                                \
-	X_CPT(IsPlayer, size_t)                                                \
-	X_CPT(PlayerCollisionLayer, iow::CollisionBox)                         \
+	c, cpp(IsPlayer, size_t)                                               \
+		   X_CPT(PlayerCollisionLayer, iow::CollisionBox)              \
                                                                                \
-	/* bullet components */                                                \
-	X_CPT(IsBullet, bool)                                                  \
+		/* bullet components */                                        \
+		X_CPT(IsBullet, bool)                                          \
                                                                                \
-	/* game components */                                                  \
-	X_CPT(Direction, iow::Directions)                                      \
-	X_CPT(Appearance, sf ::Sprite)                                         \
-	X_CPT(Position, iow::Position)                                         \
-	X_CPT(Speed, sf::Vector2f)                                             \
-	X_CPT(HP, float)                                                       \
-	X_CPT(HasHP, bool)
+		/* game components */                                          \
+		X_CPT(Direction, iow::Directions)                              \
+			X_CPT(Appearance, sf ::Sprite)                         \
+				X_CPT(Position, iow::Position)                 \
+					X_CPT(Speed, sf::Vector2f)             \
+						X_CPT(HP, float)               \
+							X_CPT(HasHP, bool)
 
 #define MK_COMPONENT_MEMBER_VAR_NAME(name) c_##name
 
