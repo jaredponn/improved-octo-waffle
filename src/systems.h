@@ -18,7 +18,7 @@ namespace iow
 //    Collisions
 // -----------------------------------------
 static inline void checkAndResolveCollisionOfOneAgainstEntities(
-	const iow::CollisionBox &oneCollisionBox, iow::Position &onePosition,
+	iow::CollisionBox &oneCollisionBox, iow::Position &onePosition,
 	const iow::PackedVector<iow::CollisionBox> &pkdCollision)
 {
 	const std::vector<iow::CollisionBox> &pkdColData =
@@ -30,7 +30,7 @@ static inline void checkAndResolveCollisionOfOneAgainstEntities(
 			iow::checkAndResolveCollisionDelta(oneCollisionBox, i);
 		if (tmp) {
 			onePosition += tmp.value();
-			break;
+			oneCollisionBox.setPosition(onePosition);
 		}
 	}
 }
