@@ -31,7 +31,7 @@ struct EnemyConfig : public Entity {
 	float hp;
 	float speed;
 
-	SteeringBehaviour steeringBehaviour;
+	iow::SteeringBehaviour::SteeringBehaviour steeringBehaviour;
 };
 
 struct ScaryEnemyConfig : public Entity {
