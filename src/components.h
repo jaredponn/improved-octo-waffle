@@ -6,6 +6,7 @@
 #include "graphics.h"
 #include "packedvector.h"
 #include "position.h"
+#include "steeringbehaviour.h"
 
 /** Components.h
  * Class for the vectors of componenets
@@ -30,6 +31,9 @@ namespace iow
 	/* bullet components */                                                \
 	X_CPT(IsBullet, bool)                                                  \
                                                                                \
+	/* Enemy components */                                                 \
+	X_CPT(IsEnemy, bool)                                                   \
+                                                                               \
 	/* game components */                                                  \
 	X_CPT(Direction, iow::Directions)                                      \
 	X_CPT(Appearance, sf ::Sprite)                                         \
@@ -38,7 +42,8 @@ namespace iow
 	X_CPT(HP, float)                                                       \
 	X_CPT(HasHP, bool)                                                     \
                                                                                \
-	X_CPT(PositionDeltas, iow::Position)
+	X_CPT(SteeringBehav, iow::SteeringBehaviour::SteeringBehaviour)        \
+	X_CPT(ToPlayerPositionDelta, iow::Position)
 
 #define MK_COMPONENT_MEMBER_VAR_NAME(name) c_##name
 
