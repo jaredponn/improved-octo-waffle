@@ -32,8 +32,11 @@ class PackedVector
 	// when given the sparse_vector index, and returns the data in the
 	// packed vector
 	inline T get_data_from_sparse_vector(const size_t index);
+
 	// gets the global index (sparse_vector) when given the packed index
 	inline size_t get_global_index_from_packed_index(const size_t index);
+
+	inline size_t get_packed_data_size() const;
 
 	/// should only be used when yo know for certain that the entity is
 	/// thing
@@ -166,6 +169,18 @@ inline const std::vector<T> &PackedVector<T>::get_packed_data() const
 
 {
 	return m_packed_data;
+}
+
+
+template <class T>
+inline size_t PackedVector<T>::get_packed_data_size() const
+{
+	if (m_packed_data.size() != m_packed_indicies.size()) {
+		Logger::logMessage(
+			"MAJOR ERROR in PackedVector: Packed vectors are not the same length.");
+	}
+
+	return m_packed_data.size();
 }
 
 template <class T>
