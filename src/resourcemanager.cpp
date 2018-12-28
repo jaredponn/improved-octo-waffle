@@ -79,9 +79,8 @@ iow::ResourceManager::ResourceManager()
 	m_enemy_config.sprite.setColor(sf::Color::Red);
 	m_enemy_config.sprite.setPosition(10, 10);
 
-	m_enemy_config.steeringBehaviour.steeringVelocity = sf::Vector2f(0, 0);
-	m_enemy_config.steeringBehaviour.desiredVelocity = sf::Vector2f(0, 0);
-	m_enemy_config.steeringBehaviour.maxSpeed = 100;
+	m_enemy_config.steeringBehaviour.maxSpeed = 0.1f;
+	m_enemy_config.steeringBehaviour.fleeRadius = 32.f;
 
 
 	/* if (!m_player_config.texture.create(200, 200)) { */
