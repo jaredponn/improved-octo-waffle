@@ -67,14 +67,19 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 	size_t enemyTmp;
 	for (size_t i = 0; i < 5; ++i) {
 		enemyTmp = create_new_entity();
-		/* c_Speed.add_element_at_sparse_vector( */
-		/* 	enemyTmp, resourceManager.m_enemy_config.speed); */
+		c_IsEnemy.add_element_at_sparse_vector(enemyTmp, true);
+		c_Speed.add_element_at_sparse_vector(enemyTmp,
+						     sf::Vector2f{0, 0});
 		c_Position.add_element_at_sparse_vector(
-			enemyTmp, resourceManager.m_enemy_config.spawnPosition);
+			enemyTmp, resourceManager.m_enemy_config.spawnPosition
+					  * (float)i);
 		c_HP.add_element_at_sparse_vector(
 			enemyTmp, resourceManager.m_enemy_config.hp);
 		c_Appearance.add_element_at_sparse_vector(
 			enemyTmp, resourceManager.m_enemy_config.sprite);
+		c_SteeringBehav.add_element_at_sparse_vector(
+			enemyTmp,
+			resourceManager.m_enemy_config.steeringBehaviour);
 	}
 
 	/* spawning the world */
@@ -118,8 +123,16 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 	/* Systems... */
 	window.clear(); // clears the color for the buffer
+
+	iow::updateVelocityToSeek(c_Speed, c_IsEnemy, c_Position,
+				  c_SteeringBehav, c_Position[m_player_entity]);
+
+	iow::updateVelocityToFlee(c_Speed, c_IsEnemy, c_Position,
+				  c_SteeringBehav);
+
 	iow::updatePositionFromSpeed(dt, c_Position, c_Speed);
 	iow::updateCollisionBoxFromPosition(c_PlayerCollisionLayer, c_Position);
+
 
 	iow::checkAndResolveCollisionOfOneAgainstEntities(
 		c_PlayerCollisionLayer[m_player_entity],
