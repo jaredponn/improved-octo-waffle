@@ -36,8 +36,78 @@ static inline void checkAndResolveCollisionOfOneAgainstEntities(
 }
 
 // -----------------------------------------
-//    Computing Position deltas
+//    Steering behaviours
 // -----------------------------------------
+
+static inline void updateVelocityToSeek(
+	iow::PackedVector<iow::Speed> &speedPkdVec,
+	iow::PackedVector<bool> const &entitySet,
+	iow::PackedVector<iow::Position> const &posPkdVec,
+	iow::PackedVector<iow::SteeringBehaviour::SteeringBehaviour> const
+		&steeringPkdVec,
+	const iow::Position &seekToPos)
+{
+
+	auto const entitySetPkdVecLen = entitySet.get_packed_data_size();
+
+
+	for (size_t i = 0; i < entitySetPkdVecLen; i++) {
+		size_t const entitySetGlobalIndex =
+			entitySet.get_global_index_from_packed_index(i);
+		sf::Vector2f const steeringVel =
+			iow::SteeringBehaviour::calculateSeekSteeringVelocity(
+				steeringPkdVec[entitySetGlobalIndex],
+				speedPkdVec[entitySetGlobalIndex],
+				iow::SteeringBehaviour::calculatePositionDelta(
+					seekToPos,
+					posPkdVec[entitySetGlobalIndex]));
+		speedPkdVec[entitySetGlobalIndex] += steeringVel;
+	}
+}
+
+static inline void updateVelocityToFlee(
+	iow::PackedVector<iow::Speed> &speedPkdVec,
+	iow::PackedVector<bool> const &entitySet,
+	iow::PackedVector<iow::Position> const &posPkdVec,
+	iow::PackedVector<iow::SteeringBehaviour::SteeringBehaviour> const
+		&steeringPkdVec)
+{
+
+	auto const entitySetPkdVecLen = entitySet.get_packed_data_size();
+
+	for (size_t i = 0; i < entitySetPkdVecLen; ++i) {
+		for (size_t j = 0; j < entitySetPkdVecLen; ++j) {
+			if (i != j) {
+
+
+				size_t const entitySetGlobalIndex =
+					entitySet
+						.get_global_index_from_packed_index(
+							i);
+
+				size_t const otherEntitySetGlobalIndex =
+					entitySet
+						.get_global_index_from_packed_index(
+							j);
+
+				sf::Vector2f const steeringVel = iow::
+					SteeringBehaviour::calculateFleeVelocity(
+						steeringPkdVec
+							[entitySetGlobalIndex],
+						speedPkdVec
+							[entitySetGlobalIndex],
+						iow::SteeringBehaviour::calculatePositionDelta(
+							posPkdVec
+								[otherEntitySetGlobalIndex],
+							posPkdVec
+								[entitySetGlobalIndex]));
+
+				speedPkdVec[entitySetGlobalIndex] +=
+					steeringVel;
+			}
+		}
+	}
+}
 
 
 // -----------------------------------------
