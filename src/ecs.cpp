@@ -122,6 +122,8 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 	window.clear(); // clears the color for the buffer
 	iow::updatePositionFromSpeed(dt, c_Position, c_Speed);
 	iow::updateCollisionBoxFromPosition(c_PlayerCollisionLayer, c_Position);
+	iow::updateCirclePosFromPosition(c_IsBullet, c_BulletCircle,
+					 c_Position);
 
 	iow::checkAndResolveCollisionOfOneAgainstEntities(
 		c_PlayerCollisionLayer[m_player_entity],
@@ -132,15 +134,19 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 			  window.getSize());
 	iow::updateAppearanceFromPosition(c_Appearance, c_Position);
 
+	/*HAIYANG::: c_IsBullet -> the bool packed vector for determing which
+	 * indicies are a bullet*/
+	// do i pass c_Position or c_TilePosition ????????????????????
+	iow::checkAndResolveCollisionBulletAgainstEntities(
+		c_IsBullet, c_BulletCircle, c_TileCollisionLayer, c_Position,
+		c_Direction, c_Speed, c_Appearance);
+
 	iow::renderSystem(c_TileAppearance, window, m_camera);
 	iow::renderSystem(c_Appearance, window, m_camera);
 
 	// debug render system for collision boxes
 	// iow::debugRenderSystem(c_TileCollisionLayer, window, m_camera);
 	// iow::debugRenderSystem(c_PlayerCollisionLayer, window, m_camera);
-
-	/*HAIYANG::: c_IsBullet -> the bool packed vector for determing which
-	 * indicies are a bullet*/
 
 
 	/* Push output to the screen */

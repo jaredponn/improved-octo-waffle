@@ -15,13 +15,15 @@ namespace iow
  */
 
 using CollisionBox = sf::RectangleShape;
+using CollisionCir = sf::CircleShape;
 
 // checks collision between 2 rectangles
-std::optional<sf::Vector2f> checkAndResolveCollisionDelta(CollisionBox entity1,
-							  CollisionBox entity2);
+std::optional<sf::Vector2f>
+checkAndResolveCollisionDelta(CollisionBox entity1, CollisionBox entity2,
+			      size_t pushFactor = 0);
 
 // checks collision between a circle and a rectangle
-bool checkCollision(sf::CircleShape entity1, sf::RectangleShape entity2);
+bool checkCollisionBullet(sf::CircleShape entity1, sf::RectangleShape entity2);
 
 static inline iow::CollisionBox
 setCollisionBoxPositionFromPosition(const iow::CollisionBox &collisionbox,

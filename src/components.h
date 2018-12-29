@@ -30,6 +30,9 @@ namespace iow
 	/* bullet components */                                                \
 	X_CPT(IsBullet, bool)                                                  \
                                                                                \
+                                                                               \
+	X_CPT(BulletCircle, iow::CollisionCir)                                 \
+                                                                               \
 	/* game components */                                                  \
 	X_CPT(Direction, iow::Directions)                                      \
 	X_CPT(Appearance, sf ::Sprite)                                         \

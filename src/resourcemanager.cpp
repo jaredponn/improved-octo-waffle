@@ -114,9 +114,10 @@ iow::ResourceManager::ResourceManager()
 	/* HAIYANG -> Update this bullet config so it includes the proper
 	 * attributes of abullet */
 	m_bullet_config.speed = 2.f;
+	m_bullet_config.collisionCir = sf::CircleShape(20);
 
 	m_bullet_config.sprite.setTexture(m_textures.getTexture("bullet"));
-	m_bullet_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
+	m_bullet_config.sprite.setTextureRect(sf::IntRect(0, 0, 23, 23));
 	m_bullet_config.sprite.setColor(sf::Color::Yellow);
 }
 
