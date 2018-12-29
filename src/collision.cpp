@@ -11,7 +11,6 @@ iow::checkAndResolveCollisionDelta(sf::RectangleShape entity1,
 				   size_t pushFactor)
 {
 	// entity 2 is wall, and entity 1 is player!!!!!!
-	// flag = 0, is player with wall. flag = 1, is player with ZOMBIEEE
 	// position start at top left corner, add 0.2f as the bounding box
 	bool xcollide = (entity1.getPosition().x + entity1.getSize().x
 			 > entity2.sf::Shape::getPosition().x)

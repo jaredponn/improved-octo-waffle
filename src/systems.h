@@ -52,7 +52,6 @@ static inline void checkAndResolveCollisionBulletAgainstEntities(
 	for (size_t i = 0; i < bullet.get_packed_data().size(); ++i) {
 
 		// TODO JARED make this work less bad
-		// if (i == true) {
 		const iow::CollisionCir tempBullet = bulletData[i];
 		for (iow::CollisionBox j : pkdColData) {
 			if (iow::checkCollisionBullet(tempBullet, j)) {
@@ -75,7 +74,6 @@ static inline void checkAndResolveCollisionBulletAgainstEntities(
 				break;
 			}
 		}
-		//}
 	}
 }
 // -----------------------------------------
