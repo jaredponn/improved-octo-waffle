@@ -34,6 +34,8 @@ namespace iow
 	/* Enemy components */                                                 \
 	X_CPT(IsEnemy, bool)                                                   \
                                                                                \
+	X_CPT(BulletCircle, iow::CollisionCir)                                 \
+                                                                               \
 	/* game components */                                                  \
 	X_CPT(Direction, iow::Directions)                                      \
 	X_CPT(Appearance, sf ::Sprite)                                         \

@@ -23,6 +23,8 @@ size_t iow::ECS::create_new_entity()
 }
 
 // TODO the delete_entity_at() function
+
+/* HAIYANG use this to remove a bullet entity from the engine */
 size_t iow::ECS::delete_entity_at(size_t index)
 {
 	// TODO
@@ -132,6 +134,8 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 	iow::updatePositionFromSpeed(dt, c_Position, c_Speed);
 	iow::updateCollisionBoxFromPosition(c_PlayerCollisionLayer, c_Position);
+	iow::updateCirclePosFromPosition(c_IsBullet, c_BulletCircle,
+					 c_Position);
 
 
 	iow::checkAndResolveCollisionOfOneAgainstEntities(
@@ -143,12 +147,20 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 			  window.getSize());
 	iow::updateAppearanceFromPosition(c_Appearance, c_Position);
 
+	/*HAIYANG::: c_IsBullet -> the bool packed vector for determing which
+	 * indicies are a bullet*/
+	// do i pass c_Position or c_TilePosition ????????????????????
+	iow::checkAndResolveCollisionBulletAgainstEntities(
+		c_IsBullet, c_BulletCircle, c_TileCollisionLayer, c_Position,
+		c_Direction, c_Speed, c_Appearance);
+
 	iow::renderSystem(c_TileAppearance, window, m_camera);
 	iow::renderSystem(c_Appearance, window, m_camera);
 
 	// debug render system for collision boxes
 	// iow::debugRenderSystem(c_TileCollisionLayer, window, m_camera);
 	// iow::debugRenderSystem(c_PlayerCollisionLayer, window, m_camera);
+
 
 	/* Push output to the screen */
 	window.display();

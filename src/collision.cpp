@@ -7,10 +7,10 @@
 // probably we just move each shape deltax/2 and deltay/2 units back?
 std::optional<sf::Vector2f>
 iow::checkAndResolveCollisionDelta(sf::RectangleShape entity1,
-				   sf::RectangleShape entity2)
+				   sf::RectangleShape entity2,
+				   size_t pushFactor)
 {
 	// entity 2 is wall, and entity 1 is player!!!!!!
-	//
 	// position start at top left corner, add 0.2f as the bounding box
 	bool xcollide = (entity1.getPosition().x + entity1.getSize().x
 			 > entity2.sf::Shape::getPosition().x)
@@ -21,8 +21,6 @@ iow::checkAndResolveCollisionDelta(sf::RectangleShape entity1,
 			&& (entity2.getPosition().y + entity2.getSize().y
 			    > entity1.sf::Shape::getPosition().y);
 	float deltax, deltay;
-	// std::cout << "ycollide = " << ycollide << std::endl;
-	//
 
 	if (xcollide && ycollide == true) {
 		// for x axis
@@ -38,13 +36,13 @@ iow::checkAndResolveCollisionDelta(sf::RectangleShape entity1,
 			 && (entity1.getPosition().x + entity1.getSize().x
 			     < entity2.getPosition().x + entity2.getSize().x)) {
 			deltax = entity2.getPosition().x
-				 - entity1.getPosition().x
-				 - entity1.getSize().x;
+				 - entity1.getPosition().x - entity1.getSize().x
+				 - pushFactor;
 		}
 		// if player is to the right of wall
 		else {
 			deltax = entity2.getPosition().x + entity2.getSize().x
-				 - entity1.getPosition().x;
+				 + pushFactor - entity1.getPosition().x;
 		}
 
 		// for y axis
@@ -60,14 +58,14 @@ iow::checkAndResolveCollisionDelta(sf::RectangleShape entity1,
 			 && (entity1.getPosition().y + entity1.getSize().y
 			     < entity2.getPosition().y + entity2.getSize().y)) {
 			deltay = entity2.getPosition().y
-				 - entity1.getPosition().y
-				 - entity1.getSize().y;
+				 - entity1.getPosition().y - entity1.getSize().y
+				 - pushFactor;
 
 		}
 		// if player is below the  wall
 		else {
 			deltay = entity2.getPosition().y + entity2.getSize().y
-				 - entity1.getPosition().y;
+				 + pushFactor - entity1.getPosition().y;
 		}
 		// float temp = std::min(deltax, deltay);
 		sf::Vector2f tempv;
@@ -120,7 +118,8 @@ iow::checkAndResolveCollisionDelta(sf::RectangleShape entity1,
 	}
 }
 
-bool iow::checkCollision(sf::CircleShape circle, sf::RectangleShape entity)
+bool iow::checkCollisionBullet(sf::CircleShape circle,
+			       sf::RectangleShape entity)
 {
 	sf::Vector2f circleCenter(
 		circle.getPosition()
