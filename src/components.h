@@ -30,11 +30,12 @@ namespace iow
                                                                                \
 	/* bullet components */                                                \
 	X_CPT(IsBullet, bool)                                                  \
+	X_CPT(BulletCircle, iow::CollisionCir)                                 \
+	X_CPT(BulletDamage, float)                                             \
                                                                                \
 	/* Enemy components */                                                 \
 	X_CPT(IsEnemy, bool)                                                   \
-                                                                               \
-	X_CPT(BulletCircle, iow::CollisionCir)                                 \
+	X_CPT(EnemyColBox, iow::CollisionBox)                                  \
                                                                                \
 	/* game components */                                                  \
 	X_CPT(Direction, iow::Directions)                                      \

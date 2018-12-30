@@ -65,9 +65,9 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 	m_camera.position = resourceManager.m_camera_config.position;
 	m_camera.scale = resourceManager.m_camera_config.scale;
 
-	/* spawning 5 enemies */
+	/* spawning enemies */
 	size_t enemyTmp;
-	for (size_t i = 0; i < 5; ++i) {
+	for (size_t i = 0; i < 3; ++i) {
 		enemyTmp = create_new_entity();
 		c_IsEnemy.add_element_at_sparse_vector(enemyTmp, true);
 		c_Speed.add_element_at_sparse_vector(enemyTmp,
@@ -75,6 +75,13 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 		c_Position.add_element_at_sparse_vector(
 			enemyTmp, resourceManager.m_enemy_config.spawnPosition
 					  * (float)i);
+		iow::CollisionBox tempColBox =
+			resourceManager.m_enemy_config.enemyColBox;
+		tempColBox.setPosition(
+			resourceManager.m_enemy_config.spawnPosition
+			* (float)i);
+		c_EnemyColBox.add_element_at_sparse_vector(enemyTmp,
+							   tempColBox);
 		c_HP.add_element_at_sparse_vector(
 			enemyTmp, resourceManager.m_enemy_config.hp);
 		c_Appearance.add_element_at_sparse_vector(
@@ -134,25 +141,28 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 	iow::updatePositionFromSpeed(dt, c_Position, c_Speed);
 	iow::updateCollisionBoxFromPosition(c_PlayerCollisionLayer, c_Position);
+	iow::updateEnemyBoxPosFromPosition(c_IsEnemy, c_EnemyColBox,
+					   c_Position);
 	iow::updateCirclePosFromPosition(c_IsBullet, c_BulletCircle,
 					 c_Position);
 
 
+	// iow::checkAndResolveCollisionOfPlayerAgainstEntities(
+	// c_PlayerCollisionLayer[m_player_entity],
+	// c_Position[m_player_entity], c_IsEnemy, c_EnemyColBox);
 	iow::checkAndResolveCollisionOfOneAgainstEntities(
 		c_PlayerCollisionLayer[m_player_entity],
 		c_Position[m_player_entity], c_TileCollisionLayer);
-
 
 	iow::updateCamera(m_camera, c_Position[m_player_entity],
 			  window.getSize());
 	iow::updateAppearanceFromPosition(c_Appearance, c_Position);
 
-	/*HAIYANG::: c_IsBullet -> the bool packed vector for determing which
-	 * indicies are a bullet*/
-	// do i pass c_Position or c_TilePosition ????????????????????
 	iow::checkAndResolveCollisionBulletAgainstEntities(
-		c_IsBullet, c_BulletCircle, c_TileCollisionLayer, c_Position,
+		c_IsBullet, c_BulletCircle, c_BulletDamage, c_IsEnemy,
+		c_EnemyColBox, c_HP, c_TileCollisionLayer, c_Position,
 		c_Direction, c_Speed, c_Appearance);
+	iow::debugEnemyHP(c_HP);
 
 	iow::renderSystem(c_TileAppearance, window, m_camera);
 	iow::renderSystem(c_Appearance, window, m_camera);

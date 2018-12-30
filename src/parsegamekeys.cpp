@@ -80,6 +80,8 @@ static inline void parseGameInputs(iow::ECS &ecs, const float dt,
 		ecs.c_IsBullet.add_element_at_sparse_vector(bulletEntity, true);
 		ecs.c_Position.add_element_at_sparse_vector(
 			bulletEntity, ecs.c_Position[ecs.m_player_entity]);
+		ecs.c_BulletDamage.add_element_at_sparse_vector(bulletEntity,
+								20);
 
 		iow::CollisionCir tempCir =
 			resourceManager.m_bullet_config.collisionCir;
