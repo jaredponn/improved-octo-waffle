@@ -1,6 +1,7 @@
 #include "ecs.h"
 #include "logger.h"
 #include "parsegamekeys.h"
+#include "parseinternalgameevents.h"
 #include "systems.h"
 #include <iostream>
 
@@ -33,11 +34,11 @@ size_t iow::ECS::delete_entity_at(size_t index)
 	Logger::logMessage("UNTESTED AND PROBABLY NOT WORKIGN");
 #define X_CPT(name, type)                                                      \
 	MK_COMPONENT_MEMBER_VAR_NAME(name).delete_element_at_sparse_vector(    \
-		index);                                                        \
+		index);
+
 	IOW_COMPONENT_LIST
 #undef X_CPT
 
-	(void)index;
 	return 0;
 }
 
@@ -120,8 +121,8 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 		      iow::ResourceManager &resourceManager)
 {
 
-	/*  game logic */
-	runGameLogic(dt, resourceManager);
+	/*  parsing game keys */
+	iow::parseGameKeys(*this, dt, resourceManager);
 
 	/* Systems... */
 	window.clear(); // clears the color for the buffer
@@ -151,8 +152,8 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 	 * indicies are a bullet*/
 	// do i pass c_Position or c_TilePosition ????????????????????
 	iow::checkAndResolveCollisionBulletAgainstEntities(
-		c_IsBullet, c_BulletCircle, c_TileCollisionLayer, c_Position,
-		c_Direction, c_Speed, c_Appearance);
+		c_IsBullet, c_BulletCircle, c_TileCollisionLayer,
+		m_internal_game_event_stack);
 
 	iow::renderSystem(c_TileAppearance, window, m_camera);
 	iow::renderSystem(c_Appearance, window, m_camera);
@@ -164,11 +165,9 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 	/* Push output to the screen */
 	window.display();
-}
 
-void iow::ECS::runGameLogic(float dt, iow::ResourceManager &resourceManager)
-{
-	iow::parseGameKeys(*this, dt, resourceManager);
+	/* internal game logic*/
+	iow::parseInternalGameEvents(*this, m_internal_game_event_stack);
 }
 
 } // namespace iow
