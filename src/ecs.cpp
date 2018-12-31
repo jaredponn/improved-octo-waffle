@@ -28,10 +28,6 @@ size_t iow::ECS::create_new_entity()
 /* HAIYANG use this to remove a bullet entity from the engine */
 size_t iow::ECS::delete_entity_at(size_t index)
 {
-	// TODO
-	Logger::logMessage(
-		"ERROR deleting entity. This has not been implemented yet.");
-	Logger::logMessage("UNTESTED AND PROBABLY NOT WORKIGN");
 #define X_CPT(name, type)                                                      \
 	MK_COMPONENT_MEMBER_VAR_NAME(name).delete_element_at_sparse_vector(    \
 		index);
