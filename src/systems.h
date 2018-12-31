@@ -40,9 +40,35 @@ static inline void checkAndResolveCollisionOfOneAgainstEntities(
 
 static inline void checkAndResolveCollisionOfPlayerAgainstEntities(
 	iow::CollisionBox &oneCollisionBox, iow::Position &onePosition,
+	const sf::Vector2f &direction, const float &speed,
 	const iow::PackedVector<bool> &enemyBool,
-	const iow::PackedVector<iow::CollisionBox> &enemyPkdCollision)
+	const iow::PackedVector<iow::CollisionBox> &enemyPkdCollision,
+	const float dt)
 {
+	// return new dttttttttttttt
+	for (size_t i = 0; i < enemyBool.get_packed_data().size(); ++i) {
+		auto tmp = iow::checkAndResolveCollisionDelta(
+			oneCollisionBox,
+			enemyPkdCollision
+				[enemyBool.get_global_index_from_packed_index(
+					i)],
+			direction, speed, dt, 13);
+		if (tmp) {
+			onePosition += tmp.value();
+			oneCollisionBox.setPosition(onePosition);
+		}
+	}
+}
+
+/*
+
+static inline void checkAndResolveCollisionOfPlayerAgainstEntities(
+	iow::CollisionBox &oneCollisionBox, iow::Position &onePosition,
+	const iow::PackedVector<bool> &enemyBool,
+	const iow::PackedVector<iow::CollisionBox> &enemyPkdCollision,
+	const float dt)
+{
+	// return new dttttttttttttt
 	for (size_t i = 0; i < enemyBool.get_packed_data().size(); ++i) {
 		auto tmp = iow::checkAndResolveCollisionDelta(
 			oneCollisionBox,
@@ -56,6 +82,7 @@ static inline void checkAndResolveCollisionOfPlayerAgainstEntities(
 		}
 	}
 }
+ */
 
 // -----------------------------------------
 //    collision between player and enemy

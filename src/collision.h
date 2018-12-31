@@ -20,7 +20,8 @@ using CollisionCir = sf::CircleShape;
 // checks collision between 2 rectangles
 std::optional<sf::Vector2f>
 checkAndResolveCollisionDelta(CollisionBox entity1, CollisionBox entity2,
-			      size_t pushFactor = 0);
+			      const sf::Vector2f &direction, const float &speed,
+			      const float dt, size_t pushFactor = 0);
 
 // checks collision between a circle and a rectangle
 bool checkCollisionBullet(sf::CircleShape entity1, sf::RectangleShape entity2);

@@ -67,7 +67,7 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 
 	/* spawning enemies */
 	size_t enemyTmp;
-	for (size_t i = 0; i < 3; ++i) {
+	for (size_t i = 0; i < 1; ++i) {
 		enemyTmp = create_new_entity();
 		c_IsEnemy.add_element_at_sparse_vector(enemyTmp, true);
 		c_Speed.add_element_at_sparse_vector(enemyTmp,
@@ -147,9 +147,13 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 					 c_Position);
 
 
-	// iow::checkAndResolveCollisionOfPlayerAgainstEntities(
-	// c_PlayerCollisionLayer[m_player_entity],
-	// c_Position[m_player_entity], c_IsEnemy, c_EnemyColBox);
+	iow::checkAndResolveCollisionOfPlayerAgainstEntities(
+		c_PlayerCollisionLayer[m_player_entity],
+		c_Position[m_player_entity],
+		iow::convertDirectionToNormalizedVector(
+			c_Direction[m_player_entity]),
+		resourceManager.m_player_config.speed, c_IsEnemy, c_EnemyColBox,
+		dt);
 	iow::checkAndResolveCollisionOfOneAgainstEntities(
 		c_PlayerCollisionLayer[m_player_entity],
 		c_Position[m_player_entity], c_TileCollisionLayer);

@@ -38,6 +38,7 @@ namespace iow
 	X_CPT(EnemyColBox, iow::CollisionBox)                                  \
                                                                                \
 	/* game components */                                                  \
+	X_CPT(DeltaTime, float)                                                \
 	X_CPT(Direction, iow::Directions)                                      \
 	X_CPT(Appearance, sf ::Sprite)                                         \
 	X_CPT(Position, iow::Position)                                         \
