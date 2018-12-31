@@ -1,9 +1,11 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <stack>
 
 #include "components.h"
 #include "graphics.h"
+#include "internalgameevents.h"
 #include "logger.h"
 #include "packedvector.h"
 
@@ -115,17 +117,13 @@ static inline void checkAndResolveCollisionBulletAgainstEntities(
 	iow::PackedVector<bool> &bullet,
 	iow::PackedVector<iow::CollisionCir> &bulletCir,
 	const iow::PackedVector<iow::CollisionBox> &pkdCollision,
-	iow::PackedVector<iow::Position> &posVec,
-	iow::PackedVector<iow::Direction> &dirVec,
-	iow::PackedVector<iow::Speed> &speedVec,
-	iow::PackedVector<iow::Appearance> &appVec)
+	std::stack<iow::InternalGameEvent> &internalGameEvents)
 {
 	// the bullet position is updated ..
 	const auto &pkdColData = pkdCollision.get_packed_data();
 	const auto &bulletData = bulletCir.get_packed_data();
 	for (size_t i = 0; i < bullet.get_packed_data().size(); ++i) {
 
-		// TODO JARED make this work less bad
 		const iow::CollisionCir tempBullet = bulletData[i];
 		for (iow::CollisionBox j : pkdColData) {
 			if (iow::checkCollisionBullet(tempBullet, j)) {
@@ -133,18 +131,12 @@ static inline void checkAndResolveCollisionBulletAgainstEntities(
 				size_t tempSparseInd =
 					bullet.get_global_index_from_packed_index(
 						i);
-				bullet.delete_element_at_sparse_vector(
-					tempSparseInd);
-				bulletCir.delete_element_at_sparse_vector(
-					tempSparseInd);
-				posVec.delete_element_at_sparse_vector(
-					tempSparseInd);
-				dirVec.delete_element_at_sparse_vector(
-					tempSparseInd);
-				speedVec.delete_element_at_sparse_vector(
-					tempSparseInd);
-				appVec.delete_element_at_sparse_vector(
-					tempSparseInd);
+				internalGameEvents.push((
+					struct InternalGameEvent){
+					.type = iow::InternalGameEventType::
+						DELETE_BULLET,
+					.deleteBullet =
+						(DeleteBullet){tempSparseInd}});
 				break;
 			}
 		}
