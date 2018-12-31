@@ -109,8 +109,11 @@ inline void PackedVector<T>::delete_element_at_sparse_vector(const size_t index)
 {
 	// if the index has already been added, throw an error
 	if (m_sparse_vector[index] == SIZE_MAX) {
-		Logger::logMessage(
-			"MINOR ERROR in PackedVector with function delete_element_at. You are deleting an element that has already been deleted. The system should continue working as normally.");
+		// Logger::logMessage(
+		//	"MINOR ERROR in PackedVector with function
+		//delete_element_at. You are deleting an element that has
+		//already been deleted. The system should continue working as
+		//normally.");
 		return;
 	}
 
