@@ -5,6 +5,7 @@
 #include "ecs.h"
 #include "graphics.h"
 #include "input.h"
+#include "internalgameevents.h"
 #include "packedvector.h"
 #include "resourcemanager.h"
 
