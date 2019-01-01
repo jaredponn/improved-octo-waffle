@@ -154,16 +154,21 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 
 std::pair<iow::Position, iow::TileType> iow::TileMap::getTile(size_t i)
 {
-	/* sf::Vector2i tileIndexPosition = sf::Vector2i( */
-	/* 	m_tileMapSize.x - 1 - i / m_tileMapSize.y, i %
-	 * m_tileMapSize.y); */
-	sf::Vector2i tileIndexPosition = sf::Vector2i(
-		i % m_tileMapSize.y, m_tileMapSize.x - 1 - i / m_tileMapSize.y);
+	auto tileIndexPosition = getTileCoord(i);
 	return std::make_pair(
 		sf::Vector2f(
 			static_cast<float>(tileIndexPosition.x) * m_tileSize.x,
 			static_cast<float>(tileIndexPosition.y) * m_tileSize.y),
 		m_tiles[i]);
+}
+
+sf::Vector2i iow::TileMap::getTileCoord(size_t i)
+{
+	/* sf::Vector2i tileIndexPosition = sf::Vector2i( */
+	/* 	m_tileMapSize.x - 1 - i / m_tileMapSize.y, i %
+	 * m_tileMapSize.y); */
+	return sf::Vector2i(i % m_tileMapSize.y,
+			    m_tileMapSize.x - 1 - i / m_tileMapSize.y);
 }
 
 size_t iow::TileMap::getTileMapSize()

@@ -66,7 +66,10 @@ class TileMap
 	void setTileConfig(TileType val, std::optional<TileConfig> conf);
 
 	/* getters */
+	// gets the tile position and type in world coordinates
 	std::pair<iow::Position, iow::TileType> getTile(size_t i);
+	// returns the coordinates fo the tile( e.g. (0,0 is the bottom left))
+	sf::Vector2i getTileCoord(size_t i);
 	// gets the length ofthe tile map
 	size_t getTileMapSize();
 	// gets a specific tile config
