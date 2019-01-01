@@ -70,6 +70,9 @@ class TileMap
 	std::pair<iow::Position, iow::TileType> getTile(size_t i);
 	// returns the coordinates fo the tile( e.g. (0,0 is the bottom left))
 	sf::Vector2i getTileCoord(size_t i);
+	// inverse of getTileCoord
+	size_t getTileIndex(sf::Vector2i);
+
 	// gets the length ofthe tile map
 	size_t getTileMapSize();
 	// gets a specific tile config

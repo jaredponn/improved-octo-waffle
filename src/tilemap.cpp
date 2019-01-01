@@ -171,6 +171,11 @@ sf::Vector2i iow::TileMap::getTileCoord(size_t i)
 			    m_tileMapSize.x - 1 - i / m_tileMapSize.y);
 }
 
+size_t iow::TileMap::getTileIndex(sf::Vector2i n)
+{
+	return n.x - (n.y - m_tileSize.x + 1) * m_tileMapSize.y;
+}
+
 size_t iow::TileMap::getTileMapSize()
 {
 	return m_tiles.size();
