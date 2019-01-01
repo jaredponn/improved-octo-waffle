@@ -59,7 +59,7 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.collisionBox = sf::RectangleShape(sf::Vector2f(32, 32));
 	m_player_config.bulletInterval = 10;
 	m_player_config.hp = 10;
-	m_player_config.spawnPosition = sf::Vector2f(250, 250);
+	m_player_config.spawnPosition = sf::Vector2f(600, 700);
 	m_player_config.size = sf::Vector2f(32, 32);
 	m_player_config.speed = 0.25;
 
@@ -72,12 +72,12 @@ iow::ResourceManager::ResourceManager()
 	m_enemy_config.speed = 0.0001;
 	m_enemy_config.size = sf::Vector2f(100, 100);
 
-	m_enemy_config.spawnPosition = sf::Vector2f(100, 100);
+	m_enemy_config.spawnPosition = sf::Vector2f(1000, 700);
 
 	m_enemy_config.sprite.setTexture(m_textures.getTexture("enemy"));
 	m_enemy_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
 	m_enemy_config.sprite.setColor(sf::Color::Red);
-	m_enemy_config.sprite.setPosition(10, 10);
+	m_enemy_config.sprite.setPosition(0, 0);
 
 	m_enemy_config.steeringBehaviour.maxSpeed = 0.1f;
 	m_enemy_config.steeringBehaviour.fleeRadius = 32.f;
@@ -91,7 +91,8 @@ iow::ResourceManager::ResourceManager()
 
 	/* camera */
 	m_camera_config.position = sf::Vector2f(0.f, 0.f);
-	m_camera_config.scale = sf::Vector2f(1.0f, -1.0f);
+	// m_camera_config.scale = sf::Vector2f(1.0f, -1.0f); //default scale
+	m_camera_config.scale = sf::Vector2f(0.8f, -0.8f);
 
 	/* Tile map */
 	// must be set before everything else
