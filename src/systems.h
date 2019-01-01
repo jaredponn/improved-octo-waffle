@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <cmath>
 #include <stack>
 
 #include "components.h"
@@ -250,16 +251,20 @@ static inline void renderEntityToSFMLRenderBuffer(sf::RenderWindow &window,
 	// Uncommenting this block of code will make collisions weird. For some
 	// reason, all entites have to have the heigh pushed in to match the
 	// collision box size
+	sf::Vector2f npos;
+
 	sf::Vector2f lengthOffset = sf::Vector2f(
 		0.0, static_cast<float>(sprite.getTextureRect().height));
 
-	sf::Vector2f npos;
-	npos = (sprite.getPosition() - (camera.position))
-	       + (camera.windowsize * 0.5f);
+	npos = (sprite.getPosition() - (camera.position));
 
 	npos += lengthOffset;
+
 	npos.x *= camera.scale.x;
 	npos.y *= camera.scale.y;
+
+	npos.x += (camera.windowsize.x * std::pow(camera.scale.x, -1)) * 0.5f;
+	npos.y += (camera.windowsize.y * std::pow(camera.scale.y, -1)) * 0.5f;
 
 	auto newsprite = sprite;
 	newsprite.setPosition(npos);
