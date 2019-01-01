@@ -106,10 +106,11 @@ static inline void parseGameInputs(iow::ECS &ecs, const float dt,
 	}
 }
 
+static bool NO_KEYS_PRESSED;
+
 static inline void parseSingleKey(iow::ECS &ecs, const float dt,
 				  const iow::ResourceManager &resourceManager)
 {
-	bool noKeysPressed = true;
 	for (size_t i = 0; i < iow::MAX_NUMBER_KEYS; ++i) {
 		if (iow::InputManager::getKeyState(
 			    static_cast<sf::Keyboard::Key>(i))
@@ -117,12 +118,8 @@ static inline void parseSingleKey(iow::ECS &ecs, const float dt,
 			parseGameInputs(
 				ecs, dt, resourceManager,
 				std::get<1>(resourceManager.m_key_binds[i]));
-			noKeysPressed = false;
+			NO_KEYS_PRESSED = false;
 		}
-	}
-	if (noKeysPressed) {
-		parseGameInputs(ecs, dt, resourceManager,
-				iow::PlayerGameEvents::NO_ACTION);
 	}
 }
 
@@ -151,6 +148,7 @@ static inline void parseKeyChords(iow::ECS &ecs, const float dt,
 				iow::InputManager::setKeyState(
 					std::get<0>(j),
 					iow::KeyState::RELEASED);
+				NO_KEYS_PRESSED = false;
 			}
 		}
 	}
@@ -159,7 +157,13 @@ static inline void parseKeyChords(iow::ECS &ecs, const float dt,
 void parseGameKeys(iow::ECS &ecs, float const dt,
 		   iow::ResourceManager const &resourceManager)
 {
+	NO_KEYS_PRESSED = true;
+
 	parseKeyChords(ecs, dt, resourceManager);
 	parseSingleKey(ecs, dt, resourceManager);
+
+	if (NO_KEYS_PRESSED)
+		parseGameInputs(ecs, dt, resourceManager,
+				iow::PlayerGameEvents::NO_ACTION);
 }
 } // namespace iow
