@@ -64,22 +64,17 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 
 	/* spawning 5 enemies */
 	size_t enemyTmp;
-	for (size_t i = 0; i < 5; ++i) {
-		enemyTmp = create_new_entity();
-		c_IsEnemy.add_element_at_sparse_vector(enemyTmp, true);
-		c_Speed.add_element_at_sparse_vector(enemyTmp,
-						     sf::Vector2f{0, 0});
-		c_Position.add_element_at_sparse_vector(
-			enemyTmp, resourceManager.m_enemy_config.spawnPosition
-					  * (float)i);
-		c_HP.add_element_at_sparse_vector(
-			enemyTmp, resourceManager.m_enemy_config.hp);
-		c_Appearance.add_element_at_sparse_vector(
-			enemyTmp, resourceManager.m_enemy_config.sprite);
-		c_SteeringBehav.add_element_at_sparse_vector(
-			enemyTmp,
-			resourceManager.m_enemy_config.steeringBehaviour);
-	}
+	enemyTmp = create_new_entity();
+	c_IsEnemy.add_element_at_sparse_vector(enemyTmp, true);
+	c_Speed.add_element_at_sparse_vector(enemyTmp, sf::Vector2f{0, 0});
+	c_Position.add_element_at_sparse_vector(
+		enemyTmp, resourceManager.m_enemy_config.spawnPosition);
+	c_HP.add_element_at_sparse_vector(enemyTmp,
+					  resourceManager.m_enemy_config.hp);
+	c_Appearance.add_element_at_sparse_vector(
+		enemyTmp, resourceManager.m_enemy_config.sprite);
+	c_SteeringBehav.add_element_at_sparse_vector(
+		enemyTmp, resourceManager.m_enemy_config.steeringBehaviour);
 
 	/* spawning the world */
 	for (size_t i = 0;
