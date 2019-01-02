@@ -213,7 +213,7 @@ void iow::TileMap::setTileConfig(size_t val, std::optional<TileConfig> conf)
 	m_tileConfigs[val] = std::move(conf);
 }
 
-const iow::TileConfig iow::TileMap::getTileConfig(iow::TileType val)
+const iow::TileConfig iow::TileMap::getTileConfig(iow::TileType val) const
 {
 	if (!m_tileConfigs[val].has_value()) {
 		Logger::logMessage(

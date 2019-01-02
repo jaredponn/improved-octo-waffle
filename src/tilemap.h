@@ -84,7 +84,7 @@ class TileMap
 	// gets the length ofthe tile map
 	sf::Vector2u getTileMapDimensions() const;
 	// gets a specific tile config
-	const iow::TileConfig getTileConfig(iow::TileType val);
+	const iow::TileConfig getTileConfig(iow::TileType val) const;
 
 
 	/* printing */

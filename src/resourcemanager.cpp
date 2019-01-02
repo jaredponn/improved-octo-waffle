@@ -91,8 +91,8 @@ iow::ResourceManager::ResourceManager()
 
 	/* camera */
 	m_camera_config.position = sf::Vector2f(0.f, 0.f);
-	// m_camera_config.scale = sf::Vector2f(1.0f, -1.0f); //default scale
-	m_camera_config.scale = sf::Vector2f(0.8f, -0.8f);
+	m_camera_config.scale = sf::Vector2f(1.0f, -1.0f); // default scale
+	// m_camera_config.scale = sf::Vector2f(0.8f, -0.8f);
 
 	/* Tile map */
 	// must be set before everything else
