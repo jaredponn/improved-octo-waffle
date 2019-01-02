@@ -12,7 +12,7 @@ namespace iow
 #define ROOT_TWO_OVER_TWO (float)(std::sqrt(2) / 1)
 
 enum class Directions : unsigned int {
-	UP,
+	UP = 0,
 	DOWN,
 	LEFT,
 	RIGHT,
