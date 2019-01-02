@@ -67,16 +67,25 @@ class TileMap
 
 	/* getters */
 	// gets the tile position and type in world coordinates
-	std::pair<iow::Position, iow::TileType> getTile(size_t i);
+	std::pair<iow::Position, iow::TileType> getTile(size_t i) const;
+
 	// returns the coordinates fo the tile( e.g. (0,0 is the bottom left))
-	sf::Vector2i getTileCoord(size_t i);
+	sf::Vector2i getTileCoord(size_t i) const;
+	static sf::Vector2i getTileCoord(size_t i,
+					 sf::Vector2u const &dimensions);
+
 	// inverse of getTileCoord
-	size_t getTileIndex(sf::Vector2i);
+	size_t getTileIndex(sf::Vector2i) const;
+	static size_t getTileIndex(sf::Vector2i const &coord,
+				   sf::Vector2u const &dimensions);
 
 	// gets the length ofthe tile map
-	size_t getTileMapSize();
+	size_t getTileMapSize() const;
+	// gets the length ofthe tile map
+	sf::Vector2u getTileMapDimensions() const;
 	// gets a specific tile config
 	const iow::TileConfig getTileConfig(iow::TileType val);
+
 
 	/* printing */
 	// TODO not implemented yet
