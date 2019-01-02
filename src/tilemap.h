@@ -31,8 +31,9 @@ class TileMap
     private:
 	TileConfigs m_tileConfigs;
 
-	sf::Vector2u m_tileMapSize; // number of tiles rows (x) and columns (y)
-	sf::Vector2f m_tileSize;    // length and width of a tile
+	sf::Vector2u
+		m_tileMapDimensions; // number of tiles rows (x) and columns (y)
+	sf::Vector2f m_tileSize;     // length and width of a tile
 
 	std::vector<iow::TileType> m_tiles;
 

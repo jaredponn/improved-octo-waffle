@@ -1,8 +1,7 @@
-#include <string>
-
-#include "logger.h"
 #include "tilemap.h"
+#include "logger.h"
 #include "util.h"
+#include <string>
 
 
 constexpr float DEFAULT_TILE_SIZE = 100;
@@ -157,6 +156,10 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 std::pair<iow::Position, iow::TileType> iow::TileMap::getTile(size_t i) const
 {
 	auto tileIndexPosition = getTileCoord(i);
+	std::cout << tileIndexPosition.x << std::endl;
+	std::cout << tileIndexPosition.y << std::endl;
+	std::cout << "----" << std::endl;
+
 	return std::make_pair(
 		sf::Vector2f(
 			static_cast<float>(tileIndexPosition.x) * m_tileSize.x,
@@ -170,8 +173,12 @@ sf::Vector2i iow::TileMap::getTileCoord(size_t i) const
 	/* 	m_tileMapDimensions.x - 1 - i / m_tileMapDimensions.y, i %
 	 * m_tileMapDimensions.y); */
 	return sf::Vector2i(i % m_tileMapDimensions.y,
-			    m_tileMapDimensions.x - 1
-				    - i / m_tileMapDimensions.y);
+			    i % m_tileMapDimensions.x - 1);
+}
+
+sf::Vector2i iow::TileMap::getTileCoord(size_t i,
+					sf::Vector2u const &dimensions)
+{
 }
 
 size_t iow::TileMap::getTileIndex(sf::Vector2i n) const
@@ -216,9 +223,14 @@ const iow::TileConfig iow::TileMap::getTileConfig(iow::TileType val) const
 
 void iow::TileMap::printTileMap()
 {
+	std::cout << "STARTPRINT----- " << std::endl;
 	for (size_t i = 0; i < m_tiles.size(); ++i) {
-		// TODO implement this funciton
+		std::cout << m_tiles[i] << ", ";
+		// std::cout << i % (m_tileMapDimensions.y - 1) << ", ";
+		if ((i + 1) % (m_tileMapDimensions.y) == 0)
+			std::cout << std::endl;
 	}
+	std::cout << "ENDPRINTTILEMAP----- " << std::endl;
 }
 
 bool iow::TileMap::isValidTileType(TileType n)
