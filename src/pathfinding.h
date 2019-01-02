@@ -64,7 +64,7 @@ class TileMapGraph
 	// gets the current focus of the graph
 	GraphCoord getFocus();
 	// gets the neighobr in a given direction
-	GraphCoord getNeighbor(iow::Directions &direction);
+	GraphEdge getNeighbor(iow::Directions &direction);
 
 	GraphVertex dereferenceGraphCoord(GraphCoord const &coord);
 
