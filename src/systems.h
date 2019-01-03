@@ -248,17 +248,10 @@ static inline void renderEntityToSFMLRenderBuffer(sf::RenderWindow &window,
 	/* 	-static_cast<float>(sprite.getTextureRect().width) / 2.f, */
 	/* 	static_cast<float>(sprite.getTextureRect().height) / 2.f); */
 
-	// Uncommenting this block of code will make collisions weird. For some
-	// reason, all entites have to have the heigh pushed in to match the
-	// collision box size
 	sf::Vector2f npos;
-
-	sf::Vector2f lengthOffset = sf::Vector2f(
-		0.0, static_cast<float>(sprite.getTextureRect().height));
 
 	npos = (sprite.getPosition() - (camera.position));
 
-	npos += lengthOffset;
 
 	npos.x *= camera.scale.x;
 	npos.y *= camera.scale.y;
