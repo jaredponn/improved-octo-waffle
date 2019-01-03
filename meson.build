@@ -18,6 +18,7 @@ srcs = [ 'src/main.cpp'
        , 'src/parsegamekeys.cpp'
        , 'src/parseinternalgameevents.cpp'
        , 'src/pathfinding.cpp'
+       #, 'src/tilemappathfinding.cpp'
        , 'src/extrastate.cpp'
        , 'src/collision.cpp'
        , 'src/gameconfig.cpp'
@@ -32,6 +33,8 @@ executable('improved-octo-waffle'
 
 testsrcs = [ 'tests/main-tests.cpp'  
            , 'tests/packedvectortests.cpp'  
+           , 'tests/tilemaptests.cpp'  
+           , 'src/tilemap.cpp'  
            ]
 unittests = executable('unittests', testsrcs, cpp_args : ['-Wall', '-Wextra', '-O2', '-g'], link_args :['-lsfml-graphics', '-lsfml-window', '-lsfml-audio', '-lsfml-network', '-lsfml-system'])
 test('unittests', unittests )
