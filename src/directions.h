@@ -30,10 +30,10 @@ convertDirectionToNormalizedVector(const Directions n)
 
 	switch (n) {
 	case Directions::UP:
-		return sf::Vector2f(0, 1);
+		return sf::Vector2f(0, -1);
 		break;
 	case Directions::DOWN:
-		return sf::Vector2f(0, -1);
+		return sf::Vector2f(0, 1);
 		break;
 	case Directions::LEFT:
 		return sf::Vector2f(-1, 0);
@@ -42,16 +42,16 @@ convertDirectionToNormalizedVector(const Directions n)
 		return sf::Vector2f(1, 0);
 		break;
 	case Directions::UP_RIGHT:
-		return sf::Vector2f(ROOT_TWO_OVER_TWO, ROOT_TWO_OVER_TWO);
+		return sf::Vector2f(ROOT_TWO_OVER_TWO, -ROOT_TWO_OVER_TWO);
 		break;
 	case Directions::UP_LEFT:
-		return sf::Vector2f(-ROOT_TWO_OVER_TWO, ROOT_TWO_OVER_TWO);
-		break;
-	case Directions::DOWN_LEFT:
 		return sf::Vector2f(-ROOT_TWO_OVER_TWO, -ROOT_TWO_OVER_TWO);
 		break;
+	case Directions::DOWN_LEFT:
+		return sf::Vector2f(-ROOT_TWO_OVER_TWO, ROOT_TWO_OVER_TWO);
+		break;
 	case Directions::DOWN_RIGHT:
-		return sf::Vector2f(ROOT_TWO_OVER_TWO, -ROOT_TWO_OVER_TWO);
+		return sf::Vector2f(ROOT_TWO_OVER_TWO, ROOT_TWO_OVER_TWO);
 		break;
 	case Directions::INVALID_DIRECTION:
 		Logger::logMessage(
