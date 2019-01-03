@@ -11,6 +11,20 @@
 namespace iow
 {
 
+template <class T>
+struct TileCoord {
+	T row;
+	T col;
+};
+
+template <class T>
+bool operator==(const iow::TileCoord<T> &a, const iow::TileCoord<T> &b)
+{
+	return a.row == b.row && a.col == b.col;
+}
+using TileCoordi = TileCoord<int>;
+using TileCoordu = TileCoord<unsigned int>;
+
 struct TileConfig {
 	// constructo ro intialize the std::optionals as empty
 	TileConfig(const sf::Texture &texture,
@@ -31,9 +45,9 @@ class TileMap
     private:
 	TileConfigs m_tileConfigs;
 
-	sf::Vector2u
-		m_tileMapDimensions; // number of tiles rows (x) and columns (y)
-	sf::Vector2f m_tileSize;     // length and width of a tile
+	iow::TileCoordi m_tileMapDimensions; // number of tiles rows (row) and
+					     // columns (col)
+	sf::Vector2f m_tileSize;	     // length and width of a tile
 
 	std::vector<iow::TileType> m_tiles;
 
@@ -66,24 +80,33 @@ class TileMap
 	// set the tile config. witha given path to a texture
 	void setTileConfig(TileType val, std::optional<TileConfig> conf);
 
-	/* getters */
+    public:
+	/* getters for the world coordinates */
 	// gets the tile position and type in world coordinates
 	std::pair<iow::Position, iow::TileType> getTile(size_t i) const;
+	iow::Position getTileWorldCoord(size_t i) const;
+	static iow::Position getTileWorldCoord(iow::TileCoordi const &,
+					       sf::Vector2f const &tileSize);
+	iow::Position getTileType(size_t i) const;
 
+    public:
+	/* getters for the tile maps internal representation of the coords */
 	// returns the coordinates fo the tile( e.g. (0,0 is the bottom left))
-	sf::Vector2i getTileCoord(size_t i) const;
-	static sf::Vector2i getTileCoord(size_t i,
-					 sf::Vector2u const &dimensions);
+	iow::TileCoordi getTileCoord(size_t i) const;
+	static iow::TileCoordi getTileCoord(size_t i,
+					    iow::TileCoordi const &dimensions);
 
 	// inverse of getTileCoord
-	size_t getTileIndex(sf::Vector2i) const;
-	static size_t getTileIndex(sf::Vector2i const &coord,
-				   sf::Vector2u const &dimensions);
+	size_t getTileIndex(iow::TileCoordi) const;
+	static size_t getTileIndex(iow::TileCoordi const &coord,
+				   iow::TileCoordi const &dimensions);
 
+    public:
+	/* getters extra variables in the tilemap */
 	// gets the length ofthe tile map
 	size_t getTileMapSize() const;
 	// gets the length ofthe tile map
-	sf::Vector2u getTileMapDimensions() const;
+	iow::TileCoordi getTileMapDimensions() const;
 	// gets a specific tile config
 	const iow::TileConfig getTileConfig(iow::TileType val) const;
 
@@ -94,8 +117,18 @@ class TileMap
 };
 
 /* Using the tile map */
-/* TileMap myTileMap; */
-/* myTileMap.setTileSize(100,100); */
-/* myTileMap.loadTileMap(...); */
+/* TileMap myTileMap;
+ myTileMap.setTileSize(100,100);
+ myTileMap.loadTileMap(...);
+
+ -----
+
+(0,0)
+
+
+		(+inf, +inf)
+
+
+ */
 
 } // namespace iow

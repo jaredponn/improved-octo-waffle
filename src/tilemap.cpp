@@ -21,7 +21,8 @@ iow::TileMap::TileMap(){};
 
 void iow::TileMap::assertTileMapSize()
 {
-	if (m_tileMapDimensions.y * m_tileMapDimensions.x != m_tiles.size())
+	if (m_tileMapDimensions.col * m_tileMapDimensions.row
+	    != static_cast<int>(m_tiles.size()))
 		Logger::logMessage(
 			"ERROR with tile map config -- the width and the height of the tilemap must be the same as the .size() aof the tiles vector.");
 }
@@ -82,7 +83,7 @@ void iow::TileMap::loadTileMap(const std::string &tilemap)
 
 	std::vector<std::string> lines = iow::splitStringBy(tilemap, "\n");
 	// number of lines is the number of rows
-	m_tileMapDimensions.x = lines.size();
+	m_tileMapDimensions.row = lines.size();
 
 	loadTileMap(lines);
 }
@@ -91,12 +92,13 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 {
 	std::vector<std::string> row = iow::splitStringBy(lines[0], " ");
 	// number of columns is the number of space seperated things
-	m_tileMapDimensions.y = row.size();
+	m_tileMapDimensions.col = row.size();
 
 	for (size_t i = 0; i < lines.size(); ++i) {
 		row = ::iow::splitStringBy(lines[i], " ");
 
-		for (size_t j = 0; j < m_tileMapDimensions.y && j < row.size();
+		for (int j = 0; j < m_tileMapDimensions.col
+				&& j < static_cast<int>(row.size());
 		     ++j) {
 			if (!iow::isNumber(row[j])) {
 				Logger::logMessage(
@@ -126,22 +128,25 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 			}
 		}
 
-		if (row.size() > m_tileMapDimensions.y) {
+		if (static_cast<int>(row.size()) > m_tileMapDimensions.col) {
 			Logger::logMessage(
 				"ERROR loading tile map. Ensure dimensions are the same for every row and column of the tilemap.  ROW:");
 			Logger::logMessage(std::to_string(i).c_str());
 			Logger::logMessage(
 				"Is bigger than the initial row length of: ");
 			Logger::logMessage(
-				std::to_string(m_tileMapDimensions.y).c_str());
+				std::to_string(m_tileMapDimensions.col)
+					.c_str());
 		}
 
-		for (size_t j = 0; j < m_tileMapDimensions.y - row.size();
+		for (size_t j = 0; j < m_tileMapDimensions.col - row.size();
 		     ++j) {
 			Logger::logMessage(
-				std::to_string(m_tileMapDimensions.y).c_str());
+				std::to_string(m_tileMapDimensions.col)
+					.c_str());
 			Logger::logMessage(
-				std::to_string(m_tileMapDimensions.y).c_str());
+				std::to_string(m_tileMapDimensions.col)
+					.c_str());
 			Logger::logMessage("ERROR loading tile map at ROW:");
 			Logger::logMessage(std::to_string(i).c_str());
 			Logger::logMessage("and COLUMN:");
@@ -155,41 +160,45 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 
 std::pair<iow::Position, iow::TileType> iow::TileMap::getTile(size_t i) const
 {
-	auto tileIndexPosition = getTileCoord(i);
-	std::cout << tileIndexPosition.x << std::endl;
-	std::cout << tileIndexPosition.y << std::endl;
-	std::cout << "----" << std::endl;
-
-	return std::make_pair(
-		sf::Vector2f(
-			static_cast<float>(tileIndexPosition.x) * m_tileSize.x,
-			static_cast<float>(tileIndexPosition.y) * m_tileSize.y),
-		m_tiles[i]);
+	return std::make_pair(getTileWorldCoord(i), m_tiles[i]);
 }
 
-sf::Vector2i iow::TileMap::getTileCoord(size_t i) const
+iow::Position iow::TileMap::getTileWorldCoord(size_t i) const
+{
+	return getTileWorldCoord(getTileCoord(i), m_tileSize);
+}
+
+iow::Position iow::TileMap::getTileWorldCoord(iow::TileCoordi const &tileCoord,
+					      sf::Vector2f const &tileSize)
+{
+	return sf::Vector2f(static_cast<float>(tileCoord.col) * tileSize.y,
+			    static_cast<float>(tileCoord.row) * tileSize.x);
+}
+
+iow::TileCoordi iow::TileMap::getTileCoord(size_t i) const
 {
 	/* sf::Vector2i tileIndexPosition = sf::Vector2i( */
 	/* 	m_tileMapDimensions.x - 1 - i / m_tileMapDimensions.y, i %
 	 * m_tileMapDimensions.y); */
-	return sf::Vector2i(i % m_tileMapDimensions.y,
-			    i % m_tileMapDimensions.x - 1);
+	return getTileCoord(i, m_tileMapDimensions);
 }
 
-sf::Vector2i iow::TileMap::getTileCoord(size_t i,
-					sf::Vector2u const &dimensions)
+iow::TileCoordi iow::TileMap::getTileCoord(size_t i,
+					   iow::TileCoordi const &dimensions)
 {
+	return iow::TileCoordi{static_cast<int>(i / dimensions.col),
+			       static_cast<int>(i % dimensions.col)};
 }
 
-size_t iow::TileMap::getTileIndex(sf::Vector2i n) const
+size_t iow::TileMap::getTileIndex(iow::TileCoordi n) const
 {
 	return getTileIndex(n, m_tileMapDimensions);
 }
 
-size_t iow::TileMap::getTileIndex(sf::Vector2i const &coord,
-				  sf::Vector2u const &dimensions)
+size_t iow::TileMap::getTileIndex(iow::TileCoordi const &n,
+				  iow::TileCoordi const &dimensions)
 {
-	return coord.x - (coord.y - dimensions.x + 1) * dimensions.y;
+	return n.row * dimensions.col + n.col;
 }
 
 size_t iow::TileMap::getTileMapSize() const
@@ -223,11 +232,11 @@ const iow::TileConfig iow::TileMap::getTileConfig(iow::TileType val) const
 
 void iow::TileMap::printTileMap()
 {
-	std::cout << "STARTPRINT----- " << std::endl;
+	std::cout << "STARTPRINTTILEMAP----- " << std::endl;
 	for (size_t i = 0; i < m_tiles.size(); ++i) {
 		std::cout << m_tiles[i] << ", ";
 		// std::cout << i % (m_tileMapDimensions.y - 1) << ", ";
-		if ((i + 1) % (m_tileMapDimensions.y) == 0)
+		if ((i + 1) % (m_tileMapDimensions.col) == 0)
 			std::cout << std::endl;
 	}
 	std::cout << "ENDPRINTTILEMAP----- " << std::endl;
@@ -247,7 +256,7 @@ bool iow::TileMap::isValidTileType(TileType n)
 	return true;
 }
 
-sf::Vector2u iow::TileMap::getTileMapDimensions() const
+iow::TileCoordi iow::TileMap::getTileMapDimensions() const
 {
 	return m_tileMapDimensions;
 }
