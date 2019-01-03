@@ -59,7 +59,8 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.collisionBox = sf::RectangleShape(sf::Vector2f(32, 32));
 	m_player_config.bulletInterval = 10;
 	m_player_config.hp = 10;
-	m_player_config.spawnPosition = sf::Vector2f(600, 700);
+	// m_player_config.spawnPosition = sf::Vector2f(600, 700);
+	m_player_config.spawnPosition = sf::Vector2f(0, 0);
 	m_player_config.size = sf::Vector2f(32, 32);
 	m_player_config.speed = 0.25;
 
@@ -91,7 +92,7 @@ iow::ResourceManager::ResourceManager()
 
 	/* camera */
 	m_camera_config.position = sf::Vector2f(0.f, 0.f);
-	m_camera_config.scale = sf::Vector2f(1.0f, -1.0f); // default scale
+	m_camera_config.scale = sf::Vector2f(1.0f, 1.0f); // default scale
 	// m_camera_config.scale = sf::Vector2f(0.8f, -0.8f);
 
 	/* Tile map */
