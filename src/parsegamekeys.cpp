@@ -7,7 +7,7 @@ namespace iow
 {
 
 
-static inline void parseGameInputs(iow::ECS &ecs, const float dt,
+static inline void parseGameInputs(iow::ECS &ecs,
 				   const iow::ResourceManager &resourceManager,
 				   iow::PlayerGameEvents const event)
 
@@ -16,61 +16,61 @@ static inline void parseGameInputs(iow::ECS &ecs, const float dt,
 		/* player movement events */
 	case iow::PlayerGameEvents::MOVE_PLAYER_DOWN:
 		ecs.c_Direction[ecs.m_player_entity] = iow::Direction::DOWN;
-		ecs.c_Position[ecs.m_player_entity] +=
+		ecs.c_Speed[ecs.m_player_entity] =
 			iow::convertDirectionToNormalizedVector(
 				ecs.c_Direction[ecs.m_player_entity])
-			* resourceManager.m_player_config.speed * dt;
+			* resourceManager.m_player_config.speed;
 		break;
 	case iow::PlayerGameEvents::MOVE_PLAYER_UP:
 		ecs.c_Direction[ecs.m_player_entity] = iow::Direction::UP;
-		ecs.c_Position[ecs.m_player_entity] +=
+		ecs.c_Speed[ecs.m_player_entity] =
 			iow::convertDirectionToNormalizedVector(
 				ecs.c_Direction[ecs.m_player_entity])
-			* resourceManager.m_player_config.speed * dt;
+			* resourceManager.m_player_config.speed;
 		break;
 	case iow::PlayerGameEvents::MOVE_PLAYER_LEFT:
 		ecs.c_Direction[ecs.m_player_entity] = iow::Direction::LEFT;
-		ecs.c_Position[ecs.m_player_entity] +=
+		ecs.c_Speed[ecs.m_player_entity] =
 			iow::convertDirectionToNormalizedVector(
 				ecs.c_Direction[ecs.m_player_entity])
-			* resourceManager.m_player_config.speed * dt;
+			* resourceManager.m_player_config.speed;
 		break;
 	case iow::PlayerGameEvents::MOVE_PLAYER_RIGHT:
 		ecs.c_Direction[ecs.m_player_entity] = iow::Direction::RIGHT;
-		ecs.c_Position[ecs.m_player_entity] +=
+		ecs.c_Speed[ecs.m_player_entity] =
 			iow::convertDirectionToNormalizedVector(
 				ecs.c_Direction[ecs.m_player_entity])
-			* resourceManager.m_player_config.speed * dt;
+			* resourceManager.m_player_config.speed;
 		break;
 	case iow::PlayerGameEvents::MOVE_PLAYER_UP_LEFT:
 		ecs.c_Direction[ecs.m_player_entity] = iow::Direction::UP_LEFT;
-		ecs.c_Position[ecs.m_player_entity] +=
+		ecs.c_Speed[ecs.m_player_entity] =
 			iow::convertDirectionToNormalizedVector(
 				ecs.c_Direction[ecs.m_player_entity])
-			* resourceManager.m_player_config.speed * dt;
+			* resourceManager.m_player_config.speed;
 		break;
 	case iow::PlayerGameEvents::MOVE_PLAYER_UP_RIGHT:
 		ecs.c_Direction[ecs.m_player_entity] = iow::Direction::UP_RIGHT;
-		ecs.c_Position[ecs.m_player_entity] +=
+		ecs.c_Speed[ecs.m_player_entity] =
 			iow::convertDirectionToNormalizedVector(
 				ecs.c_Direction[ecs.m_player_entity])
-			* resourceManager.m_player_config.speed * dt;
+			* resourceManager.m_player_config.speed;
 		break;
 	case iow::PlayerGameEvents::MOVE_PLAYER_DOWN_LEFT:
 		ecs.c_Direction[ecs.m_player_entity] =
 			iow::Direction::DOWN_LEFT;
-		ecs.c_Position[ecs.m_player_entity] +=
+		ecs.c_Speed[ecs.m_player_entity] =
 			iow::convertDirectionToNormalizedVector(
 				ecs.c_Direction[ecs.m_player_entity])
-			* resourceManager.m_player_config.speed * dt;
+			* resourceManager.m_player_config.speed;
 		break;
 	case iow::PlayerGameEvents::MOVE_PLAYER_DOWN_RIGHT:
 		ecs.c_Direction[ecs.m_player_entity] =
 			iow::Direction::DOWN_RIGHT;
-		ecs.c_Position[ecs.m_player_entity] +=
+		ecs.c_Speed[ecs.m_player_entity] =
 			iow::convertDirectionToNormalizedVector(
 				ecs.c_Direction[ecs.m_player_entity])
-			* resourceManager.m_player_config.speed * dt;
+			* resourceManager.m_player_config.speed;
 		break;
 
 
@@ -101,12 +101,15 @@ static inline void parseGameInputs(iow::ECS &ecs, const float dt,
 	}
 
 
-	case iow::PlayerGameEvents::NO_ACTION:
+	case iow::PlayerGameEvents::NO_ACTION: {
+		ecs.c_Speed[ecs.m_player_entity] = sf::Vector2f(0, 0);
 		break;
 	}
+	}
 }
+static bool NO_KEYS_PRESSED;
 
-static inline void parseSingleKey(iow::ECS &ecs, const float dt,
+static inline void parseSingleKey(iow::ECS &ecs,
 				  const iow::ResourceManager &resourceManager)
 {
 	for (size_t i = 0; i < iow::MAX_NUMBER_KEYS; ++i) {
@@ -114,13 +117,14 @@ static inline void parseSingleKey(iow::ECS &ecs, const float dt,
 			    static_cast<sf::Keyboard::Key>(i))
 		    == std::get<0>(resourceManager.m_key_binds[i])) {
 			parseGameInputs(
-				ecs, dt, resourceManager,
+				ecs, resourceManager,
 				std::get<1>(resourceManager.m_key_binds[i]));
+			NO_KEYS_PRESSED = false;
 		}
 	}
 }
 
-static inline void parseKeyChords(iow::ECS &ecs, const float dt,
+static inline void parseKeyChords(iow::ECS &ecs,
 				  const iow::ResourceManager &resourceManager)
 {
 	for (const auto &i : resourceManager.m_key_chords) {
@@ -135,8 +139,7 @@ static inline void parseKeyChords(iow::ECS &ecs, const float dt,
 		}
 
 		if (tmp) {
-			parseGameInputs(ecs, dt, resourceManager,
-					std::get<1>(i));
+			parseGameInputs(ecs, resourceManager, std::get<1>(i));
 
 			// reseeting all the keys that were pressed to release,
 			// so that game events with single key chords are not
@@ -145,15 +148,21 @@ static inline void parseKeyChords(iow::ECS &ecs, const float dt,
 				iow::InputManager::setKeyState(
 					std::get<0>(j),
 					iow::KeyState::RELEASED);
+				NO_KEYS_PRESSED = false;
 			}
 		}
 	}
 }
 
-void parseGameKeys(iow::ECS &ecs, float const dt,
-		   iow::ResourceManager const &resourceManager)
+void parseGameKeys(iow::ECS &ecs, iow::ResourceManager const &resourceManager)
 {
-	parseKeyChords(ecs, dt, resourceManager);
-	parseSingleKey(ecs, dt, resourceManager);
+	NO_KEYS_PRESSED = true;
+
+	parseKeyChords(ecs, resourceManager);
+	parseSingleKey(ecs, resourceManager);
+
+	if (NO_KEYS_PRESSED)
+		parseGameInputs(ecs, resourceManager,
+				iow::PlayerGameEvents::NO_ACTION);
 }
 } // namespace iow

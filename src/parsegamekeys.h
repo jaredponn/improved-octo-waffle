@@ -14,6 +14,6 @@
 namespace iow
 {
 
-extern void parseGameKeys(iow::ECS &ecs, float const dt,
+extern void parseGameKeys(iow::ECS &ecs,
 			  iow::ResourceManager const &resourceManager);
 }

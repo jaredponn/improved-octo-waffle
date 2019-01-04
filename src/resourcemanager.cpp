@@ -61,7 +61,7 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.hp = 100;
 	m_player_config.spawnPosition = sf::Vector2f(250, 250);
 	m_player_config.size = sf::Vector2f(32, 32);
-	m_player_config.speed = 0.25;
+	m_player_config.speed = 100;
 
 	m_player_config.sprite.setTexture(m_textures.getTexture("player"));
 	m_player_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));

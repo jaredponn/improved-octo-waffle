@@ -43,6 +43,7 @@ namespace iow
 	X_CPT(Appearance, sf ::Sprite)                                         \
 	X_CPT(Position, iow::Position)                                         \
 	X_CPT(Speed, sf::Vector2f)                                             \
+	X_CPT(PrevSpeed, sf::Vector2f)                                         \
 	X_CPT(HP, float)                                                       \
 	X_CPT(HasHP, bool)                                                     \
                                                                                \

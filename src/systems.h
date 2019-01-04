@@ -1,9 +1,11 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <stack>
 
 #include "components.h"
 #include "graphics.h"
+#include "internalgameevents.h"
 #include "logger.h"
 #include "packedvector.h"
 
@@ -17,19 +19,25 @@ namespace iow
 // -----------------------------------------
 //    Collisions between player and wall
 // -----------------------------------------
-static inline void checkAndResolveCollisionOfOneAgainstEntities(
-	iow::CollisionBox &oneCollisionBox, iow::Position &onePosition,
+static inline void checkAndResolveCollisionOfPlayerAgainstWall(
+	iow::CollisionBox &oneCollisionBox, sf::Vector2f &velocity,
+	sf::Vector2f &prevVelocity, const float dt, float &playerDeltaTime,
 	const iow::PackedVector<iow::CollisionBox> &pkdCollision)
 {
 	const std::vector<iow::CollisionBox> &pkdColData =
 		pkdCollision.get_packed_data();
 
 	for (auto &i : pkdColData) {
-		auto tmp =
-			iow::checkAndResolveCollisionDelta(oneCollisionBox, i);
+		auto tmp = iow::checkAndResolveCollisionPlayerWithWall(
+			oneCollisionBox, i, velocity, prevVelocity, dt,
+			playerDeltaTime);
 		if (tmp) {
-			onePosition += tmp.value();
-			oneCollisionBox.setPosition(onePosition);
+			// std::cout << " old player velocity: " << velocity.x
+			//<< " " << velocity.y << std::endl;
+			velocity = tmp.value(); // update the velocity of the
+						// player
+			// std::cout << " new player velocity: " << velocity.x
+			//<< " " << velocity.y << std::endl;
 		}
 	}
 }
@@ -37,28 +45,28 @@ static inline void checkAndResolveCollisionOfOneAgainstEntities(
 // -----------------------------------------
 //    collision between player and enemy
 // -----------------------------------------
-
-static inline void checkAndResolveCollisionOfPlayerAgainstEntities(
+/*
+static inline void checkAndResolveCollisionOfPlayerAgainstZombie(
 	iow::CollisionBox &oneCollisionBox, iow::Position &onePosition,
-	const sf::Vector2f &direction, const float &speed,
-	const iow::PackedVector<bool> &enemyBool,
+	const sf::Vector2f &velocity, const iow::PackedVector<bool> &enemyBool,
 	const iow::PackedVector<iow::CollisionBox> &enemyPkdCollision,
 	const float dt)
 {
 	// return new dttttttttttttt
 	for (size_t i = 0; i < enemyBool.get_packed_data().size(); ++i) {
-		auto tmp = iow::checkAndResolveCollisionDelta(
+		auto tmp = iow::checkAndResolveCollisionPlayerWithWall(
 			oneCollisionBox,
 			enemyPkdCollision
 				[enemyBool.get_global_index_from_packed_index(
 					i)],
-			direction, speed, dt, 13);
+			velocity, dt, 13);
 		if (tmp) {
 			onePosition += tmp.value();
 			oneCollisionBox.setPosition(onePosition);
 		}
 	}
 }
+*/
 
 /*
 
@@ -177,7 +185,79 @@ static inline void updateVelocityToFlee(
 
 //    Collisions between bullet and wall
 // -----------------------------------------
-static inline void checkAndResolveCollisionBulletAgainstEntities(
+
+static inline void checkAndResolveCollisionBulletAgainstWallsAndZombies(
+	iow::PackedVector<bool> &bullet,
+	iow::PackedVector<iow::CollisionCir> &bulletCir,
+	iow::PackedVector<float> &bulletDamage,
+	iow::PackedVector<bool> &enemyBool,
+	iow::PackedVector<iow::CollisionBox> &enemyColBox,
+	iow::PackedVector<float> &enemyHP,
+
+	const iow::PackedVector<iow::CollisionBox> &pkdCollision,
+	std::stack<iow::InternalGameEvent> &internalGameEvents)
+{
+	// the bullet position is updated ..
+	const auto &pkdColData = pkdCollision.get_packed_data();
+	const auto &bulletData = bulletCir.get_packed_data();
+	for (size_t i = 0; i < bullet.get_packed_data().size(); ++i) {
+
+		size_t tempBulletSparseInd =
+			bullet.get_global_index_from_packed_index(i);
+		const iow::CollisionCir tempBullet = bulletData[i];
+		const auto &enemyData = enemyColBox.get_packed_data();
+		bool tempBulletDelete = false;
+
+
+		for (size_t j = 0; j < enemyBool.get_packed_data().size();
+		     ++j) {
+			size_t tempEnemySparseInd =
+				enemyBool.get_global_index_from_packed_index(j);
+
+			if (iow::checkCollisionBullet(tempBullet,
+						      enemyData[j])) {
+				enemyHP[tempEnemySparseInd] -=
+					bulletDamage[tempBulletSparseInd];
+
+				if (enemyHP[tempEnemySparseInd] <= 0) {
+					internalGameEvents.push((
+						struct InternalGameEvent){
+						.type = iow::
+							InternalGameEventType::
+								DELETE_ENEMY,
+						.deleteEnemy = (DeleteEnemy){
+							tempEnemySparseInd}});
+				}
+				internalGameEvents.push((
+					struct InternalGameEvent){
+					.type = iow::InternalGameEventType::
+						DELETE_BULLET,
+					.deleteBullet = (DeleteBullet){
+						tempBulletSparseInd}});
+				tempBulletDelete = true;
+				break;
+			}
+		}
+
+		if (!tempBulletDelete) {
+			for (iow::CollisionBox j : pkdColData) {
+				if (iow::checkCollisionBullet(tempBullet, j)) {
+					// deleteBullet(i, &bullet, &bulletCir);
+					internalGameEvents.push((
+						struct InternalGameEvent){
+						.type = iow::
+							InternalGameEventType::
+								DELETE_BULLET,
+						.deleteBullet = (DeleteBullet){
+							tempBulletSparseInd}});
+					break;
+				}
+			}
+		}
+	}
+}
+/*
+static inline void checkAndResolveCollisionBulletAgainstWallsAndZombies(
 	iow::PackedVector<bool> &bullet,
 	iow::PackedVector<iow::CollisionCir> &bulletCir,
 	iow::PackedVector<float> &bulletDamage,
@@ -280,6 +360,8 @@ static inline void checkAndResolveCollisionBulletAgainstEntities(
 		}
 	}
 }
+*/
+
 
 // -----------------------------------------
 //   Debug HP
@@ -332,7 +414,8 @@ updateAppearanceFromPosition(iow::PackedVector<Appearance> &pkdAppearance,
 static inline void
 updatePositionFromSpeed(const float dt,
 			iow::PackedVector<Position> &positionPackedVector,
-			const iow::PackedVector<Speed> &speedPackedVector)
+			const iow::PackedVector<Speed> &speedPackedVector,
+			const size_t playerIndex, float &playerDeltaTime)
 {
 	const auto &speedPackedIndicies =
 		speedPackedVector.get_packed_indicies();
@@ -342,8 +425,14 @@ updatePositionFromSpeed(const float dt,
 		Logger::logMessage(
 			"ERROR in update position from speed. Velocity packed data is not the same size");
 	for (size_t i = 0; i < speedPackedData.size(); ++i) {
-		positionPackedVector[speedPackedIndicies[i]] +=
-			speedPackedData[i] * dt;
+		if (speedPackedIndicies[i] == playerIndex) {
+
+			positionPackedVector[speedPackedIndicies[i]] +=
+				speedPackedData[i] * playerDeltaTime;
+		} else {
+			positionPackedVector[speedPackedIndicies[i]] +=
+				speedPackedData[i] * dt;
+		}
 	}
 }
 
