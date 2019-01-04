@@ -18,9 +18,10 @@ using CollisionBox = sf::RectangleShape;
 using CollisionCir = sf::CircleShape;
 
 // checks collision between 2 rectangles
-std::optional<sf::Vector2f>
-checkAndResolveCollisionDelta(CollisionBox entity1, CollisionBox entity2,
-			      size_t pushFactor = 0);
+std::optional<sf::Vector2f> checkAndResolveCollisionPlayerWithWall(
+	CollisionBox entity1, CollisionBox entity2,
+	const sf::Vector2f &velocity, const sf::Vector2f &prevVelocity,
+	const float dt, float &playerDeltaTime, size_t pushfactor = 0);
 
 // checks collision between a circle and a rectangle
 bool checkCollisionBullet(sf::CircleShape entity1, sf::RectangleShape entity2);
