@@ -56,7 +56,12 @@ static inline Distance dijkstras(iow::Graph<T, N> const &graph,
 				distances[edgeCoord] = newDistance;
 			}
 
-			toVisit.push(edgeCoord);
+			/* optimization to only visit the future nodes that are
+			 * smaller than the current destination node */
+			if (distances[edgeCoord] < distances[destination]) {
+
+				toVisit.push(edgeCoord);
+			}
 		}
 	}
 
