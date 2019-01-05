@@ -69,7 +69,7 @@ iow::ResourceManager::ResourceManager()
 
 	/* enemy stuff */
 	m_enemy_config.hp = 100;
-	m_enemy_config.speed = 0.0001;
+	m_enemy_config.speed = 100;
 	m_enemy_config.size = sf::Vector2f(100, 100);
 	m_enemy_config.enemyColBox = sf::RectangleShape(sf::Vector2f(32, 32));
 
@@ -80,7 +80,7 @@ iow::ResourceManager::ResourceManager()
 	m_enemy_config.sprite.setColor(sf::Color::Red);
 	m_enemy_config.sprite.setPosition(0, 0);
 
-	m_enemy_config.steeringBehaviour.maxSpeed = 0.1f;
+	m_enemy_config.steeringBehaviour.maxSpeed = 100.f;
 	m_enemy_config.steeringBehaviour.fleeRadius = 32.f;
 
 
