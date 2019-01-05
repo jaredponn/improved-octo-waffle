@@ -37,3 +37,6 @@ testsrcs = [ 'tests/main-tests.cpp'
            ]
 unittests = executable('unittests', testsrcs, cpp_args : ['-Wall', '-Wextra', '-O2', '-g'], link_args :['-lsfml-graphics', '-lsfml-window', '-lsfml-audio', '-lsfml-network', '-lsfml-system'])
 test('unittests', unittests )
+
+smallmainsrcs = [ 'tests/smallmain.cpp' ]
+smallmain = executable('smallmain', smallmainsrcs, cpp_args : ['-Wall', '-Wextra', '-g'], link_args :['-lsfml-graphics', '-lsfml-window', '-lsfml-audio', '-lsfml-network', '-lsfml-system'])
