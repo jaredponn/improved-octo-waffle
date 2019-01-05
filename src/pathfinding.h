@@ -25,14 +25,18 @@ static inline Distance dijkstras(iow::Graph<T, N> const &graph,
 
 	std::vector<bool> visited(graph.m_graph.size(), false);
 
-	std::priority_queue<GraphCoord> toVisit;
+	std::queue<GraphCoord> toVisit;
+	toVisit.push(start);
 
-	GraphCoord focus = start;
-	visited[focus] = true;
-	distances[focus] = 0;
+	visited[start] = true;
+	distances[start] = 0;
 
+	while (!toVisit.empty()) {
+		// pop
+		GraphCoord const focus = toVisit.front();
+		toVisit.pop();
 
-	while (focus != destination) {
+		visited[focus] = true;
 
 		GraphNeighbors<N> const &neighbors = graph.getNeighbors(focus);
 
@@ -52,27 +56,11 @@ static inline Distance dijkstras(iow::Graph<T, N> const &graph,
 				distances[edgeCoord] = newDistance;
 			}
 
-			visited[edgeCoord] = true;
-		}
-
-		// determining the shortest distance and changing the focus
-		Distance shortestDistance = MAX_DISTANCE;
-		for (GraphEdge const &edge : neighbors) {
-			GraphCoord const edgeCoord = std::get<0>(edge);
-
-			if (!iow::Graph<T, N>::isValidGraphEdge(edge))
-				continue;
-
-			int const focusedDistance = distances[edgeCoord];
-
-			if (focusedDistance < shortestDistance) {
-				shortestDistance = focusedDistance;
-				focus = edgeCoord;
-			}
+			toVisit.push(edgeCoord);
 		}
 	}
 
-	return distances[focus];
+	return distances[destination];
 }
 
 template <class T, size_t N>
