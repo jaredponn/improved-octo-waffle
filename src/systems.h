@@ -435,6 +435,24 @@ updatePositionFromSpeed(const float dt,
 }
 
 static inline void
+updatePositionFromSpeed(const float dt,
+			iow::PackedVector<Position> &positionPackedVector,
+			const iow::PackedVector<Speed> &speedPackedVector)
+{
+
+	const auto &speedPackedIndicies =
+		speedPackedVector.get_packed_indicies();
+	const auto &speedPackedData = speedPackedVector.get_packed_data();
+
+	if (speedPackedIndicies.size() != speedPackedData.size())
+		Logger::logMessage(
+			"ERROR in update position from speed. Velocity packed data is not the same size");
+	for (size_t i = 0; i < speedPackedData.size(); ++i) {
+		positionPackedVector[speedPackedIndicies[i]] +=
+			speedPackedData[i] * dt;
+	}
+}
+static inline void
 updateCollisionBoxFromPosition(iow::PackedVector<CollisionBox> &pkdCollision,
 			       const iow::PackedVector<Position> &pkdPos)
 {
