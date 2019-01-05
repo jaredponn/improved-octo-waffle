@@ -21,6 +21,7 @@ using GraphCoord = size_t;
 using GraphCost = int;
 
 using GraphEdge = std::pair<GraphCoord, GraphCost>;
+static inline GraphEdge makeGraphEdge(size_t const coordTo, int const cost = 0);
 
 template <size_t N>
 using GraphNeighbors = std::array<GraphEdge, N>;
@@ -28,7 +29,10 @@ using GraphNeighbors = std::array<GraphEdge, N>;
 template <typename T, size_t N>
 using GraphVertex = std::pair<T, GraphNeighbors<N>>;
 
-const int INVALID_GRAPH_COORD = std::numeric_limits<int>::max();
+const GraphCoord INVALID_GRAPH_COORD = SIZE_MAX;
+const GraphCost MAX_GRAPH_COST = std::numeric_limits<int>::max();
+const GraphEdge INVALID_GRAPH_EDGE =
+	makeGraphEdge(INVALID_GRAPH_COORD, MAX_GRAPH_COST);
 
 template <class T, size_t N>
 class Graph
@@ -47,15 +51,16 @@ class Graph
 
     public: // dereferences and references
 	T dereferenceDataGraphCoord(GraphCoord const &coord) const;
-	GraphVertex<T, N> dereferenceGraphCoord(GraphCoord const &coord) const;
+	GraphVertex<T, N> const &
+	dereferenceVertexGraphCoord(GraphCoord const &coord) const;
 	GraphCoord referenceGraphCoord(GraphVertex<T, N> const &) const;
 
     public: // utitliy functions
-	bool isValidGraphEdge(GraphEdge const n) const;
+	static bool isValidGraphEdge(GraphEdge const n);
 };
 
 template <class T, size_t N>
-inline bool iow::Graph<T, N>::isValidGraphEdge(GraphEdge const n) const
+inline bool iow::Graph<T, N>::isValidGraphEdge(GraphEdge const n)
 {
 	return INVALID_GRAPH_COORD != std::get<0>(n);
 }
@@ -68,8 +73,8 @@ iow::Graph<T, N>::getNeighbors(GraphCoord const n) const
 }
 
 template <class T, size_t N>
-inline GraphVertex<T, N>
-iow::Graph<T, N>::dereferenceGraphCoord(GraphCoord const &n) const
+inline GraphVertex<T, N> const &
+iow::Graph<T, N>::dereferenceVertexGraphCoord(GraphCoord const &n) const
 {
 	return m_graph[n];
 }
@@ -78,9 +83,15 @@ template <class T, size_t N>
 inline GraphCoord
 iow::Graph<T, N>::referenceGraphCoord(GraphVertex<T, N> const &vertex) const
 {
-	return (GraphCoord)(&vertex - m_graph[0]);
+	return (GraphCoord)(&vertex - &m_graph[0]);
 }
 
+template <class T, size_t N>
+inline T
+iow::Graph<T, N>::dereferenceDataGraphCoord(GraphCoord const &coord) const
+{
+	return std::get<0>(dereferenceVertexGraphCoord(coord));
+}
 
 template <class T, size_t N>
 iow::Graph<T, N>::Graph()
@@ -90,6 +101,11 @@ iow::Graph<T, N>::Graph()
 template <class T, size_t N>
 iow::Graph<T, N>::~Graph()
 {
+}
+
+static inline GraphEdge makeGraphEdge(size_t const coordTo, int const cost)
+{
+	return std::make_pair(coordTo, cost);
 }
 
 } // namespace iow
