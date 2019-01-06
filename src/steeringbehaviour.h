@@ -17,11 +17,9 @@ sf::Vector2f normalizeVec(sf::Vector2f val)
 {
 	sf::Vector2f normalizedVec;
 	const float vecmagnitude = absVec(val);
-	// TODO probably the cause of the bugge behavior
 	if (vecmagnitude == 0)
 		return sf::Vector2f{0, 0};
 
-	// TODO probably the cause of the bugge behavior
 	normalizedVec.x = val.x / vecmagnitude;
 	normalizedVec.y = val.y / vecmagnitude;
 
