@@ -25,6 +25,14 @@ int main(void)
 		iow::GraphNeighbors<MAX_NEIGHBORS>(
 			{iow::makeGraphEdge(1, 3), iow::makeGraphEdge(2, 1)})));
 
-	std::cout << iow::Pathfinding::dijkstras(testGraph, 0, 3);
+	auto tmp = iow::Pathfinding::dijkstrasPath(testGraph, 0, 3);
+
+
+	for (auto i : tmp) {
+		std::cout << testGraph.dereferenceDataGraphCoord(i)
+			  << std::endl;
+	}
+
+
 	return 0;
 }
