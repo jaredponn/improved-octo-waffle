@@ -29,9 +29,9 @@ using GraphNeighbors = std::array<GraphEdge, N>;
 template <typename T, size_t N>
 using GraphVertex = std::pair<T, GraphNeighbors<N>>;
 
-const GraphCoord INVALID_GRAPH_COORD = SIZE_MAX;
-const GraphCost MAX_GRAPH_COST = std::numeric_limits<int>::max();
-const GraphEdge INVALID_GRAPH_EDGE =
+GraphCoord const INVALID_GRAPH_COORD = SIZE_MAX;
+GraphCost const MAX_GRAPH_COST = std::numeric_limits<int>::max();
+GraphEdge const INVALID_GRAPH_EDGE =
 	makeGraphEdge(INVALID_GRAPH_COORD, MAX_GRAPH_COST);
 
 template <class T, size_t N>
@@ -45,7 +45,7 @@ class Graph
 	~Graph();
 
     public: // working with the graph
-	// gets the edge
+	// gets the neighors
 	GraphNeighbors<N> const &getNeighbors(GraphCoord const) const;
 
 
@@ -55,9 +55,13 @@ class Graph
 	dereferenceVertexGraphCoord(GraphCoord const &coord) const;
 	GraphCoord referenceGraphCoord(GraphVertex<T, N> const &) const;
 
-    public: // utitliy functions
+    public: // utility functions
 	static bool isValidGraphEdge(GraphEdge const n);
 };
+
+// -----------------------------------------
+//    function implementations
+// -----------------------------------------
 
 template <class T, size_t N>
 inline bool iow::Graph<T, N>::isValidGraphEdge(GraphEdge const n)
