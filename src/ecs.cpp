@@ -69,20 +69,26 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 	m_camera.scale = resourceManager.m_camera_config.scale;
 
 	/* spawning enemies */
-	size_t enemyTmp;
-	enemyTmp = create_new_entity();
-	c_IsEnemy.add_element_at_sparse_vector(enemyTmp, true);
-	c_Speed.add_element_at_sparse_vector(enemyTmp, sf::Vector2f{0, 0});
-	c_Position.add_element_at_sparse_vector(
-		enemyTmp, resourceManager.m_enemy_config.spawnPosition);
-	c_HP.add_element_at_sparse_vector(enemyTmp,
-					  resourceManager.m_enemy_config.hp);
-	c_Appearance.add_element_at_sparse_vector(
-		enemyTmp, resourceManager.m_enemy_config.sprite);
-	c_SteeringBehav.add_element_at_sparse_vector(
-		enemyTmp, resourceManager.m_enemy_config.steeringBehaviour);
+	for (int i = 0; i < 5; ++i) {
+		size_t const enemyTmp = create_new_entity();
+		c_IsEnemy.add_element_at_sparse_vector(enemyTmp, true);
+		c_Speed.add_element_at_sparse_vector(enemyTmp,
+						     sf::Vector2f{20, 20});
+		c_Position.add_element_at_sparse_vector(
+			enemyTmp, resourceManager.m_enemy_config.spawnPosition
+					  + sf::Vector2f(20 * i, 0));
+		c_HP.add_element_at_sparse_vector(
+			enemyTmp, resourceManager.m_enemy_config.hp);
+		c_Appearance.add_element_at_sparse_vector(
+			enemyTmp, resourceManager.m_enemy_config.sprite);
+		c_SteeringBehav.add_element_at_sparse_vector(
+			enemyTmp,
+			resourceManager.m_enemy_config.steeringBehaviour);
+		c_LastPathNode.add_element_at_sparse_vector(enemyTmp,
+							    sf::Vector2f(0, 0));
+	}
 
-	/* spawning the world */
+	/* spawning the tilemap */
 	for (size_t i = 0;
 	     i < resourceManager.m_tile_map_config.getTileMapSize(); ++i) {
 		size_t tileEntity = create_new_entity();
@@ -109,7 +115,16 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 					tileConf.collision.value(),
 					tileWorldPosition));
 		}
+
+		if (tileConf.steeringBehaviour) {
+			c_TileSteeringBehav.add_element_at_sparse_vector(
+				tileEntity, tileConf.steeringBehaviour.value());
+		}
 	}
+
+	/* spawning generating the graph from the tilemap */
+	m_tile_map_graph = iow::TileMapPathfinding::tileMapToGraph(
+		resourceManager.m_tile_map_config);
 
 	iow::updateAppearanceFromPosition(c_TileAppearance, c_TilePosition);
 }
@@ -121,26 +136,37 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 	/*  parsing game keys */
 	iow::parseGameKeys(*this, resourceManager);
 
+	/* pathfinding */
+	iow::pathfindTo(c_IsEnemy, c_LastPathNode, c_Position,
+			c_Position[m_player_entity], m_tile_map_graph,
+			resourceManager.m_tile_map_config);
+
+
 	/* Systems... */
 	window.clear(); // clears the color for the buffer
 
 	c_DeltaTime[m_player_entity] = dt;
 
+	/*
 	iow::checkAndResolveCollisionOfPlayerAgainstWall(
 		c_PlayerCollisionLayer[m_player_entity],
 		c_Speed[m_player_entity], c_PrevSpeed[m_player_entity], dt,
-		c_DeltaTime[m_player_entity], c_TileCollisionLayer);
+		c_DeltaTime[m_player_entity], c_TileCollisionLayer);*/
 
 	c_PrevSpeed[m_player_entity] = c_Speed[m_player_entity] / dt;
 
-	iow::updateVelocityToSeek(c_Speed, c_IsEnemy, c_Position,
-				  c_SteeringBehav, c_Position[m_player_entity]);
+	/*steering behaviors */
+	updateVelocityToSeekToOtherPositionComponent(
+		c_Speed, c_IsEnemy, c_Position, c_SteeringBehav,
+		c_LastPathNode);
+	iow::updateVelocityToFleeFromTileMapWalls(
+		c_Speed, c_IsEnemy, c_TileCollisionLayer, c_Position,
+		c_TileSteeringBehav);
+	iow::updateVelocityToFleeAgainstItself(c_Speed, c_IsEnemy, c_Position,
+					       c_SteeringBehav);
 
-	iow::updateVelocityToFlee(c_Speed, c_IsEnemy, c_Position,
-				  c_SteeringBehav);
 
 	iow::updatePositionFromSpeed(dt, c_Position, c_Speed);
-
 	iow::updateCollisionBoxFromPosition(c_PlayerCollisionLayer, c_Position);
 
 	// iow::updateEnemyBoxPosFromPosition(c_IsEnemy, c_EnemyColBox,
@@ -164,7 +190,6 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 	iow::renderSystem(c_TileAppearance, window, m_camera);
 	iow::renderSystem(c_Appearance, window, m_camera);
-
 	// debug render system for collision boxes
 	// iow::debugRenderSystem(c_TileCollisionLayer, window, m_camera);
 	// iow::debugRenderSystem(c_PlayerCollisionLayer, window, m_camera);

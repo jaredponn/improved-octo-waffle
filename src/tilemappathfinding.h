@@ -19,33 +19,42 @@ namespace iow
 
 
 // -----------------------------------------
-//    constants
+//    declarations
 // -----------------------------------------
 
 
 class TileMapPathfinding
 {
+
     public:
 	static constexpr size_t MAX_TILE_MAP_EDGES = 8;
 	static constexpr GraphCost UP_DOWN_LEFT_RIGHT_COST = 10;
 	static constexpr GraphCost DIAGONAL_COST = 14;
 
     public:
+	using Graph = iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>;
+
+    public:
 	// converts the tilemap into a graph
-	iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>
+	static iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>
 	tileMapToGraph(iow ::TileMap const &tilemap);
 
 	// create tilemap neighbors
-	iow::GraphNeighbors<MAX_TILE_MAP_EDGES>
+	static iow::GraphNeighbors<MAX_TILE_MAP_EDGES>
 	createGraphNeighborFromTileMap(iow::TileCoordi const i,
 				       iow::TileMap const &tilemap);
 
 	// create the graph edge from the tilemap
 	// TODO refactor the createGrahNeighborFromTileMap to use this
 	// TODO not implemented
-	iow::GraphEdge createGraphEdgeFromTileMap(iow::TileCoordi const i,
+	static iow::GraphEdge
+	determineGraphEdgeFromTileMapAndDirection(iow::TileCoordi const i,
 						  iow::Directions const d,
 						  iow::TileMap const &tilemap);
+
+	static bool
+	isGraphCoordWall(iow::TileMapPathfinding::Graph const &graph,
+			 iow::GraphCoord const n);
 };
 
 
@@ -53,140 +62,103 @@ class TileMapPathfinding
 //    definitions
 // -----------------------------------------
 
-iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>
+inline iow::Graph<iow::TileCoordi, TileMapPathfinding::MAX_TILE_MAP_EDGES>
 iow::TileMapPathfinding::tileMapToGraph(iow ::TileMap const &tilemap)
 {
-	Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES> graph;
+	iow::Graph<iow::TileCoordi, TileMapPathfinding::MAX_TILE_MAP_EDGES>
+		graph;
 
 	size_t const tilemaplen = tilemap.getTileMapSize();
 
-	for (auto i = 0; i < tilemaplen; ++i) {
+	for (size_t i = 0; i < tilemaplen; ++i) {
 		iow::TileCoordi const tmp = tilemap.getTileCoord(i);
 
 		graph.m_graph.push_back(std::make_pair(
 			tmp, createGraphNeighborFromTileMap(tmp, tilemap)));
 	}
+
+	return graph;
 }
 
-iow::GraphNeighbors<MAX_TILE_MAP_EDGES>
+inline iow::GraphNeighbors<TileMapPathfinding::MAX_TILE_MAP_EDGES>
 iow::TileMapPathfinding::createGraphNeighborFromTileMap(
 	iow::TileCoordi const i, iow::TileMap const &tilemap)
 {
-	GraphEdge up;
-	GraphEdge down;
-	GraphEdge left;
-	GraphEdge right;
-	GraphEdge upRight;
-	GraphEdge downRight;
-	GraphEdge upLeft;
-	GraphEdge downLeft;
-
-	iow::TileCoordi const tileMapDimensions =
-		tilemap.getTileMapDimensions();
-
-	/* if the edges are out of bounds, just set it to out of bounds */
-	// up
-	if (i.row - 1 < 0) {
-		up = iow::INVALID_GRAPH_EDGE;
-		upRight = iow::INVALID_GRAPH_EDGE;
-		upLeft = iow::INVALID_GRAPH_EDGE;
-	}
-	// down
-	if (i.row + 1 >= tileMapDimensions.row) {
-		down = iow::INVALID_GRAPH_EDGE;
-		downRight = iow::INVALID_GRAPH_EDGE;
-		downLeft = iow::INVALID_GRAPH_EDGE;
-	}
-	// left
-	if (i.col - 1 < 0) {
-		left = iow::INVALID_GRAPH_EDGE;
-		upLeft = iow::INVALID_GRAPH_EDGE;
-		downLeft = iow::INVALID_GRAPH_EDGE;
-	}
-	// right
-	if (i.col + 1 >= tileMapDimensions.col) {
-		right = iow::INVALID_GRAPH_EDGE;
-		upRight = iow::INVALID_GRAPH_EDGE;
-		downRight = iow::INVALID_GRAPH_EDGE;
-	}
-
-
-	/* setting up the graph if the coordinates are valid */
-	// up
-	if (iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>::isValidGraphEdge(
-		    up)) {
-		iow::TileCoordi const nTileCoord =
-			(TileCoord){i.row - 1, i.col};
-		up = iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
-					UP_DOWN_LEFT_RIGHT_COST);
-	}
-
-	// down
-	if (iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>::isValidGraphEdge(
-		    down)) {
-		iow::TileCoordi const nTileCoord =
-			(TileCoord){i.row + 1, i.col};
-		down = iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
-					  UP_DOWN_LEFT_RIGHT_COST);
-	}
-
-	// left
-	if (iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>::isValidGraphEdge(
-		    left)) {
-		iow::TileCoordi const nTileCoord =
-			(TileCoord){i.row, i.col - 1};
-		left = iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
-					  UP_DOWN_LEFT_RIGHT_COST);
-	}
-
-	// right
-	if (iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>::isValidGraphEdge(
-		    right)) {
-		iow::TileCoordi const nTileCoord =
-			(TileCoord){i.row, i.col + 1};
-		right = iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
-					   UP_DOWN_LEFT_RIGHT_COST);
-	}
-
-	// upRight
-	if (iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>::isValidGraphEdge(
-		    upRight)) {
-		iow::TileCoordi const nTileCoord =
-			(TileCoord){i.row - 1, i.col + 1};
-		upRight = iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
-					     DIAGONAL_COST);
-	}
-
-	// downRight
-	if (iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>::isValidGraphEdge(
-		    downRight)) {
-		iow::TileCoordi const nTileCoord =
-			(TileCoord){i.row + 1, i.col + 1};
-		downRight = iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
-					       DIAGONAL_COST);
-	}
-
-	// upLeft
-	if (iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>::isValidGraphEdge(
-		    upLeft)) {
-		iow::TileCoordi const nTileCoord =
-			(TileCoord){i.row - 1, i.col - 1};
-		upLeft = iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
-					    DIAGONAL_COST);
-	}
-
-	// downLeft
-	if (iow::Graph<iow::TileCoordi, MAX_TILE_MAP_EDGES>::isValidGraphEdge(
-		    downLeft)) {
-		iow::TileCoordi const nTileCoord =
-			(TileCoord){i.row + 1, i.col - 1};
-		downLeft = iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
-					      DIAGONAL_COST);
-	}
-
+	GraphEdge up = determineGraphEdgeFromTileMapAndDirection(
+		i, iow::Directions::UP, tilemap);
+	GraphEdge down = determineGraphEdgeFromTileMapAndDirection(
+		i, iow::Directions::DOWN, tilemap);
+	GraphEdge left = determineGraphEdgeFromTileMapAndDirection(
+		i, iow::Directions::LEFT, tilemap);
+	GraphEdge right = determineGraphEdgeFromTileMapAndDirection(
+		i, iow::Directions::RIGHT, tilemap);
+	GraphEdge upRight = determineGraphEdgeFromTileMapAndDirection(
+		i, iow::Directions::UP_RIGHT, tilemap);
+	GraphEdge downRight = determineGraphEdgeFromTileMapAndDirection(
+		i, iow::Directions::DOWN_RIGHT, tilemap);
+	GraphEdge upLeft = determineGraphEdgeFromTileMapAndDirection(
+		i, iow::Directions::UP_LEFT, tilemap);
+	GraphEdge downLeft = determineGraphEdgeFromTileMapAndDirection(
+		i, iow::Directions::DOWN_LEFT, tilemap);
 
 	return {up, down, left, right, upRight, downRight, upLeft, downLeft};
 }
 
+inline iow::GraphEdge
+iow::TileMapPathfinding::determineGraphEdgeFromTileMapAndDirection(
+	iow::TileCoordi const i, iow::Directions const d,
+	iow::TileMap const &tilemap)
+{
+
+	iow::TileCoordi const tileMapDimensions =
+		tilemap.getTileMapDimensions();
+
+	sf::Vector2i const unitDirectionVec =
+		iow::convertDirectionToUnitVector(d);
+
+	iow::TileCoordi const nTileCoord = i + unitDirectionVec;
+
+	/* if the edges are out of bounds, just set it to out of bounds */
+	// for the rows
+	if (nTileCoord.row < 0 || nTileCoord.row >= tileMapDimensions.row) {
+		return iow::INVALID_GRAPH_EDGE;
+	}
+	// for the columns
+	if (nTileCoord.col < 0 || nTileCoord.col >= tileMapDimensions.col) {
+		return iow::INVALID_GRAPH_EDGE;
+	}
+
+	const auto &nTileConf =
+		tilemap.getTileConfig(tilemap.getTileType(nTileCoord));
+	const auto &fTileConf = tilemap.getTileConfig(tilemap.getTileType(i));
+
+	// if either is a wall, give it the max cost
+	if (nTileConf.collision || fTileConf.collision) {
+		return iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
+					  iow ::MAX_GRAPH_COST);
+	}
+
+	if (iow::isVerticalOrHorizontalDirection(d)) {
+		return iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
+					  UP_DOWN_LEFT_RIGHT_COST);
+	} else {
+		return iow::makeGraphEdge(tilemap.getTileIndex(nTileCoord),
+					  DIAGONAL_COST);
+	}
+}
+
+
+inline bool iow::TileMapPathfinding::isGraphCoordWall(
+	iow::TileMapPathfinding::Graph const &graph, iow::GraphCoord const n)
+{
+	GraphNeighbors<iow::TileMapPathfinding::MAX_TILE_MAP_EDGES> const
+		&neighbors = graph.dereferenceVertexGraphCoord(n).second;
+
+	for (auto const &i : neighbors) {
+		if (i.second != iow::MAX_GRAPH_COST)
+			return false;
+	}
+	return true;
+}
 
 } // namespace iow

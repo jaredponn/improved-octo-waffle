@@ -7,6 +7,7 @@
 #include "packedvector.h"
 #include "position.h"
 #include "steeringbehaviour.h"
+#include "worldcoordpath.h"
 
 /** Components.h
  * Class for the vectors of componenets
@@ -23,6 +24,7 @@ namespace iow
 	X_CPT(TilePosition, sf ::Vector2f)                                     \
 	X_CPT(TileAppearance, sf ::Sprite)                                     \
 	X_CPT(TileCollisionLayer, CollisionBox)                                \
+	X_CPT(TileSteeringBehav, iow::SteeringBehaviour::SteeringBehaviour)    \
                                                                                \
 	/* Player Components */                                                \
 	X_CPT(IsPlayer, size_t)                                                \
@@ -47,6 +49,8 @@ namespace iow
 	X_CPT(HP, float)                                                       \
 	X_CPT(HasHP, bool)                                                     \
                                                                                \
+	/* X_CPT(Path, iow::WorldCoordPath) */                                 \
+	X_CPT(LastPathNode, iow::Position)                                     \
 	X_CPT(SteeringBehav, iow::SteeringBehaviour::SteeringBehaviour)        \
 	X_CPT(ToPlayerPositionDelta, iow::Position)
 

@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "components.h"
+#include "steeringbehaviour.h"
 #include "texturemanager.h"
 
 namespace iow
@@ -22,19 +23,43 @@ bool operator==(const iow::TileCoord<T> &a, const iow::TileCoord<T> &b)
 {
 	return a.row == b.row && a.col == b.col;
 }
+
+template <class T>
+iow::TileCoord<T> operator+(const iow::TileCoord<T> &a,
+			    const iow::TileCoord<T> &b)
+{
+	return (iow::TileCoord<T>){a.row + b.row, a.col + b.col};
+}
+
+template <class T>
+iow::TileCoord<T> operator+(const iow::TileCoord<T> &a, const sf::Vector2<T> &b)
+{
+	return (iow::TileCoord<T>){a.row + b.y, a.col + b.x};
+}
+
+template <class T>
+iow::TileCoord<T> operator+(const sf::Vector2<T> &a, const iow::TileCoord<T> &b)
+{
+	return (iow::TileCoord<T>){a.y + b.row, a.x + b.col};
+}
+
 using TileCoordi = TileCoord<int>;
 using TileCoordu = TileCoord<unsigned int>;
 
 struct TileConfig {
 	// constructo ro intialize the std::optionals as empty
-	TileConfig(const sf::Texture &texture,
-		   std::optional<iow::TileCollisionLayer> col,
-		   std::optional<iow::HP> des);
+	TileConfig(
+		const sf::Texture &texture,
+		std::optional<iow::TileCollisionLayer> col,
+		std::optional<iow::HP> des,
+		std::optional<iow::SteeringBehaviour::SteeringBehaviour> ste);
 
 	sf::Sprite sprite; // sprite
 
 	std::optional<sf::RectangleShape> collision; // does have collision?
 	std::optional<iow::HP> isDestroyable;	// is it destroyable?
+	std::optional<iow::SteeringBehaviour::SteeringBehaviour>
+		steeringBehaviour; // does steering beahvirous>
 };
 
 using TileConfigs = std::vector<std::optional<TileConfig>>;
@@ -58,11 +83,12 @@ class TileMap
 	// must be rectangles
 	void assertTileMapSize();
 
-	// gets the tile size
-	const sf::Vector2f &getTileSize();
-
 	// for testing if a tile type is valid
 	bool isValidTileType(TileType);
+
+    public:
+	// gets the tile size
+	const sf::Vector2f &getTileSize() const;
 
     public:
 	TileMap();
@@ -85,9 +111,16 @@ class TileMap
 	// gets the tile position and type in world coordinates
 	std::pair<iow::Position, iow::TileType> getTile(size_t i) const;
 	iow::Position getTileWorldCoord(size_t i) const;
+	iow::Position getTileWorldCoord(iow::TileCoordi const &) const;
 	static iow::Position getTileWorldCoord(iow::TileCoordi const &,
 					       sf::Vector2f const &tileSize);
-	iow::Position getTileType(size_t i) const;
+	iow::TileCoordi getTileCoordFromWorldCoord(iow::Position const &) const;
+	static iow::TileCoordi
+	getTileCoordFromWorldCoord(iow::Position const &,
+				   sf::Vector2f const &tileSize);
+
+	iow::TileType getTileType(size_t const i) const;
+	iow::TileType getTileType(TileCoordi const i) const;
 
     public:
 	/* getters for the tile maps internal representation of the coords */

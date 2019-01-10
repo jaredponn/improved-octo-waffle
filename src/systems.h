@@ -9,6 +9,8 @@
 #include "internalgameevents.h"
 #include "logger.h"
 #include "packedvector.h"
+#include "pathfinding.h"
+#include "tilemappathfinding.h"
 
 /** systems.h
  * Systems to run over the ECS.
@@ -129,18 +131,60 @@ static inline void updateVelocityToSeek(
 	for (size_t i = 0; i < entitySetPkdVecLen; i++) {
 		size_t const entitySetGlobalIndex =
 			entitySet.get_global_index_from_packed_index(i);
+
+		sf::Vector2f posDelta =
+			iow::SteeringBehaviour::calculatePositionDelta(
+				seekToPos, posPkdVec[entitySetGlobalIndex]);
+
 		sf::Vector2f const steeringVel =
 			iow::SteeringBehaviour::calculateSeekSteeringVelocity(
 				steeringPkdVec[entitySetGlobalIndex],
-				speedPkdVec[entitySetGlobalIndex],
-				iow::SteeringBehaviour::calculatePositionDelta(
-					seekToPos,
-					posPkdVec[entitySetGlobalIndex]));
+				speedPkdVec[entitySetGlobalIndex], posDelta);
+		speedPkdVec[entitySetGlobalIndex] += steeringVel;
+	}
+}
+static inline void updateVelocityToSeekToOtherPositionComponent(
+	iow::PackedVector<iow::Speed> &speedPkdVec,
+	iow::PackedVector<bool> const &entitySet,
+	iow::PackedVector<iow::Position> const &posPkdVec,
+	iow::PackedVector<iow::SteeringBehaviour::SteeringBehaviour> const
+		&steeringPkdVec,
+	iow::PackedVector<iow::Position> const &seekToPosPkdVec)
+{
+
+	auto const entitySetPkdVecLen = entitySet.get_packed_data_size();
+
+	for (size_t i = 0; i < entitySetPkdVecLen; i++) {
+		size_t const entitySetGlobalIndex =
+			entitySet.get_global_index_from_packed_index(i);
+
+		sf::Vector2f const a = posPkdVec[entitySetGlobalIndex];
+		sf::Vector2f const b = seekToPosPkdVec[entitySetGlobalIndex];
+		std::cout << "a, b entity in steer" << std::endl;
+		std::cout << a.x << " " << a.y << std::endl;
+		std::cout << b.x << " " << b.y << std::endl;
+
+		sf::Vector2f const posDelta =
+			iow::SteeringBehaviour::calculatePositionDelta(b, a);
+		std::cout << "posdelta" << std::endl;
+		std::cout << posDelta.x << " " << a.y << std::endl;
+		std::cout << posDelta.x << " " << b.y << std::endl;
+
+		sf::Vector2f const steeringVel =
+			iow::SteeringBehaviour::calculateSeekSteeringVelocity(
+				steeringPkdVec[entitySetGlobalIndex],
+				speedPkdVec[entitySetGlobalIndex], posDelta);
+		std::cout << "steerinvel" << std::endl;
+		std::cout << steeringVel.x << " " << a.y << std::endl;
+		std::cout << steeringVel.x << " " << b.y << std::endl;
+
+
 		speedPkdVec[entitySetGlobalIndex] += steeringVel;
 	}
 }
 
-static inline void updateVelocityToFlee(
+
+static inline void updateVelocityToFleeAgainstItself(
 	iow::PackedVector<iow::Speed> &speedPkdVec,
 	iow::PackedVector<bool> const &entitySet,
 	iow::PackedVector<iow::Position> const &posPkdVec,
@@ -153,8 +197,6 @@ static inline void updateVelocityToFlee(
 	for (size_t i = 0; i < entitySetPkdVecLen; ++i) {
 		for (size_t j = 0; j < entitySetPkdVecLen; ++j) {
 			if (i != j) {
-
-
 				size_t const entitySetGlobalIndex =
 					entitySet
 						.get_global_index_from_packed_index(
@@ -184,6 +226,38 @@ static inline void updateVelocityToFlee(
 	}
 }
 
+static inline void updateVelocityToFleeFromTileMapWalls(
+	iow::PackedVector<iow::Speed> &speedPkdVec,
+	iow::PackedVector<bool> const &fleeingEntitySet,
+	iow::PackedVector<iow::CollisionBox> const &tilemapcollision,
+	iow::PackedVector<iow::Position> const &posPkdVec,
+	iow::PackedVector<iow::SteeringBehaviour::SteeringBehaviour> const
+		&steeringPkdVec)
+{
+	std::vector<size_t> tileMapCollisionPkdVec =
+		tilemapcollision.get_packed_indicies();
+
+	std::vector<size_t> fleeingEntitySetPkdVec =
+		fleeingEntitySet.get_packed_indicies();
+
+	for (auto const &i : tileMapCollisionPkdVec) {
+		sf::Vector2f const wallPos =
+			iow::getCollisionBoxCenter(tilemapcollision[i]);
+
+		for (auto const &j : fleeingEntitySetPkdVec) {
+
+			sf::Vector2f const steeringVel =
+				iow::SteeringBehaviour::calculateFleeVelocity(
+					steeringPkdVec[i], speedPkdVec[j],
+					iow::SteeringBehaviour::
+						calculatePositionDelta(
+							wallPos, posPkdVec[j]));
+			speedPkdVec[j] += steeringVel / 100.f;
+		}
+	}
+}
+
+// -----------------------------------------
 //    Collisions between bullet and wall
 // -----------------------------------------
 
@@ -483,6 +557,88 @@ static inline void updateCamera(Camera &camera, const sf::Vector2f &pos,
 	camera.windowsize.y *= camera.scale.y;
 }
 
+// -----------------------------------------
+//    Pathfinding
+// -----------------------------------------
+
+static inline std::vector<iow::Position>
+pathfindToPositionFromPositionWithTileMap(
+	iow::TileMapPathfinding::Graph const &graph, // graph
+	iow::TileMap const &tilemap, // tile map -- needed to find the proper
+				     // world coordinates
+	iow::Position const &start, //  normally enemy
+	iow::Position const &dest   // player
+)
+{
+
+	iow::GraphCoord const startCoord =
+		tilemap.getTileIndex(tilemap.getTileCoordFromWorldCoord(start));
+	iow::GraphCoord const destCoord =
+		tilemap.getTileIndex(tilemap.getTileCoordFromWorldCoord(dest));
+
+	std::vector<iow::Position> path = iow::Pathfinding::ShortestPath<
+		iow::TileCoordi, iow::TileMapPathfinding::MAX_TILE_MAP_EDGES,
+		iow::Position>::
+		dijkstrasPath(
+			graph, startCoord, destCoord,
+			[tilemap](iow::TileCoordi const a) -> iow::Position {
+				return iow::Position(
+					tilemap.getTileWorldCoord(a).x
+						+ (tilemap.getTileSize().x * 1
+						   / 4),
+					tilemap.getTileWorldCoord(a).y
+						+ (tilemap.getTileSize().y * 1
+						   / 4)
+
+				);
+			}
+
+		);
+
+	if (path.size() == 0) {
+		path.push_back(dest);
+		return path;
+	}
+	// path.back() = dest;
+	// path.front() = start;
+
+
+	std::cout << "---" << std::endl;
+	for (auto const &i : path) {
+		std::cout << i.x << ", " << i.y << std::endl;
+	}
+
+	return path;
+}
+
+
+static inline void
+pathfindTo(iow::PackedVector<bool> const &startSet,
+	   iow::PackedVector<iow::Position> &pathsPackedVec,
+	   iow::PackedVector<iow::Position> const &posPackedVec,
+	   iow::Position const dest,
+	   iow::TileMapPathfinding::Graph const &graph, // graph
+	   iow::TileMap const &tilemap // tile map -- needed to find the proper
+				       // world coordinates
+)
+{
+	std::vector<size_t> const &setpackedindices =
+		startSet.get_packed_indicies();
+
+	for (size_t const i : setpackedindices) {
+		auto const start = posPackedVec[i];
+
+		iow::GraphCoord const startCoord = tilemap.getTileIndex(
+			tilemap.getTileCoordFromWorldCoord(start));
+		if (!iow::TileMapPathfinding::isGraphCoordWall(graph,
+							       startCoord)) {
+			pathsPackedVec[i] =
+				pathfindToPositionFromPositionWithTileMap(
+					graph, tilemap, start, dest)[1];
+		}
+	}
+}
+
 
 // -----------------------------------------
 //    Render systems
@@ -492,13 +648,15 @@ static inline void renderEntityToSFMLRenderBuffer(sf::RenderWindow &window,
 						  const iow::Camera &camera)
 {
 	/* sf::Vector2f lengthOffset = sf::Vector2f(0, 0); */
-	// uncommenting this code block sets it so that it will rende rnicelyin
-	// the center of the screen, howevre it will not play nicely with hte
-	// collision system
+	// uncommenting this code block sets it so that it will rende
+	// rnicelyin the center of the screen, howevre it will not play
+	// nicely with hte collision system
 	// TODO -- not exactly too sure how to go about fixing this....
 	/* sf::Vector2f lengthOffset = sf::Vector2f( */
-	/* 	-static_cast<float>(sprite.getTextureRect().width) / 2.f, */
-	/* 	static_cast<float>(sprite.getTextureRect().height) / 2.f); */
+	/* 	-static_cast<float>(sprite.getTextureRect().width)
+	 * / 2.f, */
+	/* 	static_cast<float>(sprite.getTextureRect().height)
+	 * / 2.f); */
 
 	sf::Vector2f npos;
 

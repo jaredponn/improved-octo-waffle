@@ -69,10 +69,13 @@ TEST_CASE("Dijstraks test case 0 -- backtracking")
 		std::make_pair('B', iow::GraphNeighbors<MAX_NEIGHBORS>(
 					    {iow::makeGraphEdge(0, 3)})));
 
-	auto path = iow::Pathfinding::dijkstrasPath(testGraph, 0, 1);
+	auto path =
+		iow::Pathfinding::ShortestPath<char, MAX_NEIGHBORS,
+					       char>::dijkstrasPath(testGraph,
+								    0, 1);
 
-	REQUIRE(testGraph.dereferenceDataGraphCoord(path[0]) == 'A');
-	REQUIRE(testGraph.dereferenceDataGraphCoord(path[1]) == 'B');
+	REQUIRE(path[0] == 'A');
+	REQUIRE(path[1] == 'B');
 }
 
 TEST_CASE("Dijstraks test case 1")
@@ -123,11 +126,14 @@ TEST_CASE("Dijstraks test case 1 -- backtracking")
 		iow::GraphNeighbors<MAX_NEIGHBORS>(
 			{iow::makeGraphEdge(1, 3), iow::makeGraphEdge(2, 1)})));
 
-	auto tmp = iow::Pathfinding::dijkstrasPath(testGraph, 0, 3);
+	auto tmp =
+		iow::Pathfinding::ShortestPath<char, MAX_NEIGHBORS,
+					       char>::dijkstrasPath(testGraph,
+								    0, 3);
 
-	REQUIRE(testGraph.dereferenceDataGraphCoord(tmp[0]) == 'A');
-	REQUIRE(testGraph.dereferenceDataGraphCoord(tmp[1]) == 'C');
-	REQUIRE(testGraph.dereferenceDataGraphCoord(tmp[2]) == 'D');
+	REQUIRE(tmp[0] == 'A');
+	REQUIRE(tmp[1] == 'C');
+	REQUIRE(tmp[2] == 'D');
 }
 
 
@@ -193,5 +199,9 @@ TEST_CASE("Dijstraks test case 3 -- no best path exists")
 	REQUIRE(iow::Pathfinding::dijkstras(testGraph, 0, 3)
 		== iow::Pathfinding::MAX_DISTANCE);
 
-	REQUIRE(iow::Pathfinding::dijkstrasPath(testGraph, 0, 3).size() == 0);
+	REQUIRE(iow::Pathfinding::ShortestPath<char, MAX_NEIGHBORS,
+					       char>::dijkstrasPath(testGraph,
+								    0, 3)
+			.size()
+		== 0);
 }

@@ -7,14 +7,16 @@
 constexpr float DEFAULT_TILE_SIZE = 100;
 
 
-iow::TileConfig::TileConfig(const sf::Texture &texture,
-			    std::optional<iow::TileCollisionLayer> col,
-			    std::optional<iow::HP> des)
+iow::TileConfig::TileConfig(
+	const sf::Texture &texture, std::optional<iow::TileCollisionLayer> col,
+	std::optional<iow::HP> des,
+	std::optional<iow::SteeringBehaviour::SteeringBehaviour> ste)
 {
 	sprite.setTexture(texture);
 
 	collision = col;
 	isDestroyable = des;
+	steeringBehaviour = ste;
 }
 
 iow::TileMap::TileMap(){};
@@ -56,7 +58,7 @@ void iow::TileMap::setTileSize(const float x, const float y)
 	setTileSize(sf::Vector2f(x, y));
 }
 
-const sf::Vector2f &iow::TileMap::getTileSize()
+const sf::Vector2f &iow::TileMap::getTileSize() const
 {
 	return m_tileSize;
 }
@@ -160,12 +162,28 @@ void iow::TileMap::loadTileMap(std::vector<std::string> lines)
 
 std::pair<iow::Position, iow::TileType> iow::TileMap::getTile(size_t i) const
 {
-	return std::make_pair(getTileWorldCoord(i), m_tiles[i]);
+	return std::make_pair(getTileWorldCoord(i), getTileType(i));
 }
+
+
+iow::TileType iow::TileMap::getTileType(size_t const i) const
+{
+	return m_tiles[i];
+}
+iow::TileType iow::TileMap::getTileType(TileCoordi const i) const
+{
+	return m_tiles[getTileIndex(i)];
+}
+
 
 iow::Position iow::TileMap::getTileWorldCoord(size_t i) const
 {
 	return getTileWorldCoord(getTileCoord(i), m_tileSize);
+}
+
+iow::Position iow::TileMap::getTileWorldCoord(iow::TileCoordi const &n) const
+{
+	return getTileWorldCoord(n, m_tileSize);
 }
 
 iow::Position iow::TileMap::getTileWorldCoord(iow::TileCoordi const &tileCoord,
@@ -173,6 +191,36 @@ iow::Position iow::TileMap::getTileWorldCoord(iow::TileCoordi const &tileCoord,
 {
 	return sf::Vector2f(static_cast<float>(tileCoord.col) * tileSize.y,
 			    static_cast<float>(tileCoord.row) * tileSize.x);
+}
+
+
+iow::TileCoordi
+iow::TileMap::getTileCoordFromWorldCoord(iow::Position const &pos) const
+{
+	return getTileCoordFromWorldCoord(pos, m_tileSize);
+}
+
+iow::TileCoordi
+iow::TileMap::getTileCoordFromWorldCoord(iow::Position const &pos,
+					 sf::Vector2f const &tileSize)
+{
+	// TODO remove debug log
+	/*
+	std::cout << "tilecoord fromworldcoord: x: "
+		  << static_cast<int>(pos.x) / static_cast<int>(tileSize.y)
+		  << std::endl;
+	std::cout << "tilecoord fromworldcoord: y: "
+		  << static_cast<int>(pos.y) / static_cast<int>(tileSize.x)
+		  << std::endl;*/
+
+	/*
+	return (iow::TileCoordi){
+		static_cast<int>(pos.x) / static_cast<int>(tileSize.y),
+		static_cast<int>(pos.y) / static_cast<int>(tileSize.x)};*/
+
+	return (iow::TileCoordi){
+		static_cast<int>(pos.y) / static_cast<int>(tileSize.x),
+		static_cast<int>(pos.x) / static_cast<int>(tileSize.y)};
 }
 
 iow::TileCoordi iow::TileMap::getTileCoord(size_t i) const

@@ -35,4 +35,13 @@ setCollisionBoxPositionFromPosition(const iow::CollisionBox &collisionbox,
 	return tmp;
 }
 
+static inline iow::Position getCollisionBoxCenter(CollisionBox const &box)
+{
+	sf::Vector2f const size = box.getSize();
+	iow::Position const pos = box.getPosition();
+
+	return sf::Vector2f{pos.x + size.x / 2.f, pos.y + size.y / 2.f};
+}
+
+
 } // namespace iow

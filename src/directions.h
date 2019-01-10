@@ -24,6 +24,35 @@ enum class Directions : unsigned int {
 	INVALID_DIRECTION
 };
 
+static inline bool isVerticalOrHorizontalDirection(const Directions n)
+{
+
+	switch (n) {
+	case Directions::UP:
+		return true;
+		break;
+	case Directions::DOWN:
+		return true;
+		break;
+	case Directions::LEFT:
+
+		return true;
+		break;
+	case Directions::RIGHT:
+		return true;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
+
+static inline bool isDiagonalDirection(const Directions n)
+{
+
+	return not isVerticalOrHorizontalDirection(n);
+}
+
 static inline sf::Vector2f
 convertDirectionToNormalizedVector(const Directions n)
 {
@@ -62,6 +91,52 @@ convertDirectionToNormalizedVector(const Directions n)
 	Logger::logMessage(
 		"ERROR in convertDirectionToNormalizedVector -- invalid direction");
 	return sf::Vector2f(0, 0);
+}
+
+static inline sf::Vector2i convertDirectionToUnitVector(const Directions n)
+{
+
+	switch (n) {
+	case Directions::UP:
+		return sf::Vector2i(0, -1);
+		break;
+	case Directions::DOWN:
+		return sf::Vector2i(0, 1);
+		break;
+	case Directions::LEFT:
+		return sf::Vector2i(-1, 0);
+		break;
+	case Directions::RIGHT:
+		return sf::Vector2i(1, 0);
+		break;
+	case Directions::UP_RIGHT:
+		return sf::Vector2i(1, -1);
+		break;
+	case Directions::UP_LEFT:
+		return sf::Vector2i(-1, -1);
+		break;
+	case Directions::DOWN_LEFT:
+		return sf::Vector2i(-1, 1);
+		break;
+	case Directions::DOWN_RIGHT:
+		return sf::Vector2i(1, 1);
+		break;
+	case Directions::INVALID_DIRECTION:
+		Logger::logMessage(
+			"ERROR in convertDirectionToNormalizedVector -- invalid direction");
+		return sf::Vector2i(0, 0);
+		break;
+	}
+	Logger::logMessage(
+		"ERROR in convertDirectionToNormalizedVector -- invalid direction");
+	return sf::Vector2i(0, 0);
+}
+
+// (x,y) -- >  (y,x)
+template <typename T>
+static inline sf::Vector2<T> swapVecCoords(const sf::Vector2<T> n)
+{
+	return sf::Vector2<T>(n.y, n.x);
 }
 
 static inline float magnitudeOfSfVector(const sf::Vector2f x)

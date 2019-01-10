@@ -59,9 +59,10 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.collisionBox = sf::RectangleShape(sf::Vector2f(32, 32));
 	m_player_config.bulletInterval = 10;
 	m_player_config.hp = 10;
-	m_player_config.spawnPosition = sf::Vector2f(600, 700);
+	// m_player_config.spawnPosition = sf::Vector2f(200, 100);
+	m_player_config.spawnPosition = sf::Vector2f(0, 90);
 	m_player_config.size = sf::Vector2f(32, 32);
-	m_player_config.speed = 100;
+	m_player_config.speed = 400;
 
 	m_player_config.sprite.setTexture(m_textures.getTexture("player"));
 	m_player_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
@@ -69,19 +70,20 @@ iow::ResourceManager::ResourceManager()
 
 	/* enemy stuff */
 	m_enemy_config.hp = 100;
-	m_enemy_config.speed = 100;
+	m_enemy_config.speed = 300;
 	m_enemy_config.size = sf::Vector2f(100, 100);
 	m_enemy_config.enemyColBox = sf::RectangleShape(sf::Vector2f(32, 32));
 
-	m_enemy_config.spawnPosition = sf::Vector2f(1000, 700);
+	// m_enemy_config.spawnPosition = sf::Vector2f(110, 410);
+	m_enemy_config.spawnPosition = sf::Vector2f(510, 310);
 
 	m_enemy_config.sprite.setTexture(m_textures.getTexture("enemy"));
 	m_enemy_config.sprite.setTextureRect(sf::IntRect(0, 0, 32, 32));
 	m_enemy_config.sprite.setColor(sf::Color::Red);
 	m_enemy_config.sprite.setPosition(0, 0);
 
-	m_enemy_config.steeringBehaviour.maxSpeed = 100.f;
-	m_enemy_config.steeringBehaviour.fleeRadius = 32.f;
+	m_enemy_config.steeringBehaviour.maxSpeed = 400.f;
+	m_enemy_config.steeringBehaviour.fleeRadius = 30.f;
 
 
 	/* if (!m_player_config.texture.create(200, 200)) { */
@@ -102,13 +104,19 @@ iow::ResourceManager::ResourceManager()
 	/* Indiviudal tile configs  */ // must be declared before
 				       // loading the tile maps
 	auto groundConf = std::make_optional<TileConfig>(
-		m_textures.getTexture("ground"), std::nullopt, std::nullopt);
+		m_textures.getTexture("ground"), std::nullopt, std::nullopt,
+		std::nullopt);
 	m_tile_map_config.setTileConfig(0, std::move(groundConf));
 
 	auto colLayer = std::make_optional<iow::TileCollisionLayer>(
 		sf::Vector2f(100, 100));
+	auto tileSteering =
+		std::make_optional<iow::SteeringBehaviour::SteeringBehaviour>((
+			iow::SteeringBehaviour::SteeringBehaviour){
+			m_enemy_config.steeringBehaviour.maxSpeed, 100});
 	auto staticWallConf = std::make_optional<TileConfig>(
-		m_textures.getTexture("staticwall"), colLayer, std::nullopt);
+		m_textures.getTexture("staticwall"), colLayer, std::nullopt,
+		tileSteering);
 
 	m_tile_map_config.setTileConfig(1, std::move(staticWallConf));
 

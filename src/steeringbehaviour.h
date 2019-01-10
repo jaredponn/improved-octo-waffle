@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "position.h"
+
 // anon namespace
 namespace
 {
@@ -67,6 +69,7 @@ calculateFleeVelocity(const SteeringBehaviour steeringBehaviourAttr,
 		      const sf::Vector2f currentVelocity,
 		      const sf::Vector2f positionDelta)
 {
+	// if (absVec(positionDelta) <= steeringBehaviourAttr.fleeRadius) {
 	if (absVec(positionDelta) <= steeringBehaviourAttr.fleeRadius) {
 		return calculateSeekSteeringVelocity(
 			steeringBehaviourAttr, currentVelocity, -positionDelta);
