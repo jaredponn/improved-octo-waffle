@@ -1,5 +1,5 @@
 # improved-octo-waffle -- reading week project
-Testing a game engine design.
+This project was a toy project to test an ECS design.
 
 # External Libraries
 A huge thank you to these libraries for writing sane libraries.
