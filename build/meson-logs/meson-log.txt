@@ -1,0 +1,40 @@
+Build started at 2019-01-04T10:58:38.811087
+Main binary: /usr/bin/python
+Python system: Linux
+The Meson build system
+Version: 0.49.0
+Source dir: /home/haiyang/programs/improved-octo-waffle
+Build dir: /home/haiyang/programs/improved-octo-waffle/build
+Build type: native build
+Project name: improved-octo-waffle
+Project version: undefined
+Native C++ compiler: c++ (gcc 8.2.1 "c++ (GCC) 8.2.1 20181127")
+Build machine cpu family: x86_64
+Build machine cpu: x86_64
+Adding test "unittests"
+Build targets in project: 2
+Found ninja-1.8.2 at /usr/bin/ninja
+Running compile:
+Working directory:  /tmp/tmpc8l727ah
+Command line:  c++ /tmp/tmpc8l727ah/testfile.cpp -pipe -D_FILE_OFFSET_BITS=64 -c -o /tmp/tmpc8l727ah/output.obj -std=c++17 
+
+Code:
+ int i = static_cast<int>(0);
+Compiler stdout:
+ 
+Compiler stderr:
+ 
+Compiler accepts -std=c++17: YES
+Running compile:
+Working directory:  /tmp/tmpvqaq9z6s
+Command line:  c++ /tmp/tmpvqaq9z6s/testfile.cpp -pipe -D_FILE_OFFSET_BITS=64 -c -o /tmp/tmpvqaq9z6s/output.obj -O0 -fpermissive --print-search-dirs 
+
+Code:
+ 
+Compiler stdout:
+ install: /usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/
+programs: =/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../x86_64-pc-linux-gnu/bin/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../x86_64-pc-linux-gnu/bin/
+libraries: =/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../x86_64-pc-linux-gnu/lib/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../x86_64-pc-linux-gnu/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../x86_64-pc-linux-gnu/8.2.1/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../lib/:/lib/x86_64-pc-linux-gnu/8.2.1/:/lib/../lib/:/usr/lib/x86_64-pc-linux-gnu/8.2.1/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../../x86_64-pc-linux-gnu/lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/8.2.1/../../../:/lib/:/usr/lib/
+
+Compiler stderr:
+ 

@@ -19,26 +19,98 @@ namespace iow
 // -----------------------------------------
 //    Collisions between player and wall
 // -----------------------------------------
-static inline void checkAndResolveCollisionOfPlayerAgainstWall(
-	iow::CollisionBox &oneCollisionBox, sf::Vector2f &velocity,
+static inline sf::Vector2f checkAndResolveCollisionOfPlayerAgainstWall(
+	iow::CollisionBox &oneCollisionBox, const sf::Vector2f &velocity,
 	sf::Vector2f &prevVelocity, const float dt, float &playerDeltaTime,
+	sf::Vector2f &playerPosition,
 	const iow::PackedVector<iow::CollisionBox> &pkdCollision)
 {
 	const std::vector<iow::CollisionBox> &pkdColData =
 		pkdCollision.get_packed_data();
-
+	sf::Vector2f tempVelocity = velocity;
+	std::cout << "tempVelocity in system.h = " << tempVelocity.x << " "
+		  << tempVelocity.y << std::endl;
+	// TODO	WHAT HAPPEN WHEN PLAYER POSITION JUST TOUCH THE WALL??????
+	// TODO in the checkCollision function, print out the interseciton
+	// TODO after O(N)^2, L shape is good.. but small bug + xdir fast
+	// TODO after adding the BOTH 0 check, the collision does not work on x
+	// direction diagonal..
+	// points..
+	//  maybe prevVelocity in diagonal...
+	//
+	bool collided = false;
 	for (auto &i : pkdColData) {
 		auto tmp = iow::checkAndResolveCollisionPlayerWithWall(
 			oneCollisionBox, i, velocity, prevVelocity, dt,
-			playerDeltaTime);
+			playerDeltaTime, playerPosition);
 		if (tmp) {
-			// std::cout << " old player velocity: " << velocity.x
-			//<< " " << velocity.y << std::endl;
-			velocity = tmp.value(); // update the velocity of the
-						// player
+			tempVelocity = tmp.value(); // update the velocity of
+						    // the player
+			playerPosition += tempVelocity;
+			oneCollisionBox.setPosition(
+				oneCollisionBox.getPosition() + tempVelocity);
+			collided = true;
+
+
+			for (auto &j : pkdColData) {
+				if (j.getPosition() == i.getPosition()) {
+				} else {
+
+					auto tmp2 = iow::
+						checkAndResolveCollisionPlayerWithWall(
+							oneCollisionBox, j,
+							velocity, prevVelocity,
+							dt, playerDeltaTime,
+							playerPosition);
+
+
+					if (tmp2) {
+						tempVelocity =
+							tmp.value(); // update
+								     // the
+								     // velocity
+								     // of the
+								     // player
+						playerPosition += tempVelocity;
+						oneCollisionBox.setPosition(
+							oneCollisionBox
+								.getPosition()
+							+ tempVelocity);
+					}
+				}
+			}
+
+
 			// std::cout << " new player velocity: " << velocity.x
 			//<< " " << velocity.y << std::endl;
+			/*
+			sf::RectangleShape tempEntity1 =
+				sf::RectangleShape(oneCollisionBox.getSize());
+			tempEntity1.setSize(playerPosition + tempVelocity);
+
+			bool ydirCol = (tempEntity1.getPosition().y
+						+ tempEntity1.getSize().y
+					> i.getPosition().y)
+				       && (i.getPosition().y + i.getSize().y
+					   > tempEntity1.getPosition().y);
+
+			bool xdirCol = (tempEntity1.getPosition().x
+						+ tempEntity1.getSize().x
+					> i.getPosition().x)
+				       && (i.getPosition().x + i.getSize().x
+					   > tempEntity1.getPosition().x);
+			if (ydirCol && xdirCol) {
+				tempVelocity = sf::Vector2f(0, 0);
+			}
+			*/
 		}
+	}
+	if (collided) { // if collided
+		playerDeltaTime = 0;
+		return tempVelocity;
+	} else { // if not collided
+		playerDeltaTime = dt;
+		return velocity;
 	}
 }
 
@@ -426,9 +498,31 @@ updatePositionFromSpeed(const float dt,
 			"ERROR in update position from speed. Velocity packed data is not the same size");
 	for (size_t i = 0; i < speedPackedData.size(); ++i) {
 		if (speedPackedIndicies[i] == playerIndex) {
-
+			std::cout << "i = " << i
+				  << ", and playerIndex = " << playerIndex
+				  << std::endl;
+			std::cout
+				<< "speedPackedData = " << speedPackedData[i].x
+				<< " " << speedPackedData[i].y << std::endl;
+			std::cout
+				<< "THE POSITION before update"
+				<< positionPackedVector[speedPackedIndicies[i]]
+					   .x
+				<< " "
+				<< positionPackedVector[speedPackedIndicies[i]]
+					   .y
+				<< std::endl;
 			positionPackedVector[speedPackedIndicies[i]] +=
 				speedPackedData[i] * playerDeltaTime;
+
+			std::cout
+				<< "THE POSITION AFTERRRRR update"
+				<< positionPackedVector[speedPackedIndicies[i]]
+					   .x
+				<< " "
+				<< positionPackedVector[speedPackedIndicies[i]]
+					   .y
+				<< std::endl;
 		} else {
 			positionPackedVector[speedPackedIndicies[i]] +=
 				speedPackedData[i] * dt;

@@ -59,7 +59,7 @@ iow::ResourceManager::ResourceManager()
 	m_player_config.collisionBox = sf::RectangleShape(sf::Vector2f(32, 32));
 	m_player_config.bulletInterval = 10;
 	m_player_config.hp = 100;
-	m_player_config.spawnPosition = sf::Vector2f(250, 250);
+	m_player_config.spawnPosition = sf::Vector2f(450, 250);
 	m_player_config.size = sf::Vector2f(32, 32);
 	m_player_config.speed = 100;
 
@@ -80,7 +80,7 @@ iow::ResourceManager::ResourceManager()
 	m_enemy_config.sprite.setColor(sf::Color::Red);
 	m_enemy_config.sprite.setPosition(10, 10);
 
-	m_enemy_config.steeringBehaviour.maxSpeed = 0.1f;
+	m_enemy_config.steeringBehaviour.maxSpeed = 10.f;
 	m_enemy_config.steeringBehaviour.fleeRadius = 32.f;
 
 

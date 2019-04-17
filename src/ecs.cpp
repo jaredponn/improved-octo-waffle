@@ -99,12 +99,9 @@ void iow::ECS::initECS(sf::RenderWindow &window,
 	}
 
 	/* spawning the world */
-	std::cout << " tile map size "
-		  << resourceManager.m_tile_map_config.getTileMapSize()
-		  << std::endl;
 	for (size_t i = 0;
-	     // i < resourceManager.m_tile_map_config.getTileMapSize(); ++i) {
-	     i < 100; ++i) {
+	     i < resourceManager.m_tile_map_config.getTileMapSize(); ++i) {
+		// i < 100; ++i) {
 		size_t tileEntity = create_new_entity();
 		const auto &tmp = resourceManager.m_tile_map_config.getTile(i);
 		const auto &tileWorldPosition = std::get<0>(tmp);
@@ -143,33 +140,36 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 	/* Systems... */
 	window.clear(); // clears the color for the buffer
-	// sf::Vector2f tempPrevSpeed = c_Speed[m_player_entity];
+	sf::Vector2f tempPrevSpeed = c_Speed[m_player_entity];
+	std::cout << "tempPrevSPeed in ecs =" << tempPrevSpeed.x << " "
+		  << tempPrevSpeed.y << std::endl;
 	// get the delta time of the player
 	c_DeltaTime[m_player_entity] = dt;
 
-	iow::checkAndResolveCollisionOfPlayerAgainstWall(
-		c_PlayerCollisionLayer[m_player_entity],
-		c_Speed[m_player_entity], c_PrevSpeed[m_player_entity], dt,
-		c_DeltaTime[m_player_entity], c_TileCollisionLayer);
+	c_Speed[m_player_entity] =
+		iow::checkAndResolveCollisionOfPlayerAgainstWall(
+			c_PlayerCollisionLayer[m_player_entity], tempPrevSpeed,
+			c_PrevSpeed[m_player_entity], dt,
+			c_DeltaTime[m_player_entity],
+			c_Position[m_player_entity], c_TileCollisionLayer);
+
+	c_PrevSpeed[m_player_entity] = tempPrevSpeed;
 	// assigning the previous speed
 	// std::cout << "old player position " << c_Position[m_player_entity].x
 	//<< " " << c_Position[m_player_entity].y << std::endl;
-	c_PrevSpeed[m_player_entity] = c_Speed[m_player_entity] / dt;
-	// std::cout << " c_PrevSpeed[player] = " <<
-	// c_PrevSpeed[m_player_entity].x
-	//<< std::endl;
 	// TODO
-	iow::updatePositionFromSpeed(dt, c_Position, c_Speed, m_player_entity,
-				     c_DeltaTime[m_player_entity]);
 
+	std::cout << "player's new velocity in ecs.cpp: "
+		  << c_Speed[m_player_entity].x << " "
+		  << c_Speed[m_player_entity].y << std::endl;
 	iow::updateVelocityToSeek(c_Speed, c_IsEnemy, c_Position,
 				  c_SteeringBehav, c_Position[m_player_entity]);
 
 	iow::updateVelocityToFlee(c_Speed, c_IsEnemy, c_Position,
 				  c_SteeringBehav);
-	// std::cout << "player's new velocity in ecs.cpp: "
-	//<< c_Speed[m_player_entity].x << " "
-	//<< c_Speed[m_player_entity].y << std::endl;
+
+	iow::updatePositionFromSpeed(dt, c_Position, c_Speed, m_player_entity,
+				     c_DeltaTime[m_player_entity]);
 
 	iow::updateCollisionBoxFromPosition(c_PlayerCollisionLayer, c_Position);
 	iow::updateEnemyBoxPosFromPosition(c_IsEnemy, c_EnemyColBox,
@@ -190,6 +190,7 @@ void iow::ECS::runECS(float dt, sf::RenderWindow &window,
 
 	iow::renderSystem(c_TileAppearance, window, m_camera);
 	iow::renderSystem(c_Appearance, window, m_camera);
+	std::cout << "#######################" << std::endl;
 	// debug render system for collision boxes
 	// iow::debugRenderSystem(c_TileCollisionLayer, window, m_camera);
 	// iow::debugRenderSystem(c_PlayerCollisionLayer, window, m_camera);

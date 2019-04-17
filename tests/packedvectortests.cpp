@@ -1,8 +1,8 @@
 // 010-TestCase.cpp
 
 #include "../extern/catch.hpp"
-#include "../src/packedvector.h"
 #include "../src/collision.cpp"
+#include "../src/packedvector.h"
 #include <SFML/Graphics.hpp>
 
 TEST_CASE("Creating a packedvector")

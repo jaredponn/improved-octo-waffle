@@ -1,0 +1,77 @@
+[
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_main.cpp.o' -MF 'improved-octo-waffle@exe/src_main.cpp.o.d' -o 'improved-octo-waffle@exe/src_main.cpp.o' -c ../src/main.cpp",
+    "file": "../src/main.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_graphics.cpp.o' -MF 'improved-octo-waffle@exe/src_graphics.cpp.o.d' -o 'improved-octo-waffle@exe/src_graphics.cpp.o' -c ../src/graphics.cpp",
+    "file": "../src/graphics.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_input.cpp.o' -MF 'improved-octo-waffle@exe/src_input.cpp.o.d' -o 'improved-octo-waffle@exe/src_input.cpp.o' -c ../src/input.cpp",
+    "file": "../src/input.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_resourcemanager.cpp.o' -MF 'improved-octo-waffle@exe/src_resourcemanager.cpp.o.d' -o 'improved-octo-waffle@exe/src_resourcemanager.cpp.o' -c ../src/resourcemanager.cpp",
+    "file": "../src/resourcemanager.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_texturemanager.cpp.o' -MF 'improved-octo-waffle@exe/src_texturemanager.cpp.o.d' -o 'improved-octo-waffle@exe/src_texturemanager.cpp.o' -c ../src/texturemanager.cpp",
+    "file": "../src/texturemanager.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_ecs.cpp.o' -MF 'improved-octo-waffle@exe/src_ecs.cpp.o.d' -o 'improved-octo-waffle@exe/src_ecs.cpp.o' -c ../src/ecs.cpp",
+    "file": "../src/ecs.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_components.cpp.o' -MF 'improved-octo-waffle@exe/src_components.cpp.o.d' -o 'improved-octo-waffle@exe/src_components.cpp.o' -c ../src/components.cpp",
+    "file": "../src/components.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_gameinput.cpp.o' -MF 'improved-octo-waffle@exe/src_gameinput.cpp.o.d' -o 'improved-octo-waffle@exe/src_gameinput.cpp.o' -c ../src/gameinput.cpp",
+    "file": "../src/gameinput.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_parsegamekeys.cpp.o' -MF 'improved-octo-waffle@exe/src_parsegamekeys.cpp.o.d' -o 'improved-octo-waffle@exe/src_parsegamekeys.cpp.o' -c ../src/parsegamekeys.cpp",
+    "file": "../src/parsegamekeys.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_extrastate.cpp.o' -MF 'improved-octo-waffle@exe/src_extrastate.cpp.o.d' -o 'improved-octo-waffle@exe/src_extrastate.cpp.o' -c ../src/extrastate.cpp",
+    "file": "../src/extrastate.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_collision.cpp.o' -MF 'improved-octo-waffle@exe/src_collision.cpp.o.d' -o 'improved-octo-waffle@exe/src_collision.cpp.o' -c ../src/collision.cpp",
+    "file": "../src/collision.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_gameconfig.cpp.o' -MF 'improved-octo-waffle@exe/src_gameconfig.cpp.o.d' -o 'improved-octo-waffle@exe/src_gameconfig.cpp.o' -c ../src/gameconfig.cpp",
+    "file": "../src/gameconfig.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iimproved-octo-waffle@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'improved-octo-waffle@exe/src_tilemap.cpp.o' -MF 'improved-octo-waffle@exe/src_tilemap.cpp.o.d' -o 'improved-octo-waffle@exe/src_tilemap.cpp.o' -c ../src/tilemap.cpp",
+    "file": "../src/tilemap.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iunittests@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'unittests@exe/tests_main-tests.cpp.o' -MF 'unittests@exe/tests_main-tests.cpp.o.d' -o 'unittests@exe/tests_main-tests.cpp.o' -c ../tests/main-tests.cpp",
+    "file": "../tests/main-tests.cpp"
+  },
+  {
+    "directory": "/home/haiyang/programs/improved-octo-waffle/build",
+    "command": "c++ -Iunittests@exe -I. -I.. -fdiagnostics-color=always -pipe -D_FILE_OFFSET_BITS=64 -Wall -Winvalid-pch -Wnon-virtual-dtor -std=c++17 -g -Wall -Wextra -O2 -g  -MD -MQ 'unittests@exe/tests_packedvectortests.cpp.o' -MF 'unittests@exe/tests_packedvectortests.cpp.o.d' -o 'unittests@exe/tests_packedvectortests.cpp.o' -c ../tests/packedvectortests.cpp",
+    "file": "../tests/packedvectortests.cpp"
+  }
+]
